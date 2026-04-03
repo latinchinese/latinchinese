@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latinchinese.com</title>
+    <style>
+        /* 与之前 cosmeticos 副页相同的样式，可复用 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .simple-header {
+            background: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #0033FF;
+            margin-bottom: 30px;
+        }
+        .simple-header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #0033FF;
+        }
+        .simple-header p {
+            margin: 5px 0 0;
+            color: #666;
+        }
+        .back-home {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #0033FF;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: 0.3s;
+        }
+        .back-home:hover {
+            background: #001f99;
+        }
+        .series-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.25s, box-shadow 0.25s;
+            text-align: center;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            border-bottom: 4px solid #0033FF;
+        }
+        .card-info {
+            padding: 20px;
+        }
+        .card-info h3 {
+            margin: 0 0 10px;
+            font-size: 1.4em;
+            color: #0033FF;
+        }
+        .card-info p {
+            margin: 0 0 15px;
+            font-size: 0.95em;
+            color: #555;
+        }
+        .btn-serie {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #0033FF;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-serie:hover {
+            background: #001f99;
+        }
+        footer {
+            background: #0033FF;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 40px;
+        }
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        @media (max-width: 992px) {
+            .series-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+        @media (max-width: 576px) {
+            .series-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .simple-header h1 {
+                font-size: 1.5em;
+            }
+            .card-info {
+                padding: 15px;
+            }
+            .card-info h3 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="simple-header">
+        <h1>Serie de Muñecas y Peluches</h1>
+        <p>Elige tu serie de productos</p >
+        <a href=" " class="back-home">← Volver al inicio</a >
+    </div>
+
+    <div class="series-container">
+        <!-- 子系列1 -->
+        <div class="card">
+            <a href="muñecasypeluches.htm" target="_blank">
+                <img src="peluchesymuñecas.jpg" alt="Subserie 1">
+            </a >
+            <div class="card-info">
+                <h3>Lista de Peluches y Muñecas</h3>
+                <p></p >
+                <a href="muñecasypeluches.htm" target="_blank" class="btn-serie">Ver productos →</a >
+            </div>
+        </div>
+
+        <!-- 子系列2 -->
+        <div class="card">
+            <a href=".htm" target="_blank">
+                <img src=".jpg" alt="Subserie 2">
+            </a >
+            <div class="card-info">
+                <h3>Lista de </h3>
+                <p></p >
+                <a href=".htm" target="_blank" class="btn-serie">Ver productos →</a >
+            </div>
+        </div>
+        
+        <!-- 子系列3 -->
+        <div class="card">
+            <a href=".htm" target="_blank">
+                <img src=".jpg" alt="Subserie 2">
+            </a >
+            <div class="card-info">
+                <h3>Lista de </h3>
+                <p></p >
+                <a href=".htm" target="_blank" class="btn-serie">Ver productos →</a >
+            </div>
+        </div>
+        <!-- 继续添加更多子系列卡片，直到6个或更多 -->
+    </div>
+
+    <footer>
+        <p>© 2026 LatinChinese.com – Puente comercial Latam-China</p >
+        <p><a href="mailto:info@latinchinese.com">Contacto</a ></p >
+    </footer>
+
+</body>
+</html>
