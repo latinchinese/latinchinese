@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LatinChinese.com - Productos</title>
+  
+  <style>
+    /* 基础样式 */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.3;
+    }
+
+    /* Logo + Banner 并排容器 */
+    .header-banner-wrapper {
+      display: flex;
+      align-items: stretch;
+      background: #fff;
+      border-bottom: 3px solid #0033FF;
+      overflow: hidden;
+    }
+
+    /* 左侧 Logo 区域 - 占 20% */
+    header.logo-section {
+      flex: 0 0 20%;
+      background: #fff;
+      padding: 10px 0px;
+      text-align: center;
+      border-bottom: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .logo {
+      max-width: 100px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .logo-title {
+      margin: 5px 0 0;
+      font-size: 1.5em;
+      color: #0033FF;
+      text-align: center;
+    }
+
+    /* 右侧 Banner 区域 - 占 80% */
+    .banner-right {
+      flex: 0 0 80%;
+      background: linear-gradient(135deg, #0033FF, #0055ff);
+      color: white;
+      padding: 10px 0px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .banner-right h2 {
+      margin: 0 0 8px;
+      font-size: 1.4em;
+      line-height: 1.3;
+    }
+
+    .banner-right p, .banner-right h2 {
+      margin: 3px 0;
+    }
+
+    /* 原 Banner 样式保留（用于下方的 Banner 2） */
+    .banner {
+      background: linear-gradient(135deg, #0033FF, #0055ff);
+      color: white;
+      padding: 10px 10px;
+      text-align: center;
+    }
+
+    .banner h2 {
+      margin: 0 0 15px;
+      font-size: 1.2em;
+    }
+    
+
+    /* 分类菜单 */
+    .categories {
+      background: #fff;
+      padding: 15px 20px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .categories a {
+      display: inline-block;
+      margin: 8px;
+      padding: 10px 18px;
+      background: #f0f0f0;
+      color: #0033FF;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 0.95em;
+      transition: 0.3s;
+    }
+
+    .categories a:hover {
+      background: #0033FF;
+      color: white;
+    }
+
+    /* 商品网格容器 - 四列布局 */
+    .ventanas-container {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 25px;
+    }
+
+    /* 单个商品卡片 */
+    .ventana {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.25s, box-shadow 0.25s;
+      text-align: center;
+    }
+
+    .ventana:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* 图片样式：固定高度，裁剪填充，居中裁剪 */
+    .ventana img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+      border-bottom: 4px solid #0033FF;
+    }
+
+    /* 卡片内容区 */
+    .ventana-info {
+      padding: 18px;
+    }
+
+    .ventana-info h3 {
+      margin: 0 0 10px;
+      font-size: 1.2em;
+      color: #0033FF;
+    }
+
+    .ventana-info p {
+      margin: 0 0 12px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    .btn-detalles {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #0033FF;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.85em;
+      transition: background 0.3s;
+    }
+
+    .btn-detalles:hover {
+      background: #001f99;
+    }
+
+    /* 页脚 */
+    footer {
+      background: #0033FF;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 0.95em;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: underline;
+    }
+
+    /* ========== 响应式布局 ========== */
+    /* 平板设备：≤992px 显示三列 */
+    @media (max-width: 992px) {
+      .ventanas-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .banner h2, .banner-right h2 {
+        font-size: 1.6em;
+      }
+      .banner p, .banner h3, .banner-right p, .banner-right h3 {
+        font-size: 0.9em;
+      }
+    }
+
+    /* 手机设备：≤768px 显示两列 */
+    @media (max-width: 768px) {
+      .ventanas-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      .header-banner-wrapper {
+        flex-direction: column;
+      }
+      header.logo-section {
+        flex: auto;
+        border-bottom: 1px solid #ddd;
+      }
+      .banner-right {
+        flex: auto;
+      }
+    }
+
+    /* 小手机设备：≤576px 显示一列 */
+    @media (max-width: 576px) {
+      .ventanas-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin: 20px auto;
+      }
+      .logo-title {
+        font-size: 1.5em;
+      }
+      .banner-right {
+        padding: 25px 15px;
+      }
+      .banner-right h2 {
+        font-size: 1.3em;
+      }
+      .banner-right p, .banner-right h3 {
+        font-size: 0.85em;
+      }
+      .banner {
+        padding: 30px 15px;
+      }
+      .banner h2 {
+        font-size: 1.4em;
+      }
+      .banner p, .banner h3 {
+        font-size: 0.85em;
+      }
+      .categories a {
+        padding: 8px 14px;
+        margin: 5px;
+        font-size: 0.85em;
+      }
+      .ventana-info {
+        padding: 15px;
+      }
+      .ventana-info h3 {
+        font-size: 1.1em;
+      }
+      .btn-detalles {
+        padding: 8px 16px;
+        font-size: 0.85em;
+      }
+      footer {
+        padding: 25px 15px;
+        font-size: 0.85em;
+      }
+    }
+  </style>
+  
+</head>
+<body>
+
+  <!-- Logo + Banner 并排容器 -->
+  <div class="header-banner-wrapper">
+    <!-- 左侧 Logo -->
+    <header class="logo-section">
+        <img src="latinchinese-logo.png" alt="LatinChinese.com" class="logo">
+        <h1 class="logo-title">latinchinese.com</h1>
+    </header>
+
+    <!-- 右侧 Banner 1 -->
+    <div class="banner-right">
+        <h2>La única forma de cambiar la pobreza </p >es por su acción propia y no por la promesa de los politiqueros.</h2>
+        <p>改变贫困的唯一途径是通过自己的行动，而不是政客们的承诺。</p >
+    </div>
+  </div>
+
+
+
+  <!-- 商品展示区：12个商品大类，三列网格 -->
+  <section class="ventanas-container">
+
+    <!-- Ventana 10 -->
+    <div class="ventana">
+      <a href="ventana10.html" target="_blank">
+        <img src="geomembrana.jpg" alt="Productos de geomembrana">
+      </a >
+      <div class="ventana-info">
+        <h3>HDPE Geomembrana y productos impermeables</h3>
+        <p></p >
+        <a href="ventana10.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 1 -->
+    <div class="ventana">
+      <a href="ventana1.html" target="_blank">
+        <img src="fantasías.jpg" alt="Colección de Fantasías de Acero Titanio">
+      </a >
+      <div class="ventana-info">
+        <h3>Colección de Fantasías</h3>
+        <p></p >
+        <a href="ventana1.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 2 -->
+    <div class="ventana">
+      <a href="Cosméticos/index.html" target="_blank">
+        <img src="cosméticos.jpg" alt="Serie de Productos Cosméticos">
+      </a >
+      <div class="ventana-info">
+        <h3>Productos Cosméticos</h3>
+        <p></p >
+        <a href="cosméticos/index.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 3 -->
+    <div class="ventana">
+      <a href="muñecasypeluches/muñucas_peluches.html" target="_blank">
+        <img src="peluches.jpg" alt="Serie de Muñecas de Peluches">
+      </a >
+      <div class="ventana-info">
+        <h3>Serie de Muñecas de Peluches</h3>
+        <p></p >
+        <a href="muñecasypeluches/muñucas_peluches.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+
+
+    <!-- Ventana 4 -->
+    <div class="ventana">
+      <a href="" target="_blank">
+        <img src="adornos.jpg" alt="Serie de Adornos para Hogar">
+      </a >
+      <div class="ventana-info">
+        <h3>Serie de Adornos para Hogar</h3>
+        <p></p >
+        <a href="" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 5 -->
+    <div class="ventana">
+      <a href="ganchos/index.html" target="_blank">
+        <img src="ganchos.jpg" alt="Producto 5">
+      </a >
+      <div class="ventana-info">
+        <h3>Serie de Ganchos de Cabello</h3>
+        <p></p >
+        <a href="ganchos/index.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 6 -->
+    <div class="ventana">
+      <a href="ventana6.html" target="_blank">
+        <img src="https://via.placeholder.com/400x220/0033FF/FFFFFF?text=Producto+6" alt="Producto 6">
+      </a >
+      <div class="ventana-info">
+        <h3>Nombre Producto 6</h3>
+        <p></p >
+        <a href="ventana6.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 7 -->
+    <div class="ventana">
+      <a href="ventana7.html" target="_blank">
+        <img src="https://via.placeholder.com/400x220/0033FF/FFFFFF?text=Producto+7" alt="Producto 7">
+      </a >
+      <div class="ventana-info">
+        <h3>Nombre Producto 7</h3>
+        <p></p >
+        <a href="ventana7.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 8 -->
+    <div class="ventana">
+      <a href="ventana8.html" target="_blank">
+        <img src="https://via.placeholder.com/400x220/0033FF/FFFFFF?text=Producto+8" alt="Producto 8">
+      </a >
+      <div class="ventana-info">
+        <h3>Nombre Producto 8</h3>
+        <p></p >
+        <a href="ventana8.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+    <!-- Ventana 9 -->
+    <div class="ventana">
+      <a href="ventana9.html" target="_blank">
+        <img src="https://via.placeholder.com/400x220/0033FF/FFFFFF?text=Producto+9" alt="Producto 9">
+      </a >
+      <div class="ventana-info">
+        <h3>Nombre Producto 9</h3>
+        <p></p >
+        <a href="ventana9.html" target="_blank" class="btn-detalles">Ver Detalles</a >
+      </div>
+    </div>
+
+   
+  </section>
+  
+    
+  <!-- 热点分析文章模块 -->
+<section style="max-width:1100px; margin:60px auto 40px; padding:0 20px;">
+    <div style="display:flex; flex-wrap:wrap; background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <!-- 左侧图片（点击跳转文章） -->
+        <a href="artículos/elecciones-peru-2026.html" style="flex:1; min-width:200px;">
+            <img src="artículos/elecciones2026.jpg" alt="Elecciones Perú 2026" style="width:100%; height:100%; object-fit:cover; display:block;">
+        </a >
+        <!-- 右侧文字 -->
+        <div style="flex:2; padding:30px;">
+            <h2 style="color:#0033FF; margin-top:0;">Análisis: Demagogia, Polarización y los Obstáculos Reales al Progreso del Perú</h2>
+            <p style="color:#666;">Publicado el 29 de marzo, 2026</p >
+            <p style="font-size:1.1em; line-height:1.5;">Un examen lógico y sereno de la campaña electoral peruana: sus falacias, contradicciones y el único camino que conduce al desarrollo sostenible.</p >
+            <a href="artículos/elecciones-peru-2026.html" class="btn-detalles" style="display:inline-block; margin-top:15px;">Leer artículo completo →</a >
+        </div>
+    </div>
+</section>
+
+  <!-- 页脚 -->
+  <footer>
+    <p>© 2026 latinchinese.com – Puente comercial Latam-China</p >
+    <p><a href="mailto:info@latinchinese.com">Contacto</a ></p >
+  </footer>
+
+</body>
+</html>
