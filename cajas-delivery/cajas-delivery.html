@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos - Catálogo de Envases</title>
+    <style>
+        /* --- Estilos Generales / 通用样式 --- */
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px; /* 限制最大宽度，阅读更舒适 */
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 24px;
+        }
+
+        /* --- Estilos de Categorías / 分类颜色 --- */
+        /* 定制产品 - Verde (Green) */
+        .section-custom h2 {
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        /* 吹塑产品 - Azul (Blue) */
+        .section-blow h2 {
+            color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        /* 注塑产品 - Rojo/Naranja (Red/Orange) */
+        .section-inject h2 {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        /* --- Estilos de Imágenes / 图片样式 --- */
+        .product-sheet {
+            width: 100%;
+            height: auto;
+            margin-bottom: 30px; /* 图片之间的间距 */
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            /* 添加一点阴影让图片更有质感 */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .product-sheet:hover {
+            transform: scale(1.02); /* 鼠标悬停时轻微放大 */
+            box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+        }
+
+        .page-note {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: -20px;
+            margin-bottom: 30px;
+        }
+
+        /* 简单的回到顶部按钮 */
+        .top-link {
+            display: block;
+            text-align: right;
+            font-size: 14px;
+            color: #2980b9;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Catálogo de Envases y Embalajes</h1>
+
+    <!-- ========================================== -->
+    <!-- 1. PRODUCTOS PERSONALIZADOS (定制产品) -->
+    <!-- ========================================== -->
+    
+    <section class="section-custom">
+        <h2>1. Productos Personalizados</h2>
+       
+        <!-- 定制产品图 1 -->
+        <img src="img/img-pedido-01.jpg" alt="Catálogo de Productos Personalizados Página 1" class="product-sheet">
+
+        <!-- 定制产品图 2 -->
+        <img src="img/img-pedido-02.jpg" alt="Catálogo de Productos Personalizados Página 2" class="product-sheet">
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- 2. PRODUCTOS DE SOPLO (吹塑产品) -->
+    <!-- ========================================== -->
+    <section class="section-blow">
+        <h2>2. Productos de Soplado (Blow Molding)</h2>
+        
+        <!-- 吹塑 - 单格盒 (Single Compartment) x2 -->
+        <h3>Cajas de un Compartimento (单格盒)</h3>
+        <img src="img/img-1-seccion-01.jpg" alt="Cajas de un Compartimento 1" class="product-sheet">
+        <img src="img/img-1-seccion-02.jpg" alt="Cajas de un Compartimento 2" class="product-sheet">
+
+        <!-- 吹塑 - 双格盒 (Double Compartment) x1 -->
+        <h3>Cajas de dos Compartimentos (双格盒)</h3>
+        <img src="img/img-2-secciones.jpg" alt="Cajas de dos Compartimentos" class="product-sheet">
+
+        <!-- 吹塑 - 三格盒 (Three Compartment) x1 -->
+        <h3>Cajas de tres Compartimentos (三格盒)</h3>
+        <img src="img/img-3-secciones.jpg" alt="Cajas de tres Compartimentos" class="product-sheet">
+
+        <!-- 吹塑 - 四格盒 (Four Compartment) x1 -->
+        <h3>Cajas de cuatro Compartimentos (四格盒)</h3>
+        <img src="img/img-4-secciones.jpg" alt="Cajas de cuatro Compartimentos" class="product-sheet">
+
+        <!-- 吹塑 - 五格盒 (Five Compartment) x1 -->
+        <h3>Cajas de cinco Compartimentos (五格盒)</h3>
+        <img src="img/img-5-secciones.jpg" alt="Cajas de cinco Compartimentos" class="product-sheet">
+
+        <!-- 吹塑 - 饺子盒 (Dumpling Box) x1 -->
+        <h3>Cajas para Dumplings (饺子盒)</h3>
+        <img src="img/img-jiaozi-secciones.jpg" alt="Cajas para Dumplings" class="product-sheet">
+
+        <!-- 吹塑 - 米饭盒 (Rice Box) x1 -->
+        <h3>Cajas para Arroz (米饭盒)</h3>
+        <img src="img/img-arroz-secciones.jpg" alt="Cajas para Arroz" class="product-sheet">
+
+        <!-- 吹塑 - 杯碗 (Cups/Bowls) x2 -->
+        <h3>Vasos y Tazones (杯碗)</h3>
+        <img src="img/img-tazones-01.jpg" alt="Vasos y Tazones 1" class="product-sheet">
+        <img src="img/img-tazones-02.jpg" alt="Vasos y Tazones 2" class="product-sheet">
+
+        <!-- 吹塑 - 托盘 (Trays) x2 -->
+        <h3>Bandejas (托盘)</h3>
+        <img src="img/img-platillos.jpg" alt="Bandejas 1" class="product-sheet">
+        
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- 3. PRODUCTOS INYECTADOS (注塑产品) -->
+    <!-- ========================================== -->
+    <section class="section-inject">
+        <h2>3. Productos Inyectados (Injection Molding)</h2>
+        
+        <!-- 注塑 - 圆盒 (Round Box) x2 -->
+        <h3>Cajas Redondas (圆盒)</h3>
+        <img src="img/img-redundo-01.jpg" alt="Cajas Redondas 1" class="product-sheet">
+        <img src="img/img-redundo-02.jpg" alt="Cajas Redondas 2" class="product-sheet">
+
+        <!-- 注塑 - 方盒 (Square Box) x1 -->
+        <h3>Cajas Cuadradas (方盒)</h3>
+        <img src="img/img-cuadradas.jpg" alt="Cajas Cuadradas" class="product-sheet">
+
+        <!-- 注塑 - 美式盒 (American Box) x2 -->
+        <h3>Cajas Estilo Americano (美式盒)</h3>
+        <img src="img/img-americano-01.jpg" alt="Cajas Estilo Americano 1" class="product-sheet">
+        <img src="img/img-americano-02.jpg" alt="Cajas Estilo Americano 2" class="product-sheet">
+    </section>
+
+    <div style="text-align: center; margin-top: 50px; color: #999;">
+        <p>Pedido por escrito al correo</p>
+    </div>
+
+</div>
+
+</body>
+</html>
+
