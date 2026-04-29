@@ -7,63 +7,126 @@
     <link rel="manifest" href='data:application/json,{"name":"LogiTransparente","short_name":"LogiTrans","start_url":".","display":"standalone","background_color":"#2563eb","theme_color":"#2563eb","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/2830/2830305.png","sizes":"512x512","type":"image/png"}]}'>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+        ::-webkit-scrollbar { display: none; }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col">
+<body class="bg-gray-50 font-sans">
+    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl bg-white">
+        
         <header class="bg-blue-600 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
-            <h1 class="font-bold text-lg">LogiTransparente</h1>
-            <button @click="toggleLang" class="bg-blue-700 px-3 py-1 rounded text-sm border border-blue-400">
+            <h1 class="font-bold text-lg tracking-tight">LogiTransparente</h1>
+            <button @click="toggleLang" class="bg-blue-700 px-4 py-1 rounded-full text-xs border border-blue-400 font-bold transition-all active:scale-95">
                 {{ lang === 'zh' ? 'Español' : '中文' }}
             </button>
         </header>
 
-        <main class="p-4 flex-grow">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">{{ t.welcome }}</h2>
-                <p class="text-gray-500 text-sm">{{ t.subtitle }}</p>
+        <main class="flex-grow p-4 mb-16">
+            
+            <div v-if="activeTab === 'home'" class="fade-in">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-black text-gray-800">{{ t.welcome }}</h2>
+                    <p class="text-gray-500 text-sm">{{ t.subtitle }}</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-8 text-center">
+                    <div @click="activeTab = 'orders'" class="cursor-pointer transition-transform active:scale-90">
+                        <div class="bg-orange-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🚚</div>
+                        <span class="text-xs font-bold text-gray-700">{{ t.btn_quote }}</span>
+                    </div>
+                    <div @click="activeTab = 'finance'" class="cursor-pointer transition-transform active:scale-90">
+                        <div class="bg-green-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🛡️</div>
+                        <span class="text-xs font-bold text-gray-700">{{ t.btn_guarantee }}</span>
+                    </div>
+                    <div @click="showAI = true" class="cursor-pointer transition-transform active:scale-90">
+                        <div class="bg-blue-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🤖</div>
+                        <span class="text-xs font-bold text-gray-700">{{ t.logi_ai }}</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl shadow-lg border border-gray-100 mb-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+                    <div class="flex justify-between mb-3">
+                        <span class="text-[10px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded uppercase tracking-widest">{{ t.lock_notice }}</span>
+                        <span class="text-[10px] text-gray-400 font-mono">ID: LC20260429</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-base flex items-center">Shanghai <span class="mx-2 text-blue-500">➔</span> Callao</h3>
+                    <div class="mt-4 space-y-2 text-xs text-gray-600">
+                        <div class="flex justify-between"><span>{{ t.fee_visto_bueno }}</span><span class="font-mono font-bold text-gray-800">$300.00</span></div>
+                        <div class="flex justify-between"><span>{{ t.fee_handling }}</span><span class="font-mono font-bold text-gray-800">$130.00</span></div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-dashed flex justify-between font-bold text-blue-600 text-sm">
+                        <span>{{ t.total_locked }}</span><span class="font-mono">$430.00 + (CBM * $50)</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-4 mb-8 text-center">
-                <div @click="alert('En desarrollo')" class="cursor-pointer">
-                    <div class="bg-orange-100 p-4 rounded-2xl mb-2 text-2xl">🚚</div>
-                    <span class="text-xs font-medium">{{ t.btn_quote }}</span>
-                </div>
-                <div @click="alert('En desarrollo')" class="cursor-pointer">
-                    <div class="bg-green-100 p-4 rounded-2xl mb-2 text-2xl">🛡️</div>
-                    <span class="text-xs font-medium">{{ t.btn_guarantee }}</span>
-                </div>
-                <div @click="alert('AI logic coming soon')" class="cursor-pointer">
-                    <div class="bg-blue-100 p-4 rounded-2xl mb-2 text-2xl">🤖</div>
-                    <span class="text-xs font-medium">Logi-AI</span>
+            <div v-if="activeTab === 'orders'" class="space-y-4">
+                <h2 class="text-xl font-bold">{{ t.nav_orders }}</h2>
+                <div class="bg-gray-100 p-8 rounded-2xl text-center text-gray-400 italic">
+                    暂无待处理询价 / No hay consultas pendientes
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-green-500 mb-6">
-                <div class="flex justify-between mb-2">
-                    <span class="text-[10px] font-bold text-green-600 tracking-wider">{{ t.lock_notice }}</span>
-                    <span class="text-[10px] text-gray-400">ID: LC20260429</span>
-                </div>
-                <h3 class="font-bold text-gray-800 text-sm">Shanghai ➔ Callao</h3>
-                <div class="mt-3 space-y-2 text-xs text-gray-600">
-                    <div class="flex justify-between"><span>{{ t.fee_visto_bueno }}</span><span class="font-bold">$300.00</span></div>
-                    <div class="flex justify-between"><span>{{ t.fee_handling }}</span><span class="font-bold">$130.00</span></div>
-                </div>
-                <div class="mt-3 pt-2 border-t border-dashed flex justify-between font-bold text-blue-600">
-                    <span>{{ t.total_locked }}</span><span>$430.00 + (CBM * $50)</span>
+            <div v-if="activeTab === 'finance'" class="space-y-4">
+                <h2 class="text-xl font-bold text-blue-600">{{ t.nav_finance }}</h2>
+                <div class="bg-white p-4 rounded-xl border-2 border-blue-50 shadow-md">
+                    <p class="text-sm font-bold mb-3">输入实际账单金额进行比对 / Auditar Factura:</p>
+                    <input type="number" placeholder="Visto Bueno ($)" class="w-full p-2 mb-2 border rounded" id="vb_input">
+                    <button @click="audit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold">开始审核 / Auditar</button>
                 </div>
             </div>
+
+            <div v-if="activeTab === 'me'" class="space-y-4">
+                <h2 class="text-xl font-bold">{{ t.nav_me }}</h2>
+                <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-2xl">
+                    <div class="w-16 h-16 bg-blue-200 rounded-full flex items-center justify-center text-2xl">👤</div>
+                    <div>
+                        <p class="font-bold">LatinChinese Admin</p>
+                        <p class="text-xs text-gray-500">ID: 888888</p>
+                    </div>
+                </div>
+            </div>
+
         </main>
 
-        <nav class="bg-white border-t flex justify-around p-3 text-gray-400 text-[10px] text-center">
-            <div class="text-blue-600 font-bold">首页<br>Inicio</div>
-            <div>订单<br>Pedidos</div>
-            <div>账单<br>Finanzas</div>
-            <div>我的<br>Perfil</div>
+        <div v-if="showAI" class="fixed inset-0 bg-black/50 z-[100] flex items-end">
+            <div class="bg-white w-full rounded-t-3xl p-6 shadow-2xl animate-bounce-in">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg text-blue-600">{{ t.logi_ai }} 大脑</h3>
+                    <button @click="showAI = false" class="text-gray-400 text-2xl">&times;</button>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-2xl mb-4 text-sm text-gray-700 min-h-[100px]">
+                    {{ t.ai_msg }}
+                </div>
+                <input type="text" :placeholder="t.ai_placeholder" class="w-full p-3 bg-gray-100 rounded-xl outline-none border-2 border-transparent focus:border-blue-400">
+            </div>
+        </div>
+
+        <nav class="bg-white/90 backdrop-blur-md border-t flex justify-around p-3 fixed bottom-0 w-full max-w-md z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+            <div @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
+                <span class="text-lg">🏠</span>
+                <span class="text-[10px] font-bold">{{ t.nav_home }}</span>
+            </div>
+            <div @click="activeTab = 'orders'" :class="activeTab === 'orders' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
+                <span class="text-lg">📋</span>
+                <span class="text-[10px] font-bold">{{ t.nav_orders }}</span>
+            </div>
+            <div @click="activeTab = 'finance'" :class="activeTab === 'finance' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
+                <span class="text-lg">💰</span>
+                <span class="text-[10px] font-bold">{{ t.nav_finance }}</span>
+            </div>
+            <div @click="activeTab = 'me'" :class="activeTab === 'me' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
+                <span class="text-lg">👤</span>
+                <span class="text-[10px] font-bold">{{ t.nav_me }}</span>
+            </div>
         </nav>
     </div>
 
     <script>
-        // 注册 Service Worker (Inline 模式)
+        // PWA Service Worker 注册
         if ('serviceWorker' in navigator) {
             const swCode = `self.addEventListener('fetch', function(e){});`;
             const blob = new Blob([swCode], {type: 'text/javascript'});
@@ -74,31 +137,61 @@
         createApp({
             setup() {
                 const lang = ref('es');
+                const activeTab = ref('home');
+                const showAI = ref(false);
+
                 const dictionary = {
                     zh: {
                         welcome: "您好, 进口商",
                         subtitle: "中拉贸易透明物流专家",
                         btn_quote: "发布询价",
                         btn_guarantee: "费用保障",
+                        logi_ai: "Logi-AI",
                         lock_notice: "目的港费用已锁定",
-                        fee_visto_bueno: "核放费(V.B.)",
-                        fee_handling: "操作费",
+                        fee_visto_bueno: "核放费(Visto Bueno)",
+                        fee_handling: "操作费(Handling)",
                         total_locked: "锁定总额",
+                        nav_home: "首页",
+                        nav_orders: "订单",
+                        nav_finance: "账单",
+                        nav_me: "我的",
+                        ai_msg: "你好！我是 Logi-AI。我可以帮你分析账单是否超标，或者查询秘鲁最新的清关政策。请问今天有什么可以帮您？",
+                        ai_placeholder: "输入问题或粘贴账单文本..."
                     },
                     es: {
                         welcome: "Hola, Importador",
                         subtitle: "Especialista en Logística Transparente",
                         btn_quote: "Consultar",
                         btn_guarantee: "Garantía",
+                        logi_ai: "Logi-AI",
                         lock_notice: "COSTOS BLOQUEADOS",
                         fee_visto_bueno: "Visto Bueno",
                         fee_handling: "Handling",
                         total_locked: "Total Bloqueado",
+                        nav_home: "Inicio",
+                        nav_orders: "Pedidos",
+                        nav_finance: "Finanzas",
+                        nav_me: "Perfil",
+                        ai_msg: "¡Hola! Soy Logi-AI. Puedo ayudarte a auditar facturas o consultar políticas de aduanas en Perú. ¿En qué puedo ayudarte?",
+                        ai_placeholder: "Escribe tu duda o pega el texto..."
                     }
                 };
+
                 const t = computed(() => dictionary[lang.value]);
                 const toggleLang = () => lang.value = lang.value === 'zh' ? 'es' : 'zh';
-                return { lang, t, toggleLang };
+
+                const audit = () => {
+                    const input = document.getElementById('vb_input').value;
+                    if(input > 300) {
+                        alert("⚠️ 报警 / Alerta: Visto Bueno 超标！锁定价格 $300，实际收 $"+input);
+                    } else if(input > 0) {
+                        alert("✅ 正常 / Normal: 费用符合协议。");
+                    } else {
+                        alert("请输入金额 / Ingrese un monto");
+                    }
+                };
+
+                return { lang, t, toggleLang, activeTab, showAI, audit };
             }
         }).mount('#app');
     </script>
