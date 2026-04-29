@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiTransparente - 中拉物流透明平台</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .pwa-card { border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col">
+        <header class="bg-blue-600 text-white p-4 flex justify-between items-center sticky top-0 z-50">
+            <h1 class="font-bold text-lg">LogiTransparente</h1>
+            <button @click="toggleLang" class="bg-blue-700 px-3 py-1 rounded text-sm border border-blue-400">
+                {{ lang === 'zh' ? 'Español' : '中文' }}
+            </button>
+        </header>
+
+        <main class="p-4 flex-grow">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">{{ t.welcome }}</h2>
+                <p class="text-gray-500 text-sm">{{ t.subtitle }}</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="flex flex-col items-center">
+                    <div class="bg-orange-100 p-4 rounded-full mb-2">🚚</div>
+                    <span class="text-xs text-center">{{ t.btn_quote }}</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="bg-green-100 p-4 rounded-full mb-2">🛡️</div>
+                    <span class="text-xs text-center">{{ t.btn_guarantee }}</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="bg-blue-100 p-4 rounded-full mb-2">🤖</div>
+                    <span class="text-xs text-center">Logi-AI</span>
+                </div>
+            </div>
+
+            <div class="pwa-card bg-white p-4 border-l-4 border-green-500 mb-6">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-green-600 uppercase">{{ t.lock_notice }}</span>
+                    <span class="text-xs text-gray-400">Order: LC-20260429</span>
+                </div>
+                <h3 class="font-bold text-gray-800 mb-2">Shanghai -> Callao</h3>
+                <div class="text-sm text-gray-600 space-y-1">
+                    <div class="flex justify-between">
+                        <span>{{ t.fee_visto_bueno }}:</span>
+                        <span class="font-mono">$300.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>{{ t.fee_handling }}:</span>
+                        <span class="font-mono">$130.00</span>
+                    </div>
+                </div>
+                <hr class="my-2">
+                <div class="flex justify-between font-bold text-blue-600">
+                    <span>{{ t.total_locked }}:</span>
+                    <span>$430.00 + (CBM * $50)</span>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bg-white border-t flex justify-around p-3 text-gray-400 text-xs">
+            <div class="text-blue-600">🏠<br>{{ t.nav_home }}</div>
+            <div>📋<br>{{ t.nav_orders }}</div>
+            <div>💰<br>{{ t.nav_finance }}</div>
+            <div>👤<br>{{ t.nav_me }}</div>
+        </nav>
+    </div>
+
+    <script>
+        const { createApp, ref, computed } = Vue;
+
+        createApp({
+            setup() {
+                const lang = ref('es');
+                const dictionary = {
+                    zh: {
+                        welcome: "您好, 进口商",
+                        subtitle: "跨境物流透明化服务平台",
+                        btn_quote: "发布询价",
+                        btn_guarantee: "费用保障",
+                        lock_notice: "目的港费用已锁定",
+                        fee_visto_bueno: "核放费(V.B.)",
+                        fee_handling: "操作费",
+                        total_locked: "锁定总计",
+                        nav_home: "首页",
+                        nav_orders: "订单",
+                        nav_finance: "账单",
+                        nav_me: "我的"
+                    },
+                    es: {
+                        welcome: "Hola, Importador",
+                        subtitle: "Plataforma de transparencia logística",
+                        btn_quote: "Publicar Consulta",
+                        btn_guarantee: "Garantía",
+                        lock_notice: "Costos de destino bloqueados",
+                        fee_visto_bueno: "Visto Bueno",
+                        fee_handling: "Handling",
+                        total_locked: "Total Bloqueado",
+                        nav_home: "Inicio",
+                        nav_orders: "Pedidos",
+                        nav_finance: "Finanzas",
+                        nav_me: "Perfil"
+                    }
+                };
+
+                const t = computed(() => dictionary[lang.value]);
+                const toggleLang = () => {
+                    lang.value = lang.value === 'zh' ? 'es' : 'zh';
+                };
+
+                return { lang, t, toggleLang };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
