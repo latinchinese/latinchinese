@@ -10,14 +10,16 @@
         .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         ::-webkit-scrollbar { display: none; }
+        /* 统一弹窗样式控制 */
+        .modal-bg { background-color: rgba(249, 250, 251, 1); } /* 灰白色背景 #F9FAFB */
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
     <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl bg-white relative">
         
-        <header class="bg-blue-600 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
-            <h1 class="font-bold text-sm">{{ t.brand_name }}</h1>
-            <button @click="toggleLang" class="bg-blue-700 px-4 py-1 rounded-full text-xs border border-blue-400 font-bold">
+        <header class="bg-blue-600 text-white p-4 flex justify-between items-center sticky top-0 z-50">
+            <h1 class="font-bold text-sm tracking-tight">{{ t.brand_name }}</h1>
+            <button @click="toggleLang" class="bg-blue-700 px-4 py-1 rounded-full text-xs border border-blue-400 font-bold transition-all active:scale-95">
                 {{ lang === 'zh' ? 'Español' : '中文' }}
             </button>
         </header>
@@ -32,15 +34,15 @@
 
                 <div class="grid grid-cols-3 gap-4 mb-8 text-center text-gray-700">
                     <div @click="showQuoteModal = true" class="cursor-pointer">
-                        <div class="bg-orange-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm hover:bg-orange-200 transition-colors">🚚</div>
+                        <div class="bg-orange-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🚚</div>
                         <span class="text-[10px] font-bold uppercase">{{ t.btn_quote }}</span>
                     </div>
                     <div @click="activeTab = 'finance'" class="cursor-pointer">
-                        <div class="bg-green-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm hover:bg-green-200 transition-colors">🛡️</div>
+                        <div class="bg-green-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🛡️</div>
                         <span class="text-[10px] font-bold uppercase">{{ t.btn_guarantee }}</span>
                     </div>
                     <div @click="showAI = true" class="cursor-pointer">
-                        <div class="bg-blue-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm hover:bg-blue-200 transition-colors">🤖</div>
+                        <div class="bg-blue-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🤖</div>
                         <span class="text-[10px] font-bold uppercase">Logi-AI</span>
                     </div>
                 </div>
@@ -52,7 +54,7 @@
                         <span class="text-gray-300 font-mono italic">LC-2026-001</span>
                     </div>
                     <h3 class="font-bold text-gray-800 text-lg flex items-center">Shanghai <span class="mx-2 text-blue-500 text-xl">➔</span> Callao</h3>
-                    <div class="mt-4 space-y-2 text-xs text-gray-600 border-t pt-3 border-dashed text-gray-800">
+                    <div class="mt-4 space-y-2 text-xs text-gray-800 border-t pt-3 border-dashed">
                         <div class="flex justify-between"><span>{{ t.fee_visto_bueno }}</span><span class="font-mono font-bold">$300.00</span></div>
                         <div class="flex justify-between font-bold text-blue-600 text-sm mt-2 pt-2 border-t">
                             <span>{{ t.total_locked }}</span><span class="font-mono">$430 + (CBM * $50)</span>
@@ -63,108 +65,118 @@
 
             <div v-if="activeTab === 'orders'" class="fade-in space-y-4">
                 <h2 class="text-xl font-black text-gray-800">{{ t.nav_orders }}</h2>
-                <div class="bg-white p-4 rounded-2xl shadow border border-gray-100">
+                <div class="bg-white p-4 rounded-2xl shadow border border-gray-100 text-gray-800">
                     <div class="flex justify-between items-center mb-3">
                         <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">SH-CALL-889</span>
                         <span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-black uppercase">{{ t.order_status }}</span>
                     </div>
-                    <p class="font-bold text-gray-800">Shanghai ➔ Callao</p>
+                    <p class="font-bold">Shanghai ➔ Callao</p>
                     <p class="text-[10px] text-gray-400 mt-1">{{ t.order_vessel }}</p>
-                    <div class="mt-4">
-                        <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500 w-2/3"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div v-if="activeTab === 'finance'" class="fade-in space-y-4">
                 <h2 class="text-xl font-black text-gray-800">{{ t.nav_finance }}</h2>
-                <div class="bg-gray-50 p-5 rounded-3xl border border-gray-200 text-gray-800">
-                    <p class="text-sm font-bold mb-4">{{ t.audit_title }}</p>
-                    <input type="number" id="vb_input" class="w-full p-4 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 mb-4 shadow-inner" placeholder="$">
-                    <button @click="audit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg shadow-blue-100">
-                        {{ t.audit_btn }}
-                    </button>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-200">
+                    <p class="text-sm font-bold text-gray-700 mb-4">{{ t.audit_title }}</p>
+                    <input type="number" id="vb_input" class="w-full p-4 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 mb-4" placeholder="$">
+                    <button @click="audit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black">{{ t.audit_btn }}</button>
                 </div>
             </div>
 
             <div v-if="activeTab === 'me'" class="fade-in text-center pt-8 space-y-6">
-                <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 to-blue-400 rounded-full mx-auto flex items-center justify-center text-4xl text-white shadow-xl">👤</div>
+                <div class="w-24 h-24 bg-blue-600 rounded-full mx-auto flex items-center justify-center text-4xl text-white shadow-xl">👤</div>
                 <div>
                     <p class="font-black text-2xl text-gray-800">{{ isAdmin ? t.role_admin_title : t.role_client_title }}</p>
                     <p class="text-[11px] text-blue-600 font-bold uppercase mt-1 px-4 py-1 bg-blue-50 inline-block rounded-full tracking-widest">{{ t.user_role }}</p>
                 </div>
+                <div class="grid grid-cols-2 gap-4 px-4 text-gray-800">
+                    <div class="bg-gray-50 p-5 rounded-3xl">
+                        <p class="text-2xl font-black">{{ isAdmin ? '1,280' : '12' }}</p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">{{ t.stat_orders }}</p>
+                    </div>
+                    <div class="bg-gray-50 p-5 rounded-3xl">
+                        <p class="text-2xl font-black text-green-600">{{ isAdmin ? '$25.4k' : '$420' }}</p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">{{ t.stat_saving }}</p>
+                    </div>
+                </div>
+                <div v-if="isAdmin" class="px-4 text-left space-y-2 mt-4">
+                    <p class="text-[10px] font-black text-gray-400 uppercase ml-2">{{ t.admin_panel }}</p>
+                    <div class="bg-gray-900 text-white p-5 rounded-3xl text-xs space-y-3 font-medium">
+                        <div class="flex justify-between border-b border-gray-800 pb-2"><span>{{ t.admin_users }}</span><span>342</span></div>
+                        <div class="flex justify-between"><span>{{ t.admin_alerts }}</span><span class="text-red-400 font-bold animate-pulse">14</span></div>
+                    </div>
+                </div>
             </div>
-
         </main>
 
-        <div v-if="showQuoteModal" class="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4 fade-in" @click.self="showQuoteModal = false">
-            <div class="bg-white w-full max-w-sm rounded-[32px] p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-black text-lg text-gray-800">{{ t.quote_form_title }}</h3>
-                    <button @click="showQuoteModal = false" class="text-gray-400 text-2xl">&times;</button>
+        <div v-if="showQuoteModal" class="fixed inset-0 bg-black/60 z-[100] flex items-end justify-center p-4 fade-in" @click.self="showQuoteModal = false">
+            <div class="modal-bg w-full max-w-sm rounded-[32px] p-8 shadow-2xl pb-10">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-black text-xl text-gray-800">{{ t.quote_form_title }}</h3>
+                    <button @click="showQuoteModal = false" class="text-gray-400 text-3xl">&times;</button>
                 </div>
-                
-                <div class="space-y-3">
+                <div class="space-y-4">
                     <div>
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_product }}</label>
-                        <input type="text" v-model="quoteData.product" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="Ex: Aire Acondicionado">
+                        <input type="text" class="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-800 text-sm outline-none focus:border-blue-500" placeholder="Ex: Aire Acondicionado">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_qty }}</label>
-                            <input type="text" v-model="quoteData.qty" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="10 unidades">
+                            <input type="text" class="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-800 text-sm outline-none">
                         </div>
                         <div>
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_voltage }}</label>
-                            <input type="text" v-model="quoteData.voltage" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="220v / 60Hz">
+                            <input type="text" class="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-800 text-sm outline-none" placeholder="220v/60Hz">
                         </div>
                     </div>
                     <div>
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_contact }}</label>
-                        <input type="text" v-model="quoteData.contact" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="WhatsApp / Email">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">WhatsApp</label>
+                        <input type="text" class="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-800 text-sm outline-none" placeholder="+51 ...">
                     </div>
-                    <button @click="submitQuote" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg mt-2">
-                        {{ t.form_submit }}
-                    </button>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Email</label>
+                        <input type="email" class="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-800 text-sm outline-none" placeholder="... @gmail.com">
+                    </div>
+                    <button @click="submitQuote" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg mt-4">{{ t.form_submit }}</button>
                 </div>
             </div>
         </div>
 
-        <div v-if="showAI" class="fixed inset-0 bg-black/40 z-[100] flex items-end justify-center px-4 pb-20" @click.self="showAI = false">
-            <div class="bg-gray-50 w-full max-w-sm rounded-[40px] p-8 shadow-2xl border border-white fade-in">
+        <div v-if="showAI" class="fixed inset-0 bg-black/60 z-[100] flex items-end justify-center p-4 pb-20 fade-in" @click.self="showAI = false">
+            <div class="modal-bg w-full max-w-sm rounded-[32px] p-8 shadow-2xl border border-white">
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center space-x-3">
                         <div class="bg-blue-600 p-2 rounded-xl text-xl">🤖</div>
                         <h3 class="font-black text-xl text-gray-800">Logi-AI</h3>
                     </div>
-                    <button @click="showAI = false" class="text-gray-400 text-3xl">&times;</button>
+                    <button @click="showAI = false" class="text-gray-400 text-3xl font-light">&times;</button>
                 </div>
-                <div class="bg-white p-5 rounded-3xl mb-6 text-sm leading-relaxed text-gray-600 shadow-sm border border-gray-100">
+                <div class="bg-white p-5 rounded-2xl mb-6 text-sm text-gray-600 border border-gray-100 shadow-sm leading-relaxed">
                     {{ t.ai_msg }}
                 </div>
                 <div class="relative">
-                    <input type="text" :placeholder="t.ai_placeholder" class="w-full p-4 bg-white rounded-2xl outline-none border border-gray-200 focus:border-blue-500 text-sm">
-                    <button class="absolute right-2 top-2 bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-tighter">{{ t.ai_send }}</button>
+                    <input type="text" :placeholder="t.ai_placeholder" class="w-full p-4 bg-white rounded-xl outline-none border border-gray-200 text-gray-800 text-sm focus:border-blue-500">
+                    <button class="absolute right-2 top-2 bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase">{{ t.ai_send }}</button>
                 </div>
             </div>
         </div>
 
         <nav class="bg-white border-t flex justify-around p-3 fixed bottom-0 w-full max-w-md z-50">
-            <div @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+            <div @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
                 <span class="text-xl">🏠</span>
                 <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_home }}</span>
             </div>
-            <div @click="activeTab = 'orders'" :class="activeTab === 'orders' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+            <div @click="activeTab = 'orders'" :class="activeTab === 'orders' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
                 <span class="text-xl">📋</span>
                 <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_orders }}</span>
             </div>
-            <div @click="activeTab = 'finance'" :class="activeTab === 'finance' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+            <div @click="activeTab = 'finance'" :class="activeTab === 'finance' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
                 <span class="text-xl">💰</span>
                 <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_finance }}</span>
             </div>
-            <div @click="activeTab = 'me'" :class="activeTab === 'me' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+            <div @click="activeTab = 'me'" :class="activeTab === 'me' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer">
                 <span class="text-xl">👤</span>
                 <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_me }}</span>
             </div>
@@ -178,23 +190,15 @@
                 const lang = ref('es');
                 const activeTab = ref('home');
                 const showAI = ref(false);
-                const showQuoteModal = ref(false); // 控制询价弹窗
+                const showQuoteModal = ref(false);
                 const isAdmin = ref(true);
-
-                // 询价表单数据
-                const quoteData = ref({
-                    product: '',
-                    qty: '',
-                    voltage: '',
-                    contact: ''
-                });
 
                 const dictionary = {
                     zh: {
                         brand_name: "透明化物流平台",
                         welcome: "您好，进口商",
-                        subtitle: "中国-拉美贸易物流审计专家",
-                        btn_quote: "询价/发布需求",
+                        subtitle: "中拉贸易透明物流审计专家",
+                        btn_quote: "询价发布",
                         btn_guarantee: "费用保障",
                         lock_notice: "目的港费用已锁定",
                         fee_visto_bueno: "核放费 (V.B.)",
@@ -202,24 +206,24 @@
                         nav_home: "首页", nav_orders: "订单", nav_finance: "账单", nav_me: "我的",
                         order_status: "运输中",
                         order_vessel: "COSCO SHIPPING / V.088",
+                        role_admin_title: "平台管理面板", role_client_title: "客户资料卡",
+                        user_role: isAdmin.value ? "超级管理员" : "实名进口商",
+                        stat_orders: "历史订单", stat_saving: "累计节省",
+                        admin_panel: "全平台监控", admin_users: "活跃用户", admin_alerts: "费用异常预警",
                         quote_form_title: "发布您的进口需求",
-                        form_product: "产品名称与用途",
-                        form_qty: "数量",
-                        form_voltage: "电压/频率要求",
-                        form_contact: "联系人 (WhatsApp/Email)",
-                        form_submit: "提交需求",
-                        form_success: "需求已提交！我们将尽快与您联系。",
-                        ai_msg: "我是您的 AI 助手，可以帮您审计账单或查询需求进度。",
-                        ai_placeholder: "输入您的问题...",
-                        ai_send: "发送",
-                        audit_title: "输入 Visto Bueno 金额:",
-                        audit_btn: "自动审计"
+                        form_product: "产品名称与用途", form_qty: "数量", form_voltage: "电压/频率要求",
+                        form_submit: "提交需求并发送", form_success: "需求已提交！我们将尽快联络。",
+                        ai_msg: "你好！我是 Logi-AI。我可以帮您审计账单或查询需求进度。请问有什么可以帮您？",
+                        ai_placeholder: "输入您的问题...", ai_send: "发送",
+                        audit_title: "输入对账单中的 V.B. 金额进行审计:",
+                        audit_btn: "立即开始自动审计",
+                        alert_ok: "✅ 费用符合锁定协议", alert_err: "⚠️ 警告：检测到费用超支！"
                     },
                     es: {
                         brand_name: "Plataforma Logística Transparente",
                         welcome: "Hola, Importador",
-                        subtitle: "Auditoría logística China-Latam",
-                        btn_quote: "Cotizar / Pedido",
+                        subtitle: "Auditoría logística especializada China-Latam",
+                        btn_quote: "Cotizar",
                         btn_guarantee: "Garantía",
                         lock_notice: "COSTOS BLOQUEADOS",
                         fee_visto_bueno: "Visto Bueno (V.B.)",
@@ -227,36 +231,31 @@
                         nav_home: "Inicio", nav_orders: "Pedidos", nav_finance: "Finanzas", nav_me: "Yo",
                         order_status: "En Tránsito",
                         order_vessel: "COSCO SHIPPING / V.088",
+                        role_admin_title: "Panel de Gestión", role_client_title: "Perfil de Cliente",
+                        user_role: isAdmin.value ? "Administrador" : "Importador Verificado",
+                        stat_orders: "Mis Pedidos", stat_saving: "Ahorro Total",
+                        admin_panel: "Monitoreo Global", admin_users: "Usuarios Activos", admin_alerts: "Alertas de Sobrecargo",
                         quote_form_title: "Publicar Requerimiento",
-                        form_product: "Producto y Uso",
-                        form_qty: "Cantidad",
-                        form_voltage: "Voltaje / Hz",
-                        form_contact: "Contacto (WhatsApp/Email)",
-                        form_submit: "Enviar Pedido",
-                        form_success: "¡Requerimiento enviado! Nos contactaremos pronto.",
-                        ai_msg: "Hola, soy tu asistente AI. Puedo auditar facturas o revisar el estado de tu pedido.",
-                        ai_placeholder: "Escribe tu duda...",
-                        ai_send: "Enviar",
-                        audit_title: "Monto de Visto Bueno:",
-                        audit_btn: "Auditar"
+                        form_product: "Producto y Uso", form_qty: "Cantidad", form_voltage: "Voltaje / Hz",
+                        form_submit: "Enviar Requerimiento", form_success: "¡Requerimiento enviado! Nos contactaremos pronto.",
+                        ai_msg: "¡Hola! Soy Logi-AI. Puedo auditar facturas de destino o revisar el estado de tu pedido.",
+                        ai_placeholder: "Escribe tu duda...", ai_send: "Enviar",
+                        audit_title: "Ingrese monto de Visto Bueno en factura:",
+                        audit_btn: "Iniciar Auditoría Automática",
+                        alert_ok: "✅ Precio correcto conforme al acuerdo.", alert_err: "⚠️ Anomalía: ¡Sobreprecio detectado!"
                     }
                 };
 
                 const t = computed(() => dictionary[lang.value]);
                 const toggleLang = () => lang.value = lang.value === 'zh' ? 'es' : 'zh';
-                
-                const submitQuote = () => {
-                    alert(t.value.form_success);
-                    showQuoteModal.value = false;
-                };
-
+                const submitQuote = () => { alert(t.value.form_success); showQuoteModal.value = false; };
                 const audit = () => {
                     const input = document.getElementById('vb_input').value;
-                    if(input > 300) alert("⚠️ Alerta de sobreprecio");
-                    else alert("✅ Precio conforme");
+                    if(input > 300) alert(t.value.alert_err);
+                    else if(input > 0) alert(t.value.alert_ok);
                 };
 
-                return { lang, t, toggleLang, activeTab, showAI, showQuoteModal, quoteData, submitQuote, audit, isAdmin };
+                return { lang, t, toggleLang, activeTab, showAI, showQuoteModal, submitQuote, audit, isAdmin };
             }
         }).mount('#app');
     </script>
