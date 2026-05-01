@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma Logística Transparente</title>
-    <link rel="manifest" href='data:application/json,{"name":"LogiTransparente","short_name":"LogiTrans","start_url":".","display":"standalone","background_color":"#2563eb","theme_color":"#2563eb","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/2830/2830305.png","sizes":"512x512","type":"image/png"}]}'>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -17,8 +16,8 @@
     <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col shadow-2xl bg-white relative">
         
         <header class="bg-blue-600 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
-            <h1 class="font-bold text-sm tracking-tight">{{ t.brand_name }}</h1>
-            <button @click="toggleLang" class="bg-blue-700 px-4 py-1 rounded-full text-xs border border-blue-400 font-bold transition-all active:scale-95">
+            <h1 class="font-bold text-sm">{{ t.brand_name }}</h1>
+            <button @click="toggleLang" class="bg-blue-700 px-4 py-1 rounded-full text-xs border border-blue-400 font-bold">
                 {{ lang === 'zh' ? 'Español' : '中文' }}
             </button>
         </header>
@@ -28,33 +27,33 @@
             <div v-if="activeTab === 'home'" class="fade-in">
                 <div class="mb-6">
                     <h2 class="text-2xl font-black text-gray-800">{{ t.welcome }}</h2>
-                    <p class="text-gray-500 text-sm tracking-tight">{{ t.subtitle }}</p>
+                    <p class="text-gray-500 text-sm">{{ t.subtitle }}</p>
                 </div>
 
                 <div class="grid grid-cols-3 gap-4 mb-8 text-center text-gray-700">
-                    <div @click="activeTab = 'orders'" class="cursor-pointer">
-                        <div class="bg-orange-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🚚</div>
+                    <div @click="showQuoteModal = true" class="cursor-pointer">
+                        <div class="bg-orange-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm hover:bg-orange-200 transition-colors">🚚</div>
                         <span class="text-[10px] font-bold uppercase">{{ t.btn_quote }}</span>
                     </div>
                     <div @click="activeTab = 'finance'" class="cursor-pointer">
-                        <div class="bg-green-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🛡️</div>
+                        <div class="bg-green-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm hover:bg-green-200 transition-colors">🛡️</div>
                         <span class="text-[10px] font-bold uppercase">{{ t.btn_guarantee }}</span>
                     </div>
                     <div @click="showAI = true" class="cursor-pointer">
-                        <div class="bg-blue-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm">🤖</div>
+                        <div class="bg-blue-100 p-4 rounded-2xl mb-2 text-2xl shadow-sm hover:bg-blue-200 transition-colors">🤖</div>
                         <span class="text-[10px] font-bold uppercase">Logi-AI</span>
                     </div>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl shadow-lg border border-gray-100 relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-green-500"></div>
-                    <div class="flex justify-between mb-3 text-[10px] font-black tracking-widest uppercase">
+                    <div class="flex justify-between mb-3 text-[10px] font-black uppercase tracking-widest">
                         <span class="text-green-600 bg-green-50 px-2 py-0.5 rounded">{{ t.lock_notice }}</span>
                         <span class="text-gray-300 font-mono italic">LC-2026-001</span>
                     </div>
                     <h3 class="font-bold text-gray-800 text-lg flex items-center">Shanghai <span class="mx-2 text-blue-500 text-xl">➔</span> Callao</h3>
-                    <div class="mt-4 space-y-2 text-xs text-gray-600 border-t pt-3 border-dashed">
-                        <div class="flex justify-between"><span>{{ t.fee_visto_bueno }}</span><span class="font-mono font-bold text-gray-800">$300.00</span></div>
+                    <div class="mt-4 space-y-2 text-xs text-gray-600 border-t pt-3 border-dashed text-gray-800">
+                        <div class="flex justify-between"><span>{{ t.fee_visto_bueno }}</span><span class="font-mono font-bold">$300.00</span></div>
                         <div class="flex justify-between font-bold text-blue-600 text-sm mt-2 pt-2 border-t">
                             <span>{{ t.total_locked }}</span><span class="font-mono">$430 + (CBM * $50)</span>
                         </div>
@@ -70,6 +69,7 @@
                         <span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-black uppercase">{{ t.order_status }}</span>
                     </div>
                     <p class="font-bold text-gray-800">Shanghai ➔ Callao</p>
+                    <p class="text-[10px] text-gray-400 mt-1">{{ t.order_vessel }}</p>
                     <div class="mt-4">
                         <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                             <div class="h-full bg-blue-500 w-2/3"></div>
@@ -80,10 +80,10 @@
 
             <div v-if="activeTab === 'finance'" class="fade-in space-y-4">
                 <h2 class="text-xl font-black text-gray-800">{{ t.nav_finance }}</h2>
-                <div class="bg-gray-50 p-5 rounded-3xl border border-gray-200">
-                    <p class="text-sm font-bold text-gray-700 mb-4">{{ t.audit_title }}</p>
-                    <input type="number" v-model="auditAmount" class="w-full p-4 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-mono mb-4 shadow-inner" placeholder="$">
-                    <button @click="handleAudit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg shadow-blue-100 active:scale-95 transition-all">
+                <div class="bg-gray-50 p-5 rounded-3xl border border-gray-200 text-gray-800">
+                    <p class="text-sm font-bold mb-4">{{ t.audit_title }}</p>
+                    <input type="number" id="vb_input" class="w-full p-4 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 mb-4 shadow-inner" placeholder="$">
+                    <button @click="audit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg shadow-blue-100">
                         {{ t.audit_btn }}
                     </button>
                 </div>
@@ -91,31 +91,42 @@
 
             <div v-if="activeTab === 'me'" class="fade-in text-center pt-8 space-y-6">
                 <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 to-blue-400 rounded-full mx-auto flex items-center justify-center text-4xl text-white shadow-xl">👤</div>
-                <p class="font-black text-2xl text-gray-800">{{ isAdmin ? t.role_admin_title : t.role_client_title }}</p>
-                <div class="grid grid-cols-2 gap-4 px-4">
-                    <div class="bg-gray-50 p-5 rounded-3xl">
-                        <p class="text-2xl font-black text-gray-800">{{ isAdmin ? '1,280' : '12' }}</p>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{{ t.stat_orders }}</p>
-                    </div>
-                    <div class="bg-gray-50 p-5 rounded-3xl">
-                        <p class="text-2xl font-black text-green-600">{{ isAdmin ? '$25.4k' : '$420' }}</p>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{{ t.stat_saving }}</p>
-                    </div>
+                <div>
+                    <p class="font-black text-2xl text-gray-800">{{ isAdmin ? t.role_admin_title : t.role_client_title }}</p>
+                    <p class="text-[11px] text-blue-600 font-bold uppercase mt-1 px-4 py-1 bg-blue-50 inline-block rounded-full tracking-widest">{{ t.user_role }}</p>
                 </div>
             </div>
+
         </main>
 
-        <div v-if="showAuditResult" class="fixed inset-0 bg-black/50 z-[200] flex items-center justify-center px-6" @click.self="showAuditResult = false">
-            <div class="bg-white w-full rounded-[32px] overflow-hidden shadow-2xl border-4 border-blue-600 fade-in">
-                <div class="bg-blue-50 p-4 border-b border-blue-100 text-center">
-                    <h3 class="font-black text-blue-700 text-lg uppercase tracking-tight">{{ t.audit_res_title }}</h3>
+        <div v-if="showQuoteModal" class="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4 fade-in" @click.self="showQuoteModal = false">
+            <div class="bg-white w-full max-w-sm rounded-[32px] p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-black text-lg text-gray-800">{{ t.quote_form_title }}</h3>
+                    <button @click="showQuoteModal = false" class="text-gray-400 text-2xl">&times;</button>
                 </div>
-                <div class="p-8 text-center bg-gray-50">
-                    <p class="text-xl font-bold leading-relaxed text-gray-800 mb-6">
-                        {{ auditMessage }}
-                    </p>
-                    <button @click="showAuditResult = false" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
-                        {{ t.audit_ok_btn }}
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_product }}</label>
+                        <input type="text" v-model="quoteData.product" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="Ex: Aire Acondicionado">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_qty }}</label>
+                            <input type="text" v-model="quoteData.qty" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="10 unidades">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_voltage }}</label>
+                            <input type="text" v-model="quoteData.voltage" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="220v / 60Hz">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ t.form_contact }}</label>
+                        <input type="text" v-model="quoteData.contact" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 text-sm text-gray-800" placeholder="WhatsApp / Email">
+                    </div>
+                    <button @click="submitQuote" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg mt-2">
+                        {{ t.form_submit }}
                     </button>
                 </div>
             </div>
@@ -123,27 +134,39 @@
 
         <div v-if="showAI" class="fixed inset-0 bg-black/40 z-[100] flex items-end justify-center px-4 pb-20" @click.self="showAI = false">
             <div class="bg-gray-50 w-full max-w-sm rounded-[40px] p-8 shadow-2xl border border-white fade-in">
-                <div class="flex justify-between items-center mb-6 text-gray-800">
+                <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center space-x-3">
                         <div class="bg-blue-600 p-2 rounded-xl text-xl">🤖</div>
-                        <h3 class="font-black text-xl">Logi-AI</h3>
+                        <h3 class="font-black text-xl text-gray-800">Logi-AI</h3>
                     </div>
-                    <button @click="showAI = false" class="text-gray-400 text-3xl font-light">&times;</button>
+                    <button @click="showAI = false" class="text-gray-400 text-3xl">&times;</button>
                 </div>
-                <div class="bg-white p-5 rounded-3xl mb-6 text-sm text-gray-600 border border-gray-100">
+                <div class="bg-white p-5 rounded-3xl mb-6 text-sm leading-relaxed text-gray-600 shadow-sm border border-gray-100">
                     {{ t.ai_msg }}
                 </div>
                 <div class="relative">
-                    <input type="text" :placeholder="t.ai_placeholder" class="w-full p-4 bg-white rounded-2xl outline-none border border-gray-200 text-sm">
-                    <button class="absolute right-2 top-2 bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl uppercase">{{ t.ai_send }}</button>
+                    <input type="text" :placeholder="t.ai_placeholder" class="w-full p-4 bg-white rounded-2xl outline-none border border-gray-200 focus:border-blue-500 text-sm">
+                    <button class="absolute right-2 top-2 bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-tighter">{{ t.ai_send }}</button>
                 </div>
             </div>
         </div>
 
         <nav class="bg-white border-t flex justify-around p-3 fixed bottom-0 w-full max-w-md z-50">
-            <div v-for="(nav, key) in navItems" :key="key" @click="activeTab = key" :class="activeTab === key ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
-                <span class="text-xl">{{ nav.icon }}</span>
-                <span class="text-[9px] font-black mt-1 uppercase">{{ t['nav_'+key] }}</span>
+            <div @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+                <span class="text-xl">🏠</span>
+                <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_home }}</span>
+            </div>
+            <div @click="activeTab = 'orders'" :class="activeTab === 'orders' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+                <span class="text-xl">📋</span>
+                <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_orders }}</span>
+            </div>
+            <div @click="activeTab = 'finance'" :class="activeTab === 'finance' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+                <span class="text-xl">💰</span>
+                <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_finance }}</span>
+            </div>
+            <div @click="activeTab = 'me'" :class="activeTab === 'me' ? 'text-blue-600' : 'text-gray-400'" class="flex flex-col items-center cursor-pointer transition-all">
+                <span class="text-xl">👤</span>
+                <span class="text-[9px] font-black mt-1 uppercase">{{ t.nav_me }}</span>
             </div>
         </nav>
     </div>
@@ -155,82 +178,85 @@
                 const lang = ref('es');
                 const activeTab = ref('home');
                 const showAI = ref(false);
+                const showQuoteModal = ref(false); // 控制询价弹窗
                 const isAdmin = ref(true);
-                
-                // 审计相关
-                const auditAmount = ref('');
-                const showAuditResult = ref(false);
-                const auditMessage = ref('');
 
-                const navItems = {
-                    home: { icon: '🏠' },
-                    orders: { icon: '📋' },
-                    finance: { icon: '💰' },
-                    me: { icon: '👤' }
-                };
+                // 询价表单数据
+                const quoteData = ref({
+                    product: '',
+                    qty: '',
+                    voltage: '',
+                    contact: ''
+                });
 
                 const dictionary = {
                     zh: {
                         brand_name: "透明化物流平台",
                         welcome: "您好，进口商",
-                        subtitle: "专注中拉贸易物流审计",
-                        btn_quote: "询价", btn_guarantee: "保障",
+                        subtitle: "中国-拉美贸易物流审计专家",
+                        btn_quote: "询价/发布需求",
+                        btn_guarantee: "费用保障",
                         lock_notice: "目的港费用已锁定",
-                        fee_visto_bueno: "核放费 (Visto Bueno)",
+                        fee_visto_bueno: "核放费 (V.B.)",
                         total_locked: "锁定总额",
                         nav_home: "首页", nav_orders: "订单", nav_finance: "账单", nav_me: "我的",
-                        order_status: "运输中", order_vessel: "船名: COSCO V.088",
-                        role_admin_title: "平台管理面板", role_client_title: "客户资料卡",
-                        user_role: isAdmin.value ? "超级管理员" : "认证进口商",
-                        stat_orders: "历史订单", stat_saving: "累计节省",
-                        audit_title: "请输入账单中的 Visto Bueno 金额:",
-                        audit_btn: "开始自动比对",
-                        audit_res_title: "收费比对结果",
-                        audit_ok_btn: "确定",
-                        alert_warn: "⚠️ 报警：Visto Bueno 超标！锁定 $300，实际收 $",
-                        alert_pass: "✅ 费用符合协议",
-                        ai_msg: "您好！我是 Logi-AI。我可以帮您审计账单或查询关税。",
-                        ai_placeholder: "输入您的问题...", ai_send: "发送"
+                        order_status: "运输中",
+                        order_vessel: "COSCO SHIPPING / V.088",
+                        quote_form_title: "发布您的进口需求",
+                        form_product: "产品名称与用途",
+                        form_qty: "数量",
+                        form_voltage: "电压/频率要求",
+                        form_contact: "联系人 (WhatsApp/Email)",
+                        form_submit: "提交需求",
+                        form_success: "需求已提交！我们将尽快与您联系。",
+                        ai_msg: "我是您的 AI 助手，可以帮您审计账单或查询需求进度。",
+                        ai_placeholder: "输入您的问题...",
+                        ai_send: "发送",
+                        audit_title: "输入 Visto Bueno 金额:",
+                        audit_btn: "自动审计"
                     },
                     es: {
                         brand_name: "Plataforma Logística Transparente",
                         welcome: "Hola, Importador",
                         subtitle: "Auditoría logística China-Latam",
-                        btn_quote: "Cotizar", btn_guarantee: "Garantía",
+                        btn_quote: "Cotizar / Pedido",
+                        btn_guarantee: "Garantía",
                         lock_notice: "COSTOS BLOQUEADOS",
                         fee_visto_bueno: "Visto Bueno (V.B.)",
                         total_locked: "Total Bloqueado",
                         nav_home: "Inicio", nav_orders: "Pedidos", nav_finance: "Finanzas", nav_me: "Yo",
-                        order_status: "En Tránsito", order_vessel: "Buque: COSCO V.088",
-                        role_admin_title: "Panel de Gestión", role_client_title: "Perfil de Cliente",
-                        user_role: isAdmin.value ? "Administrador" : "Importador Verificado",
-                        stat_orders: "Mis Pedidos", stat_saving: "Ahorro Total",
-                        audit_title: "Ingrese monto de Visto Bueno en factura:",
-                        audit_btn: "Iniciar Comparación",
-                        audit_res_title: "Resultado de Comparación",
-                        audit_ok_btn: "Ok, entendido",
-                        alert_warn: "⚠️ Alerta: ¡Sobreprecio en V.B.! Bloqueado $300, cobro actual $",
-                        alert_pass: "✅ Precio correcto conforme al acuerdo.",
-                        ai_msg: "¡Hola! Soy Logi-AI. Puedo auditar facturas o consultar aranceles.",
-                        ai_placeholder: "Escribe tu duda...", ai_send: "Enviar"
+                        order_status: "En Tránsito",
+                        order_vessel: "COSCO SHIPPING / V.088",
+                        quote_form_title: "Publicar Requerimiento",
+                        form_product: "Producto y Uso",
+                        form_qty: "Cantidad",
+                        form_voltage: "Voltaje / Hz",
+                        form_contact: "Contacto (WhatsApp/Email)",
+                        form_submit: "Enviar Pedido",
+                        form_success: "¡Requerimiento enviado! Nos contactaremos pronto.",
+                        ai_msg: "Hola, soy tu asistente AI. Puedo auditar facturas o revisar el estado de tu pedido.",
+                        ai_placeholder: "Escribe tu duda...",
+                        ai_send: "Enviar",
+                        audit_title: "Monto de Visto Bueno:",
+                        audit_btn: "Auditar"
                     }
                 };
 
                 const t = computed(() => dictionary[lang.value]);
                 const toggleLang = () => lang.value = lang.value === 'zh' ? 'es' : 'zh';
                 
-                const handleAudit = () => {
-                    const amount = auditAmount.value;
-                    if(!amount) return;
-                    if(amount > 300) {
-                        auditMessage.value = t.value.alert_warn + amount;
-                    } else {
-                        auditMessage.value = t.value.alert_pass;
-                    }
-                    showAuditResult.value = true;
+                const submitQuote = () => {
+                    alert(t.value.form_success);
+                    showQuoteModal.value = false;
                 };
 
-                return { lang, t, toggleLang, activeTab, showAI, handleAudit, isAdmin, auditAmount, showAuditResult, auditMessage, navItems };
+                const audit = () => {
+                    const input = document.getElementById('vb_input').value;
+                    if(input > 300) alert("⚠️ Alerta de sobreprecio");
+                    else alert("✅ Precio conforme");
+                };
+
+                return { lang, t, toggleLang, activeTab, showAI, showQuoteModal, quoteData, submitQuote, audit, isAdmin };
             }
         }).mount('#app');
     </script>
