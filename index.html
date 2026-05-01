@@ -1,217 +1,1252 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma Logística Transparente</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .bg-logi-blue { background-color: #0047BB; }
-        .tab-active { color: #0047BB; font-weight: bold; }
-        .tab-inactive { color: #9CA3AF; }
-        .fade-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        ::-webkit-scrollbar { display: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TranspaLog</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07111F; --surf:#0D1E33; --surf2:#122844;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.11);
+  --teal:#00C2A8; --teal-d:rgba(0,194,168,0.13);
+  --gold:#F5A623; --gold-d:rgba(245,166,35,0.13);
+  --red:#FF4D6A;  --red-d:rgba(255,77,106,0.13);
+  --green:#22C97A;--green-d:rgba(34,201,122,0.11);
+  --purple:#8B6FE8;
+  --muted:#4E6A88; --text:#E2EDF8; --text2:#7A9AB8;
+  --nav:72px; --top:58px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  max-width:430px; margin:0 auto;
+  overflow:hidden; height:100%;
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 90% 45% at 50% -5%,rgba(0,194,168,0.07) 0%,transparent 65%),
+    radial-gradient(ellipse 55% 40% at 95% 85%,rgba(139,111,232,0.05) 0%,transparent 55%);
+}
+
+/* ══ TOPBAR ══ */
+.topbar{
+  position:fixed;top:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;height:var(--top);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;
+  background:rgba(7,17,31,0.94);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  z-index:200;
+}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.5px}
+.logo em{color:var(--teal);font-style:normal}
+
+/* Language toggle */
+.lang-toggle{
+  display:flex;align-items:center;gap:0;
+  background:var(--surf2);border:1px solid var(--border2);
+  border-radius:20px;padding:3px;cursor:pointer;
+  user-select:none;
+}
+.lang-opt{
+  padding:5px 12px;border-radius:16px;
+  font-size:12px;font-weight:700;color:var(--muted);
+  transition:all .2s;letter-spacing:.3px;
+}
+.lang-opt.on{background:var(--teal);color:#07111F;}
+
+/* notif */
+.notif-btn{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--surf2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;position:relative;
+}
+.notif-dot{
+  position:absolute;top:7px;right:6px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gold);border:2px solid var(--bg);
+}
+
+/* ══ SCROLL AREA ══ */
+.scroll{
+  position:fixed;
+  top:var(--top);left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  bottom:var(--nav);
+  overflow-y:auto;overflow-x:hidden;
+  z-index:1;
+}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ══ PAGES ══ */
+.page{display:none;padding:22px 18px 20px;min-height:100%}
+.page.on{display:block;animation:up .22s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══ BOTTOM NAV ══ */
+.bnav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;height:var(--nav);
+  background:rgba(7,17,31,0.97);
+  backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;
+  z-index:200;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.bni{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px;
+  cursor:pointer;padding:6px 4px;
+  border:none;background:transparent;
+}
+.bni-icon{
+  width:42px;height:42px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;transition:all .22s;
+}
+.bni-label{
+  font-size:11px;font-weight:600;color:var(--muted);
+  transition:color .2s;font-family:'DM Sans',sans-serif;
+}
+.bni.on .bni-icon{background:var(--teal-d);}
+.bni.on .bni-label{color:var(--teal);}
+
+/* ══ COMPONENTS ══ */
+.pg-title{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:24px;line-height:1.15;margin-bottom:4px;
+}
+.pg-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5}
+
+.card{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:16px;padding:18px;margin-bottom:12px;
+  transition:border-color .2s;
+}
+.card:hover{border-color:rgba(0,194,168,.18);}
+
+.pill{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 9px;border-radius:20px;
+  font-size:11px;font-weight:700;letter-spacing:.2px;
+}
+.p-teal{background:var(--teal-d);color:var(--teal)}
+.p-gold{background:var(--gold-d);color:var(--gold)}
+.p-red {background:var(--red-d); color:var(--red)}
+.p-green{background:var(--green-d);color:var(--green)}
+.p-purple{background:rgba(139,111,232,.13);color:var(--purple)}
+
+/* form */
+.fg{margin-bottom:14px}
+.fl{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:12px;font-weight:600;color:var(--text2);
+  margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;
+}
+.fl span{font-size:11px;font-weight:400;color:var(--muted);
+  text-transform:none;letter-spacing:0;font-style:italic}
+.fi,.fs,.fta{
+  width:100%;background:var(--surf2);
+  border:1px solid var(--border);border-radius:10px;
+  color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:14px;padding:11px 14px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.fi:focus,.fs:focus,.fta:focus{
+  border-color:var(--teal);
+  box-shadow:0 0 0 3px rgba(0,194,168,.07);
+}
+.fi::placeholder{color:var(--muted)}
+.fta{min-height:80px;resize:none}
+.fs{cursor:pointer;appearance:none}
+.fs option{background:var(--surf2)}
+
+/* $ prefix */
+.pw{position:relative}
+.pp{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:14px;
+  color:var(--teal);font-weight:600;pointer-events:none;
+}
+.pw .fi{padding-left:28px}
+
+/* 2-col grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* fee row */
+.fr{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 0;font-size:13px;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.fr:last-child{border-bottom:none}
+.fn{color:var(--text2)}
+.fn small{display:block;font-size:11px;color:var(--muted);margin-top:1px;font-style:italic}
+.fv{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  font-weight:600;color:var(--green);
+}
+.fv.warn{color:var(--gold)}
+
+.total-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0 0;margin-top:8px;
+  border-top:2px solid var(--border2);
+}
+.total-lbl{font-weight:700;font-size:14px}
+.total-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:22px;font-weight:700;color:var(--gold);
+}
+
+/* stat card */
+.sc{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:14px;padding:16px;
+}
+.sc-lbl{font-size:11px;color:var(--muted);font-weight:600;
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.sc-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:24px;font-weight:600;
+}
+
+/* btn */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:13px 20px;border-radius:12px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:14px;
+  font-weight:700;cursor:pointer;transition:all .18s;width:100%;
+  letter-spacing:.2px;
+}
+.btn-teal{background:var(--teal);color:#07111F}
+.btn-teal:hover{background:#00d4b8;transform:translateY(-1px)}
+.btn-teal:active{transform:translateY(0)}
+.btn-outline{
+  background:transparent;border:1px solid var(--border2);
+  color:var(--text2);
+}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-gold{background:var(--gold);color:#07111F}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:9px;width:auto}
+
+/* divider */
+.div{height:1px;background:var(--border);margin:16px 0}
+
+/* lock badge */
+.lock{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--green-d);border:1px solid rgba(34,201,122,.2);
+  color:var(--green);font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;
+}
+
+/* agent compare card */
+.agent-card{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:16px;padding:16px;margin-bottom:10px;
+  cursor:pointer;transition:all .2s;
+}
+.agent-card:hover{border-color:rgba(0,194,168,.3);transform:translateY(-1px)}
+.agent-card.selected{
+  border-color:var(--teal);
+  box-shadow:0 0 0 1px var(--teal);
+}
+.agent-head{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:12px;
+}
+.agent-name{font-weight:700;font-size:14px}
+.agent-country{font-size:12px;color:var(--text2);margin-top:2px}
+.agent-total{
+  font-family:'JetBrains Mono',monospace;
+  font-size:20px;font-weight:700;color:var(--gold);
+  text-align:right;
+}
+.agent-total small{display:block;font-size:11px;color:var(--muted);
+  font-family:'DM Sans',sans-serif;font-weight:400}
+
+/* tracking */
+.track-wrap{position:relative;padding:0 0 0 28px;margin-top:4px}
+.track-line{
+  position:absolute;left:9px;top:6px;bottom:6px;
+  width:2px;background:var(--border2);
+}
+.track-line-fill{
+  position:absolute;left:9px;top:6px;
+  width:2px;background:var(--teal);
+  height:58%;
+}
+.track-step{
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:18px;position:relative;z-index:1;
+}
+.track-step:last-child{margin-bottom:0}
+.tdot{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;margin-left:-28px;
+  border:2px solid var(--border2);background:var(--bg);
+}
+.tdot.done{background:var(--teal);border-color:var(--teal);color:#07111F}
+.tdot.now{
+  background:var(--gold);border-color:var(--gold);color:#07111F;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.4)}
+  50%{box-shadow:0 0 0 7px rgba(245,166,35,0)}}
+.tdot.pend{background:var(--surf2);border-color:var(--border2)}
+
+.tinfo{padding-top:1px}
+.tinfo-title{font-size:13px;font-weight:600}
+.tinfo-title.done{color:var(--text)}
+.tinfo-title.now{color:var(--gold)}
+.tinfo-title.pend{color:var(--muted)}
+.tinfo-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* profile avatar */
+.av{
+  width:64px;height:64px;border-radius:20px;
+  background:linear-gradient(135deg,var(--teal),#0081c9);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:22px;
+  color:#07111F;flex-shrink:0;
+}
+.av.seller{background:linear-gradient(135deg,var(--gold),#e07b00)}
+.av.ff{background:linear-gradient(135deg,var(--purple),#5d3db0)}
+.av.admin{background:linear-gradient(135deg,var(--red),#c0002a)}
+
+/* role selector */
+.role-sel{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.role-card{
+  display:flex;align-items:center;gap:14px;
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;
+}
+.role-card:hover{border-color:rgba(0,194,168,.3);transform:translateX(3px)}
+.role-icon{
+  width:46px;height:46px;border-radius:13px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+.ri-buyer{background:var(--teal-d)}
+.ri-seller{background:var(--gold-d)}
+.ri-ff{background:rgba(139,111,232,.13)}
+.ri-admin{background:var(--red-d)}
+.role-info{flex:1}
+.role-name{font-weight:700;font-size:15px}
+.role-desc{font-size:12px;color:var(--text2);margin-top:2px}
+.role-arrow{color:var(--muted);font-size:18px}
+
+/* admin alert */
+.aalert{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px;border-radius:10px;margin-bottom:8px;
+}
+.aalert.red{background:rgba(255,77,106,.07);border:1px solid rgba(255,77,106,.15)}
+.aalert.yellow{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.15)}
+.aalert.green{background:rgba(34,201,122,.07);border:1px solid rgba(34,201,122,.15)}
+.aalert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.d-red{background:var(--red)} .d-yellow{background:var(--gold)} .d-green{background:var(--green)}
+.aalert-text{font-size:13px;flex:1;line-height:1.4}
+.aalert-time{font-size:11px;color:var(--muted);flex-shrink:0}
+
+/* modal overlay */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.7);z-index:500;
+  align-items:flex-end;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-bg.show{display:flex;animation:mfade .2s ease}
+@keyframes mfade{from{opacity:0}to{opacity:1}}
+.modal{
+  width:100%;max-width:430px;
+  background:var(--surf);
+  border-radius:24px 24px 0 0;
+  padding:24px 20px 32px;
+  animation:mslide .25s ease;
+  max-height:85vh;overflow-y:auto;
+}
+@keyframes mslide{from{transform:translateY(40px)}to{transform:translateY(0)}}
+.modal-handle{
+  width:36px;height:4px;border-radius:2px;
+  background:var(--border2);margin:0 auto 20px;
+}
+.modal-title{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:18px;margin-bottom:16px;
+}
+
+/* success toast */
+.toast{
+  position:fixed;top:70px;left:50%;transform:translateX(-50%);
+  background:var(--green);color:#07111F;
+  font-weight:700;font-size:13px;
+  padding:10px 20px;border-radius:20px;
+  z-index:999;display:none;
+  animation:toastin .3s ease;
+  white-space:nowrap;
+}
+@keyframes toastin{from{opacity:0;transform:translateX(-50%) translateY(-10px)}
+  to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
 </head>
-<body class="bg-gray-50 font-sans">
-    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col bg-white shadow-2xl relative">
-        
-        <header class="bg-logi-blue text-white p-5 flex justify-between items-center sticky top-0 z-[100] shadow-md">
-            <div>
-                <h1 class="text-lg font-bold tracking-tight">{{ t.brand_full }}</h1>
-                <p class="text-[9px] opacity-70 uppercase font-black tracking-widest">{{ t.sub_brand }}</p>
-            </div>
-            <button @click="toggleLang" class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-xs font-bold active:scale-90 transition-all">
-                {{ lang === 'zh' ? 'Español' : '中文' }}
-            </button>
-        </header>
+<body>
 
-        <main class="flex-grow p-4 pb-28 overflow-y-auto">
-            
-            <div v-if="activeTab === 'home'" class="fade-in space-y-6">
-                <div>
-                    <h2 class="text-2xl font-black text-gray-800">{{ t.welcome_hi }}</h2>
-                    <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest">{{ t.welcome_sub }}</p>
-                </div>
+<!-- TOAST -->
+<div class="toast" id="toast">✓ <span id="toast-msg">Enviado</span></div>
 
-                <section class="bg-gradient-to-br from-blue-600 to-blue-800 p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h3 class="font-black text-xl mb-1">{{ t.post_title }}</h3>
-                        <p class="text-[10px] opacity-80 mb-5 leading-relaxed">{{ t.post_sub }}</p>
-                        <button @click="btnAction('Post')" class="bg-white text-blue-700 text-[11px] px-6 py-3 rounded-2xl font-black uppercase tracking-widest active:bg-gray-100 transition-all shadow-md">
-                            {{ t.post_btn }}
-                        </button>
-                    </div>
-                    <span class="absolute -right-6 -bottom-6 text-9xl opacity-10">📢</span>
-                </section>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">Transpa<em>Log</em></div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="lang-toggle" onclick="toggleLang()">
+      <div class="lang-opt" id="lo-es">ES</div>
+      <div class="lang-opt" id="lo-zh">中文</div>
+    </div>
+    <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+  </div>
+</div>
 
-                <div class="grid grid-cols-3 gap-4">
-                    <button v-for="b in ['Consultar', 'Garantia', 'LogiAI']" :key="b" @click="btnAction(b)" class="bg-white p-4 rounded-[28px] flex flex-col items-center border border-gray-100 shadow-sm active:scale-95 transition-all">
-                        <span class="text-2xl mb-2">{{ {Consultar:'🚚', Garantia:'🛡️', LogiAI:'🤖'}[b] }}</span>
-                        <span class="text-[9px] font-black text-gray-600 uppercase">{{ t['btn_'+b.toLowerCase()] }}</span>
-                    </button>
-                </div>
+<!-- SCROLL AREA -->
+<div class="scroll">
 
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center px-1">
-                        <h4 class="text-[11px] font-black text-gray-400 uppercase tracking-widest">{{ t.compare_section }}</h4>
-                        <button @click="activeTab = 'tariffs'" class="text-blue-600 text-[10px] font-bold">+ {{ t.add_offer }}</button>
-                    </div>
-                    <div v-for="(f, i) in forwarders" :key="i" class="bg-white border border-gray-100 p-5 rounded-[28px] shadow-sm flex justify-between items-center">
-                        <div>
-                            <p class="text-[10px] font-black text-blue-600 uppercase mb-1">{{ f.name }}</p>
-                            <p class="text-lg font-black text-gray-900 font-mono">${{ calculateTotal(f) }}</p>
-                        </div>
-                        <button @click="selectForContract(f)" class="bg-gray-900 text-white text-[10px] px-4 py-2.5 rounded-xl font-black uppercase tracking-tighter">
-                            {{ t.btn_contract }}
-                        </button>
-                    </div>
-                </div>
-            </div>
+  <!-- ══════════════════════════════
+       PAGE 1: HOME / INICIO
+  ══════════════════════════════ -->
+  <div class="page on" id="p-home">
+    <div class="pg-title" id="t-home-title">Inicio</div>
+    <div class="pg-sub" id="t-home-sub">Bienvenido, Rodrigo Silva</div>
 
-            <div v-if="activeTab === 'tariffs'" class="fade-in space-y-6">
-                <h2 class="text-2xl font-black text-gray-800">{{ t.audit_title }}</h2>
-                <div class="bg-white border border-gray-100 rounded-[32px] p-6 shadow-sm space-y-5">
-                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">{{ t.audit_sub }}</p>
-                    <div v-for="(val, key) in inputFees" :key="key" class="space-y-1">
-                        <div class="flex justify-between px-1">
-                            <label class="text-[10px] font-black text-gray-500 uppercase">{{ t['fee_'+key] }}</label>
-                            <span v-if="inputFees[key] > marketLimits[key]" class="text-[9px] text-red-500 font-black italic">{{ t.alert_over }}</span>
-                        </div>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
-                            <input v-model.number="inputFees[key]" type="number" class="w-full pl-8 p-3.5 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-mono font-bold text-sm">
-                        </div>
-                    </div>
-                    <button @click="runAudit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg active:scale-95">
-                        {{ t.btn_run_audit }}
-                    </button>
-                </div>
-            </div>
-
-            <div v-if="activeTab === 'contract'" class="fade-in space-y-6">
-                <button @click="activeTab = 'home'" class="text-blue-600 text-xs font-black uppercase">← {{ t.back }}</button>
-                <h2 class="text-2xl font-black text-gray-800">{{ t.contract_title }}</h2>
-                <div class="bg-gray-50 p-6 rounded-[32px] border border-gray-200 text-sm italic text-gray-600 leading-relaxed font-serif">
-                    <p class="mb-4">Importer Agreement with <strong>{{ selectedF.name }}</strong></p>
-                    <p>{{ t.contract_body }}</p>
-                    <div class="mt-4 pt-4 border-t border-dashed border-gray-300 text-lg font-black text-gray-900 font-mono">
-                        TOTAL: ${{ calculateTotal(selectedF) }}
-                    </div>
-                </div>
-                <div class="h-40 bg-white border-2 border-dashed border-gray-200 rounded-[32px] flex items-center justify-center text-gray-300 text-[10px] font-black uppercase">
-                    {{ t.sign_here }}
-                </div>
-                <button @click="confirmSign" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black shadow-xl shadow-green-100">
-                    {{ t.btn_sign_confirm }}
-                </button>
-            </div>
-
-            <div v-if="activeTab === 'me'" class="fade-in space-y-6">
-                <div class="flex items-center space-x-5 p-2">
-                    <div class="w-16 h-16 bg-blue-700 rounded-full flex items-center justify-center text-white text-2xl shadow-lg">👤</div>
-                    <div>
-                        <h2 class="text-xl font-black text-gray-800">Admin_User</h2>
-                        <p class="text-[10px] text-blue-600 font-black uppercase tracking-tighter italic">Verified Member</p>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <div v-for="item in t.me_menu" :key="item" class="bg-white p-5 rounded-[24px] border border-gray-100 flex justify-between items-center shadow-sm active:bg-gray-50 transition-all cursor-pointer">
-                        <span class="text-sm font-bold text-gray-700">{{ item }}</span>
-                        <span class="text-gray-300 font-bold">→</span>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <nav class="bg-white/95 backdrop-blur-sm border-t border-gray-100 flex justify-around p-4 fixed bottom-0 w-full max-w-md z-[100]">
-            <div v-for="tab in [{id:'home',i:'🏠'},{id:'orders',i:'📋'},{id:'tariffs',i:'💰'},{id:'me',i:'👤'}]" 
-                 @click="activeTab = tab.id" 
-                 :class="activeTab === tab.id ? 'tab-active' : 'tab-inactive'" 
-                 class="flex flex-col items-center cursor-pointer">
-                <span class="text-xl mb-1">{{ tab.i }}</span>
-                <span class="text-[9px] font-black uppercase tracking-tighter">{{ t['nav_'+tab.id] }}</span>
-            </div>
-        </nav>
+    <!-- status cards -->
+    <div class="g2" style="margin-bottom:14px">
+      <div class="sc"><div class="sc-lbl" id="t-active-orders">Pedidos Activos</div><div class="sc-val" style="color:var(--teal)">4</div></div>
+      <div class="sc"><div class="sc-lbl" id="t-quotes-recv">Cotizaciones</div><div class="sc-val" style="color:var(--gold)">7</div></div>
+    </div>
+    <div class="sc" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="sc-lbl" id="t-locked-fees">Costos Bloqueados</div>
+          <div class="sc-val" style="color:var(--green)">$18,240</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px" id="t-no-extra">↑ Sin cargos extra al contrato</div>
+        </div>
+        <div class="lock">🔒 <span id="t-locked">Bloqueado</span></div>
+      </div>
     </div>
 
-    <script>
-        const { createApp, ref, computed } = Vue;
-        createApp({
-            setup() {
-                const lang = ref('zh');
-                const activeTab = ref('home');
-                const selectedF = ref(null);
+    <!-- recent -->
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px" id="t-recent">Pedidos Recientes</div>
 
-                // 核心市场标准 (含临时仓库费)
-                const marketLimits = {
-                    vb: 300, descon: 320, handling: 130, 
-                    tdi: 50, mach: 550, thc: 30, trans: 150, storage: 200
-                };
+    <div class="card" style="padding:0;overflow:hidden">
+      <div onclick="goPage('orders')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer">
+        <div style="font-size:22px">📦</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600" id="t-d1">Accesorios Bicicleta Eléc. ×500</div>
+          <div style="font-size:12px;color:var(--text2)">Ningbo → Lima · 20GP</div>
+        </div>
+        <div style="text-align:right">
+          <div class="pill p-teal" id="t-transit">🚢 Tránsito</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">ETA: 12 Jun</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)">
+        <div style="font-size:22px">🪑</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600" id="t-d2">Sillas Ergonómicas ×200</div>
+          <div style="font-size:12px;color:var(--text2)">Guangzhou → Bogotá · LCL</div>
+        </div>
+        <div style="text-align:right">
+          <div class="pill p-gold" id="t-quoting">💬 Cotizando</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px" id="t-today">Hoy</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px">
+        <div style="font-size:22px">🔧</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600" id="t-d3">Piezas Industriales</div>
+          <div style="font-size:12px;color:var(--text2)">Shenzhen → Santiago</div>
+        </div>
+        <div style="text-align:right">
+          <div class="pill p-purple" id="t-new">🆕 Nuevo</div>
+        </div>
+      </div>
+    </div>
 
-                const inputFees = ref({
-                    vb: 0, descon: 0, handling: 0, tdi: 0, mach: 0, thc: 0, trans: 0, storage: 0
-                });
+    <!-- transparency score -->
+    <div class="card" style="margin-top:4px">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px" id="t-transp">Índice de Transparencia</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:52px;color:var(--green);line-height:1">96</div>
+        <div>
+          <div style="font-size:13px;color:var(--text2)" id="t-transp-desc">Todos los costos bloqueados al firmar. Cero cargos extra al llegar al puerto.</div>
+          <div style="margin-top:8px" class="lock">🔒 <span id="t-transp-lock">Precio garantizado</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                const forwarders = ref([
-                    { name: 'Sea-Bridge Peru', fees: { vb: 300, descon: 310, handling: 120, tdi: 45, mach: 540, thc: 25, trans: 140, storage: 180 } },
-                    { name: 'Generic Logistics', fees: { vb: 450, descon: 350, handling: 150, tdi: 60, mach: 600, thc: 45, trans: 200, storage: 300 } }
-                ]);
+  <!-- ══════════════════════════════
+       PAGE 2: ORDERS / PEDIDOS
+  ══════════════════════════════ -->
+  <div class="page" id="p-orders">
+    <div class="pg-title" id="t-orders-title">Nuevo Pedido</div>
+    <div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar cotizaciones de flete</div>
 
-                const dictionary = {
-                    zh: {
-                        brand_full: "Plataforma Logística Transparente", sub_brand: "透明物流平台",
-                        nav_home: "首页 / Inicio", nav_orders: "订单 / Pedidos", nav_tariffs: "资费 / Tarifas", nav_me: "我的 / Yo",
-                        welcome_hi: "您好，进口商", welcome_sub: "透明物流专家 / Especialista",
-                        post_title: "发布求购信息", post_sub: "快速获取货代精准报价 / Cotizaciones rápidas", post_btn: "立即发布 / Publicar",
-                        btn_consultar: "查询 / Consultar", btn_garantia: "保障 / Garantía", btn_logiai: "智控 / Logi AI",
-                        compare_section: "货代比价对比 / Ofertas", add_offer: "添加报价", btn_contract: "签订电子合同",
-                        audit_title: "资费报价比对 / Oferta", audit_sub: "输入实际账单项进行审计",
-                        btn_run_audit: "启动自动审计", alert_over: "超过限额",
-                        fee_vb: "核放费 / Visto Bueno", fee_descon: "拆箱费 / Descon.",
-                        fee_handling: "操作费 / Handling", fee_tdi: "数据传输费 / TDI",
-                        fee_mach: "吊箱费 / MACH", fee_thc: "码头费 / THC", 
-                        fee_trans: "运输费 / Transporte", fee_storage: "临时仓库费 / Almacén Temp.",
-                        contract_title: "电子合同签署", back: "返回", sign_here: "在此处签名 / Firma aquí",
-                        btn_sign_confirm: "确认签署电子合同",
-                        contract_body: "此报价包含所有目的港费用，货代承诺禁止任何形式的加价或乱收费。",
-                        me_menu: ["公司资料 / Perfil", "合同管理 / Contratos", "支付中心 / Pagos", "账户设置 / Ajustes"],
-                        success_msg: "✅ 合同签署成功！订单已生效。"
-                    },
-                    es: {
-                        brand_full: "Plataforma Logística Transparente", sub_brand: "Anti-Sobrecargos",
-                        nav_home: "Inicio", nav_orders: "Pedidos", nav_tariffs: "Tarifas", nav_me: "Yo",
-                        welcome_hi: "Hola, Importador", welcome_sub: "Especialista en Logística Transparente",
-                        post_title: "Publicar Requerimiento", post_sub: "Obtenga cotizaciones de forwarders rápidamente", post_btn: "Publicar Ahora",
-                        btn_consultar: "Consultar", btn_garantia: "Garantía", btn_logiai: "Logi AI",
-                        compare_section: "Ofertas de Forwarders", add_offer: "Añadir", btn_contract: "Firmar Contrato",
-                        audit_title: "Tarifas - Oferta", audit_sub: "Ingrese montos de factura",
-                        btn_run_audit: "Iniciar Auditoría", alert_over: "Exceso",
-                        fee_vb: "Visto Bueno", fee_descon: "Desconsolidación",
-                        fee_handling: "Handling", fee_tdi: "TDI",
-                        fee_mach: "MACH", fee_thc: "THC", 
-                        fee_trans: "Transporte", fee_storage: "Almacén Temporal",
-                        contract_title: "Contrato Digital", back: "Atrás", sign_here: "Firme aquí",
-                        btn_sign_confirm: "Confirmar Firma",
-                        contract_body: "Esta oferta incluye todos los gastos. Prohibido cargos adicionales.",
-                        me_menu: ["Perfil de Empresa", "Contratos", "Pagos", "Ajustes"],
-                        success_msg: "✅ ¡Contrato firmado exitosamente!"
-                    }
-                };
+    <!-- order form -->
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
 
-                const t = computed(() => dictionary[lang.value]);
-                const toggleLang = () => lang.value = (lang.value === 'zh' ? 'es' : 'zh');
-                const calculateTotal = (f) => Object.values(f.fees).reduce((a, b) => a + b, 0).toFixed(2);
-                const btnAction = (n) => alert(`Acción: ${n}`);
-                const selectForContract = (f) => { selectedF.value = f; activeTab.value = 'contract'; };
-                const confirmSign = () => { alert(t.value.success_msg); activeTab.value = 'home'; };
-                const runAudit = () => alert("Auditado: Auditoría completada.");
+      <div class="fg">
+        <div class="fl"><span id="t-fl-desc">Descripción de Mercancía</span> <span id="t-fl-desc-es">Cargo Description</span></div>
+        <textarea class="fta" id="t-ph-desc" placeholder="Ej: Sillas ergonómicas de oficina, 200 unidades, embaladas en cajas de cartón..."></textarea>
+      </div>
 
-                return { lang, t, toggleLang, activeTab, marketLimits, inputFees, forwarders, calculateTotal, btnAction, selectForContract, selectedF, confirmSign, runAudit };
-            }
-        }).mount('#app');
-    </script>
+      <div class="g2">
+        <div class="fg">
+          <div class="fl"><span id="t-fl-weight">Peso Total</span></div>
+          <div class="pw"><input class="fi" type="number" id="t-ph-weight" placeholder="2400"><span class="pp" style="font-family:'DM Sans';font-size:12px;color:var(--muted);right:12px;left:auto">kg</span></div>
+        </div>
+        <div class="fg">
+          <div class="fl"><span id="t-fl-vol">Volumen Total</span></div>
+          <div class="pw"><input class="fi" type="number" id="t-ph-vol" placeholder="18.5"><span class="pp" style="font-family:'DM Sans';font-size:12px;color:var(--muted);right:12px;left:auto">m³</span></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="fg">
+          <div class="fl"><span id="t-fl-origin">Puerto Origen</span></div>
+          <select class="fs" id="t-sel-origin">
+            <option id="t-opt-nb">Ningbo</option>
+            <option id="t-opt-gz">Guangzhou</option>
+            <option id="t-opt-sz">Shenzhen</option>
+            <option id="t-opt-sh">Shanghai</option>
+          </select>
+        </div>
+        <div class="fg">
+          <div class="fl"><span id="t-fl-dest">Puerto Destino</span></div>
+          <select class="fs" id="t-sel-dest">
+            <option>Callao (Lima)</option>
+            <option>Bogotá (BOG)</option>
+            <option>Valparaíso</option>
+            <option>Santos (GRU)</option>
+            <option>Montevideo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fg">
+        <div class="fl"><span id="t-fl-mode">Modo de Envío</span></div>
+        <select class="fs">
+          <option id="t-opt-lcl">LCL — Consolidado (Grupaje)</option>
+          <option id="t-opt-20">FCL — Contenedor 20GP</option>
+          <option id="t-opt-40">FCL — Contenedor 40HQ</option>
+        </select>
+      </div>
+
+      <div class="fg">
+        <div class="fl"><span id="t-fl-hs">Código HS</span> <span id="t-fl-hs2">Clasificación aduanera</span></div>
+        <input class="fi" id="t-ph-hs" placeholder="Ej: 9401.30">
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:14px" id="t-contact-info">📱 Datos de Contacto</div>
+
+      <div class="fg">
+        <div class="fl">
+          <span>WhatsApp</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <select class="fs" style="width:110px;flex-shrink:0">
+            <option>🇵🇪 +51</option><option>🇨🇴 +57</option><option>🇨🇱 +56</option>
+            <option>🇧🇷 +55</option><option>🇲🇽 +52</option><option>🇦🇷 +54</option>
+            <option>🇨🇳 +86</option>
+          </select>
+          <input class="fi" type="tel" id="t-ph-wa" placeholder="999 123 456">
+        </div>
+      </div>
+
+      <div class="fg">
+        <div class="fl"><span id="t-fl-email">Correo Electrónico</span></div>
+        <input class="fi" type="email" id="t-ph-email" placeholder="nombre@empresa.com">
+      </div>
+
+      <div class="fg">
+        <div class="fl"><span id="t-fl-company">Empresa / Razón Social</span></div>
+        <input class="fi" id="t-ph-company" placeholder="Importadora Silva EIRL">
+      </div>
+
+      <div class="fg">
+        <div class="fl"><span id="t-fl-country">País</span></div>
+        <select class="fs">
+          <option>🇵🇪 Perú</option><option>🇨🇴 Colombia</option><option>🇨🇱 Chile</option>
+          <option>🇧🇷 Brasil</option><option>🇲🇽 México</option><option>🇦🇷 Argentina</option>
+        </select>
+      </div>
+
+      <div class="fg">
+        <div class="fl"><span id="t-fl-notes">Notas Adicionales</span> <span id="t-fl-notes2">Opcional</span></div>
+        <textarea class="fta" id="t-ph-notes" placeholder="Requisitos especiales de embalaje, plazos, etc..." style="min-height:65px"></textarea>
+      </div>
+    </div>
+
+    <button class="btn btn-teal" onclick="submitOrder()">
+      <span id="t-btn-submit">🚀 Enviar Solicitud de Cotización</span>
+    </button>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">
+      Los agentes de carga registrados recibirán su solicitud y enviarán cotizaciones en 24h
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       PAGE 3: RATES / OFERTA
+  ══════════════════════════════ -->
+  <div class="page" id="p-rates">
+    <div class="pg-title" id="t-rates-title">Oferta de Flete</div>
+    <div class="pg-sub" id="t-rates-sub">Para agentes de carga: ingrese su cotización detallada con todos los cargos bloqueados</div>
+
+    <!-- ff form -->
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:14px" id="t-rate-order">📦 Pedido de Referencia</div>
+      <div class="fg">
+        <div class="fl"><span id="t-fl-orderref">N° de Solicitud</span></div>
+        <input class="fi" placeholder="TL-2025-0502-XXX">
+      </div>
+      <div class="g2">
+        <div class="fg">
+          <div class="fl"><span id="t-fl-validity">Validez (días)</span></div>
+          <input class="fi" type="number" placeholder="7">
+        </div>
+        <div class="fg">
+          <div class="fl"><span id="t-fl-transit">Tránsito (días)</span></div>
+          <input class="fi" type="number" placeholder="28">
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:4px" id="t-dest-fees">⚓ Cargos en Destino</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px" id="t-dest-fees-sub">Todos los valores quedan bloqueados en contrato. No se podrán cobrar cargos adicionales.</div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-vb-lbl">Visto Bueno</span>
+          <span id="t-vb-cn">核放费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-dc-lbl">Desconsolidación</span>
+          <span id="t-dc-cn">拆箱费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-hd-lbl">Handling / Manipuleo</span>
+          <span id="t-hd-cn">操作费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-tdi-lbl">TDI — Transmisión de Datos</span>
+          <span id="t-tdi-cn">数据传输费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-mach-lbl">MACH — Alquiler de Maquinaria</span>
+          <span id="t-mach-cn">吊箱费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-thc-lbl">THC — Terminal Handling</span>
+          <span id="t-thc-cn">码头费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-tr-lbl">Transporte Interior</span>
+          <span id="t-tr-cn">运输费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-alm-lbl">Almacén Temporal</span>
+          <span id="t-alm-cn">临时仓库费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-aduana-lbl">Servicio de Aduana</span>
+          <span id="t-aduana-cn">报关服务费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-bl-lbl">B/L — Conocimiento de Embarque</span>
+          <span id="t-bl-cn">提单费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:14px" id="t-sea-fees">🚢 Flete Marítimo</div>
+
+      <div class="fg">
+        <div class="fl">
+          <span id="t-of-lbl">Flete Base (O/F)</span>
+          <span id="t-of-cn">基本运费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+      <div class="fg">
+        <div class="fl">
+          <span id="t-baf-lbl">Bunker (BAF)</span>
+          <span id="t-baf-cn">燃油附加费</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+      <div class="fg">
+        <div class="fl">
+          <span id="t-otros-lbl">Otros Cargos</span>
+          <span id="t-otros-cn">其他费用</span>
+        </div>
+        <div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div>
+      </div>
+
+      <div class="fg">
+        <div class="fl"><span id="t-fl-notes">Notas del Agente</span> <span id="t-fl-notas2">Opcional</span></div>
+        <textarea class="fta" id="t-ph-ff-notes" placeholder="Condiciones especiales, servicios incluidos..." style="min-height:65px"></textarea>
+      </div>
+    </div>
+
+    <div style="background:var(--green-d);border:1px solid rgba(34,201,122,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px">
+      <div style="font-size:16px;flex-shrink:0">🔒</div>
+      <div style="font-size:12px;color:var(--green);line-height:1.5" id="t-lock-notice">
+        Al enviar esta oferta, todos los valores quedan contractualmente bloqueados. La plataforma garantiza que no se podrán cobrar cargos adicionales al importador una vez firmado el contrato.
+      </div>
+    </div>
+
+    <button class="btn btn-teal" onclick="submitRates()">
+      <span id="t-btn-rates">✅ Enviar Oferta Bloqueada</span>
+    </button>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-rates-note">
+      El importador podrá comparar y seleccionar su agente. La firma digital bloquea todos los precios.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       PAGE 4: PROFILE / YO
+  ══════════════════════════════ -->
+  <div class="page" id="p-me">
+    <div class="pg-title" id="t-me-title">Mi Perfil</div>
+    <div class="pg-sub" id="t-me-sub">Seleccione su rol para acceder a sus funciones</div>
+
+    <!-- role selector -->
+    <div class="role-sel">
+      <div class="role-card" onclick="openModal('buyer')">
+        <div class="role-icon ri-buyer">🛒</div>
+        <div class="role-info">
+          <div class="role-name" id="t-role-buyer">Comprador / Importador</div>
+          <div class="role-desc" id="t-role-buyer-desc">Compare cotizaciones, firme contratos y bloquee precios</div>
+        </div>
+        <div class="role-arrow">›</div>
+      </div>
+      <div class="role-card" onclick="goPage('rates')">
+        <div class="role-icon ri-seller">🏭</div>
+        <div class="role-info">
+          <div class="role-name" id="t-role-seller">Vendedor / Exportador</div>
+          <div class="role-desc" id="t-role-seller-desc">Cotice en FOB y provea parámetros logísticos</div>
+        </div>
+        <div class="role-arrow">›</div>
+      </div>
+      <div class="role-card" onclick="goPage('rates')">
+        <div class="role-icon ri-ff">🚢</div>
+        <div class="role-info">
+          <div class="role-name" id="t-role-ff">Agente de Carga</div>
+          <div class="role-desc" id="t-role-ff-desc">Publique su oferta detallada con costos bloqueados</div>
+        </div>
+        <div class="role-arrow">›</div>
+      </div>
+      <div class="role-card" onclick="openModal('admin')">
+        <div class="role-icon ri-admin">⚙️</div>
+        <div class="role-info">
+          <div class="role-name" id="t-role-admin">Administrador de Plataforma</div>
+          <div class="role-desc" id="t-role-admin-desc">Panel de control y supervisión general</div>
+        </div>
+        <div class="role-arrow">›</div>
+      </div>
+    </div>
+
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px" id="t-about">Acerca de TranspaLog</div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--text2);line-height:1.7" id="t-about-text">
+        TranspaLog es una plataforma de logística internacional que garantiza total transparencia en los costos de importación. Todos los cargos — portuarios, aduaneros y de manipuleo — quedan bloqueados desde el momento de la firma del contrato digital, eliminando los cobros sorpresa al llegar al puerto destino.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /scroll -->
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="bni on" id="bni-home" onclick="goPage('home')">
+    <div class="bni-icon">🏠</div>
+    <div class="bni-label" id="t-nav-home">Inicio</div>
+  </button>
+  <button class="bni" id="bni-orders" onclick="goPage('orders')">
+    <div class="bni-icon">📋</div>
+    <div class="bni-label" id="t-nav-orders">Pedido</div>
+  </button>
+  <button class="bni" id="bni-rates" onclick="goPage('rates')">
+    <div class="bni-icon">💰</div>
+    <div class="bni-label" id="t-nav-rates">Oferta</div>
+  </button>
+  <button class="bni" id="bni-me" onclick="goPage('me')">
+    <div class="bni-icon">👤</div>
+    <div class="bni-label" id="t-nav-me">Yo</div>
+  </button>
+</div>
+
+<!-- ══ MODAL: BUYER PANEL ══ -->
+<div class="modal-bg" id="modal-buyer" onclick="closeModal('buyer')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="t-modal-buyer-title">Comparar Agentes de Carga</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px" id="t-modal-buyer-sub">
+      Seleccione el agente con la mejor oferta y firme el contrato digital para bloquear todos los precios.
+    </div>
+
+    <!-- agent 1 -->
+    <div class="agent-card selected" onclick="selectAgent(this)">
+      <div class="agent-head">
+        <div>
+          <div class="agent-name">TransOcean Logistics SRL</div>
+          <div class="agent-country">🇨🇳 China → 🇵🇪 Lima · <span style="color:var(--green)">⭐ 4.9</span></div>
+        </div>
+        <div>
+          <div class="agent-total">$3,420 <div style="font-size:11px;color:var(--muted);font-family:'DM Sans'">total destino</div></div>
+        </div>
+      </div>
+      <div class="fr"><div class="fn" id="t-a-vb">Visto Bueno</div><div class="fv">$85</div></div>
+      <div class="fr"><div class="fn" id="t-a-dc">Desconsolidación</div><div class="fv">$320</div></div>
+      <div class="fr"><div class="fn" id="t-a-thc">THC Destino</div><div class="fv">$380</div></div>
+      <div class="fr"><div class="fn" id="t-a-aduana">Aduana Import.</div><div class="fv">$280</div></div>
+      <div class="fr"><div class="fn" id="t-a-transp">Transporte</div><div class="fv">$450</div></div>
+      <div class="fr"><div class="fn" id="t-a-otros">Otros cargos</div><div class="fv">$325</div></div>
+      <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between">
+        <div class="lock">🔒 <span id="t-a-locked">Precio bloqueado</span></div>
+        <div style="font-size:12px;color:var(--teal)">✓ <span id="t-a-selected">Seleccionado</span></div>
+      </div>
+    </div>
+
+    <!-- agent 2 -->
+    <div class="agent-card" onclick="selectAgent(this)">
+      <div class="agent-head">
+        <div>
+          <div class="agent-name">LogiPeru SAC</div>
+          <div class="agent-country">🇵🇪 Lima · <span style="color:var(--gold)">⭐ 4.7</span></div>
+        </div>
+        <div>
+          <div class="agent-total">$3,890 <div style="font-size:11px;color:var(--muted);font-family:'DM Sans'">total destino</div></div>
+        </div>
+      </div>
+      <div class="fr"><div class="fn">Visto Bueno</div><div class="fv warn">$120</div></div>
+      <div class="fr"><div class="fn">Desconsolidación</div><div class="fv warn">$410</div></div>
+      <div class="fr"><div class="fn">THC Destino</div><div class="fv">$380</div></div>
+      <div class="fr"><div class="fn">Aduana Import.</div><div class="fv">$290</div></div>
+      <div class="fr"><div class="fn">Transporte</div><div class="fv warn">$540</div></div>
+      <div class="fr"><div class="fn">Otros cargos</div><div class="fv">$310</div></div>
+      <div style="margin-top:8px">
+        <div style="font-size:11px;color:var(--gold)">⚠ <span id="t-warn-above">Desconsolidación por encima del promedio</span></div>
+      </div>
+    </div>
+
+    <!-- agent 3 -->
+    <div class="agent-card" onclick="selectAgent(this)">
+      <div class="agent-head">
+        <div>
+          <div class="agent-name">ChinaExp EIRL</div>
+          <div class="agent-country">🇨🇳🇵🇪 Ambos puertos · <span style="color:var(--green)">⭐ 4.8</span></div>
+        </div>
+        <div>
+          <div class="agent-total">$3,600 <div style="font-size:11px;color:var(--muted);font-family:'DM Sans'">total destino</div></div>
+        </div>
+      </div>
+      <div class="fr"><div class="fn">Visto Bueno</div><div class="fv">$90</div></div>
+      <div class="fr"><div class="fn">Desconsolidación</div><div class="fv">$350</div></div>
+      <div class="fr"><div class="fn">THC Destino</div><div class="fv">$390</div></div>
+      <div class="fr"><div class="fn">Aduana Import.</div><div class="fv">$275</div></div>
+      <div class="fr"><div class="fn">Transporte</div><div class="fv">$480</div></div>
+      <div class="fr"><div class="fn">Otros cargos</div><div class="fv">$355</div></div>
+    </div>
+
+    <div style="margin-top:4px">
+      <button class="btn btn-teal" onclick="signContract()">
+        <span id="t-btn-sign">✍️ Firmar Contrato Digital y Bloquear Precios</span>
+      </button>
+      <button class="btn btn-outline" style="margin-top:8px" onclick="closeModal('buyer')" id="t-btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: ADMIN PANEL ══ -->
+<div class="modal-bg" id="modal-admin" onclick="closeModal('admin')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="t-admin-title">Panel de Administración</div>
+
+    <!-- stats -->
+    <div class="g2" style="margin-bottom:14px">
+      <div class="sc"><div class="sc-lbl" id="t-adm-users">Usuarios</div><div class="sc-val" style="color:var(--purple)">1,284</div></div>
+      <div class="sc"><div class="sc-lbl" id="t-adm-orders">Pedidos Activos</div><div class="sc-val" style="color:var(--teal)">238</div></div>
+    </div>
+    <div class="g2" style="margin-bottom:16px">
+      <div class="sc"><div class="sc-lbl" id="t-adm-revenue">Ingresos / Mes</div><div class="sc-val" style="color:var(--gold)">$42K</div></div>
+      <div class="sc"><div class="sc-lbl" id="t-adm-disputes">Disputas</div><div class="sc-val" style="color:var(--red)">2</div></div>
+    </div>
+
+    <div style="font-weight:700;font-size:14px;margin-bottom:10px" id="t-adm-alerts">Alertas de Costos Anómalos</div>
+
+    <div class="aalert red">
+      <div class="aalert-dot d-red"></div>
+      <div class="aalert-text" id="t-alert1">🚨 <b>Disputa #D-047</b> — LogiCali cobró $500 en Desconsolidación (contrato: $160)</div>
+      <div class="aalert-time">09:14</div>
+    </div>
+    <div class="aalert yellow">
+      <div class="aalert-dot d-yellow"></div>
+      <div class="aalert-text" id="t-alert2">⚠️ THC de "Shenzhen Fast" = $620 — <b>58% sobre el promedio</b></div>
+      <div class="aalert-time">08:30</div>
+    </div>
+    <div class="aalert yellow">
+      <div class="aalert-dot d-yellow"></div>
+      <div class="aalert-text" id="t-alert3">⚠️ Visto Bueno de "Lima Express" = $210 — <b>rango normal: $80–$130</b></div>
+      <div class="aalert-time">Ayer</div>
+    </div>
+    <div class="aalert green">
+      <div class="aalert-dot d-green"></div>
+      <div class="aalert-text" id="t-alert4">✅ Contrato #TL-0428-001 firmado — 3 partes · Precios bloqueados</div>
+      <div class="aalert-time">Ayer</div>
+    </div>
+
+    <div class="div"></div>
+
+    <div style="font-weight:700;font-size:14px;margin-bottom:10px" id="t-adm-pending">Agentes Pendientes de Aprobación</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surf2);border-radius:10px;padding:11px 13px">
+        <div>
+          <div style="font-size:13px;font-weight:600">Shenzhen Fast Logistics</div>
+          <div style="font-size:11px;color:var(--text2)" id="t-pending-docs">Documentos incompletos</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm" style="background:var(--green-d);color:var(--green)" id="t-btn-approve">✓ Aprobar</button>
+          <button class="btn btn-sm btn-outline" id="t-btn-reject">✗</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surf2);border-radius:10px;padding:11px 13px">
+        <div>
+          <div style="font-size:13px;font-weight:600">Lima Express SAC</div>
+          <div style="font-size:11px;color:var(--green)" id="t-docs-ok">Documentos verificados ✓</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm" style="background:var(--green-d);color:var(--green)" id="t-btn-approve2">✓ Aprobar</button>
+          <button class="btn btn-sm btn-outline">✗</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-outline" onclick="closeModal('admin')" id="t-btn-close">Cerrar</button>
+  </div>
+</div>
+
+<!-- ══ SCRIPT ══ -->
+<script>
+// ── LANGUAGE DATA ─────────────────────────────────────
+const T = {
+  es: {
+    'lo-es':'ES','lo-zh':'中',
+    't-home-title':'Inicio','t-home-sub':'Bienvenido, Rodrigo Silva',
+    't-active-orders':'Pedidos Activos','t-quotes-recv':'Cotizaciones',
+    't-locked-fees':'Costos Bloqueados','t-no-extra':'↑ Sin cargos extra al contrato',
+    't-locked':'Bloqueado','t-recent':'Pedidos Recientes',
+    't-d1':'Accesorios Bicicleta Eléc. ×500','t-d2':'Sillas Ergonómicas ×200','t-d3':'Piezas Industriales',
+    't-transit':'🚢 Tránsito','t-quoting':'💬 Cotizando','t-new':'🆕 Nuevo','t-today':'Hoy',
+    't-transp':'Índice de Transparencia',
+    't-transp-desc':'Todos los costos bloqueados al firmar. Cero cargos extra al llegar al puerto.',
+    't-transp-lock':'Precio garantizado',
+    't-orders-title':'Nuevo Pedido',
+    't-orders-sub':'Complete el formulario para solicitar cotizaciones de flete',
+    't-cargo-info':'📋 Información de la Carga',
+    't-fl-desc':'Descripción de Mercancía','t-fl-desc-es':'Cargo Description',
+    't-ph-desc':'Ej: Sillas ergonómicas de oficina, 200 unidades...',
+    't-fl-weight':'Peso Total','t-fl-vol':'Volumen Total',
+    't-fl-origin':'Puerto Origen','t-fl-dest':'Puerto Destino',
+    't-opt-nb':'Ningbo','t-opt-gz':'Guangzhou','t-opt-sz':'Shenzhen','t-opt-sh':'Shanghai',
+    't-fl-mode':'Modo de Envío',
+    't-opt-lcl':'LCL — Consolidado (Grupaje)','t-opt-20':'FCL — Contenedor 20GP','t-opt-40':'FCL — Contenedor 40HQ',
+    't-fl-hs':'Código HS','t-fl-hs2':'Clasificación aduanera',
+    't-ph-hs':'Ej: 9401.30',
+    't-contact-info':'📱 Datos de Contacto',
+    't-ph-wa':'999 123 456',
+    't-fl-email':'Correo Electrónico','t-ph-email':'nombre@empresa.com',
+    't-fl-company':'Empresa / Razón Social','t-ph-company':'Importadora Silva EIRL',
+    't-fl-country':'País',
+    't-fl-notes':'Notas Adicionales','t-fl-notes2':'Opcional',
+    't-ph-notes':'Requisitos especiales de embalaje, plazos, etc...',
+    't-btn-submit':'🚀 Enviar Solicitud de Cotización',
+    't-submit-note':'Los agentes de carga registrados recibirán su solicitud y enviarán cotizaciones en 24h',
+    't-rates-title':'Oferta de Flete',
+    't-rates-sub':'Para agentes de carga: ingrese su cotización detallada con todos los cargos bloqueados',
+    't-rate-order':'📦 Pedido de Referencia',
+    't-fl-orderref':'N° de Solicitud','t-fl-validity':'Validez (días)','t-fl-transit':'Tránsito (días)',
+    't-dest-fees':'⚓ Cargos en Destino',
+    't-dest-fees-sub':'Todos los valores quedan bloqueados en contrato.',
+    't-vb-lbl':'Visto Bueno','t-vb-cn':'核放费',
+    't-dc-lbl':'Desconsolidación','t-dc-cn':'拆箱费',
+    't-hd-lbl':'Handling / Manipuleo','t-hd-cn':'操作费',
+    't-tdi-lbl':'TDI — Transmisión de Datos','t-tdi-cn':'数据传输费',
+    't-mach-lbl':'MACH — Alquiler de Maquinaria','t-mach-cn':'吊箱费',
+    't-thc-lbl':'THC — Terminal Handling','t-thc-cn':'码头费',
+    't-tr-lbl':'Transporte Interior','t-tr-cn':'运输费',
+    't-alm-lbl':'Almacén Temporal','t-alm-cn':'临时仓库费',
+    't-aduana-lbl':'Servicio de Aduana','t-aduana-cn':'报关服务费',
+    't-bl-lbl':'B/L — Conocimiento de Embarque','t-bl-cn':'提单费',
+    't-sea-fees':'🚢 Flete Marítimo',
+    't-of-lbl':'Flete Base (O/F)','t-of-cn':'基本运费',
+    't-baf-lbl':'Bunker (BAF)','t-baf-cn':'燃油附加费',
+    't-otros-lbl':'Otros Cargos','t-otros-cn':'其他费用',
+    't-fl-notas2':'Opcional','t-ph-ff-notes':'Condiciones especiales, servicios incluidos...',
+    't-lock-notice':'Al enviar esta oferta, todos los valores quedan contractualmente bloqueados. La plataforma garantiza que no se podrán cobrar cargos adicionales al importador.',
+    't-btn-rates':'✅ Enviar Oferta Bloqueada',
+    't-rates-note':'El importador podrá comparar y seleccionar su agente. La firma digital bloquea todos los precios.',
+    't-me-title':'Mi Perfil','t-me-sub':'Seleccione su rol para acceder a sus funciones',
+    't-role-buyer':'Comprador / Importador','t-role-buyer-desc':'Compare cotizaciones, firme contratos y bloquee precios',
+    't-role-seller':'Vendedor / Exportador','t-role-seller-desc':'Cotice en FOB y provea parámetros logísticos',
+    't-role-ff':'Agente de Carga','t-role-ff-desc':'Publique su oferta detallada con costos bloqueados',
+    't-role-admin':'Administrador de Plataforma','t-role-admin-desc':'Panel de control y supervisión general',
+    't-about':'Acerca de TranspaLog',
+    't-about-text':'TranspaLog garantiza total transparencia en los costos de importación. Todos los cargos quedan bloqueados desde la firma del contrato digital, eliminando los cobros sorpresa al llegar al puerto destino.',
+    't-nav-home':'Inicio','t-nav-orders':'Pedido','t-nav-rates':'Oferta','t-nav-me':'Yo',
+    't-modal-buyer-title':'Comparar Agentes de Carga',
+    't-modal-buyer-sub':'Seleccione el agente con la mejor oferta y firme el contrato digital.',
+    't-a-vb':'Visto Bueno','t-a-dc':'Desconsolidación','t-a-thc':'THC Destino',
+    't-a-aduana':'Aduana Import.','t-a-transp':'Transporte','t-a-otros':'Otros cargos',
+    't-a-locked':'Precio bloqueado','t-a-selected':'Seleccionado',
+    't-warn-above':'Desconsolidación por encima del promedio',
+    't-btn-sign':'✍️ Firmar Contrato Digital y Bloquear Precios',
+    't-btn-cancel':'Cancelar',
+    't-admin-title':'Panel de Administración',
+    't-adm-users':'Usuarios','t-adm-orders':'Pedidos Activos',
+    't-adm-revenue':'Ingresos / Mes','t-adm-disputes':'Disputas',
+    't-adm-alerts':'Alertas de Costos Anómalos',
+    't-alert1':'🚨 <b>Disputa #D-047</b> — LogiCali cobró $500 en Desconsolidación (contrato: $160)',
+    't-alert2':'⚠️ THC de "Shenzhen Fast" = $620 — <b>58% sobre el promedio</b>',
+    't-alert3':'⚠️ Visto Bueno de "Lima Express" = $210 — <b>rango normal: $80–$130</b>',
+    't-alert4':'✅ Contrato #TL-0428-001 firmado — 3 partes · Precios bloqueados',
+    't-adm-pending':'Agentes Pendientes de Aprobación',
+    't-pending-docs':'Documentos incompletos','t-docs-ok':'Documentos verificados ✓',
+    't-btn-approve':'✓ Aprobar','t-btn-approve2':'✓ Aprobar','t-btn-reject':'✗',
+    't-btn-close':'Cerrar',
+    'toast-order':'¡Solicitud enviada! Los agentes le contactarán en 24h',
+    'toast-rates':'¡Oferta enviada y bloqueada en contrato!',
+    'toast-sign':'¡Contrato firmado! Precios bloqueados definitivamente.',
+  },
+  zh: {
+    'lo-es':'ES','lo-zh':'中',
+    't-home-title':'首页','t-home-sub':'欢迎回来，Rodrigo Silva',
+    't-active-orders':'进行中订单','t-quotes-recv':'待选报价',
+    't-locked-fees':'已锁定费用','t-no-extra':'↑ 无合同外额外收费',
+    't-locked':'已锁定','t-recent':'最近订单',
+    't-d1':'电动自行车配件 ×500','t-d2':'人体工学椅 ×200','t-d3':'工业零件',
+    't-transit':'🚢 运输中','t-quoting':'💬 报价中','t-new':'🆕 新建','t-today':'今天',
+    't-transp':'费用透明度评分',
+    't-transp-desc':'所有费用在签约时锁定，到港后零额外收费。',
+    't-transp-lock':'价格已保障',
+    't-orders-title':'新建询价单',
+    't-orders-sub':'填写表格，向货代发出询价请求',
+    't-cargo-info':'📋 货物信息',
+    't-fl-desc':'货物描述','t-fl-desc-es':'货物描述',
+    't-ph-desc':'例：人体工学办公椅，200件，纸箱包装…',
+    't-fl-weight':'总重量','t-fl-vol':'总体积',
+    't-fl-origin':'出发港','t-fl-dest':'目的港',
+    't-opt-nb':'宁波','t-opt-gz':'广州','t-opt-sz':'深圳','t-opt-sh':'上海',
+    't-fl-mode':'运输方式',
+    't-opt-lcl':'LCL — 拼箱','t-opt-20':'FCL — 20GP整箱','t-opt-40':'FCL — 40HQ整箱',
+    't-fl-hs':'HS编码','t-fl-hs2':'海关分类',
+    't-ph-hs':'例：9401.30',
+    't-contact-info':'📱 联系方式',
+    't-ph-wa':'199 1234 5678',
+    't-fl-email':'电子邮箱','t-ph-email':'name@company.com',
+    't-fl-company':'公司名称','t-ph-company':'Importadora Silva EIRL',
+    't-fl-country':'国家',
+    't-fl-notes':'补充说明','t-fl-notes2':'选填',
+    't-ph-notes':'特殊包装要求、时效要求等…',
+    't-btn-submit':'🚀 提交询价请求',
+    't-submit-note':'已注册的货代将收到您的询价并在24小时内报价',
+    't-rates-title':'报价单（货代填写）',
+    't-rates-sub':'货代专区：填写各项费用报价，所有费用将锁定入合同',
+    't-rate-order':'📦 关联询价单',
+    't-fl-orderref':'询价单编号','t-fl-validity':'有效期（天）','t-fl-transit':'海运时间（天）',
+    't-dest-fees':'⚓ 目的港费用',
+    't-dest-fees-sub':'所有费用将锁定入合同，不得向进口商收取任何额外费用。',
+    't-vb-lbl':'核放费','t-vb-cn':'Visto Bueno',
+    't-dc-lbl':'拆箱费','t-dc-cn':'Desconsolidación',
+    't-hd-lbl':'操作费','t-hd-cn':'Handling',
+    't-tdi-lbl':'数据传输费','t-tdi-cn':'TDI',
+    't-mach-lbl':'吊箱费','t-mach-cn':'MACH',
+    't-thc-lbl':'码头费','t-thc-cn':'THC',
+    't-tr-lbl':'运输费','t-tr-cn':'Transporte',
+    't-alm-lbl':'临时仓库费','t-alm-cn':'Almacén Temp.',
+    't-aduana-lbl':'报关服务费','t-aduana-cn':'Aduana',
+    't-bl-lbl':'提单费','t-bl-cn':'B/L',
+    't-sea-fees':'🚢 海运费',
+    't-of-lbl':'基本运费（O/F）','t-of-cn':'Flete Base',
+    't-baf-lbl':'燃油附加费（BAF）','t-baf-cn':'Bunker',
+    't-otros-lbl':'其他费用','t-otros-cn':'Otros',
+    't-fl-notas2':'选填','t-ph-ff-notes':'特殊条件、包含服务说明…',
+    't-lock-notice':'提交报价后，所有费用将合同锁定。平台保证进口商到港后不会被收取任何额外费用。',
+    't-btn-rates':'✅ 提交锁定报价',
+    't-rates-note':'进口商将比较各货代报价后选择并签约，电子签名锁定全部价格。',
+    't-me-title':'我的账户','t-me-sub':'选择角色以进入对应功能',
+    't-role-buyer':'买方 / 进口商','t-role-buyer-desc':'比较报价、签订合同、锁定价格',
+    't-role-seller':'卖方 / 出口商','t-role-seller-desc':'提供FOB报价及物流参数',
+    't-role-ff':'货运代理','t-role-ff-desc':'填写详细报价单，锁定各项费用',
+    't-role-admin':'平台管理员','t-role-admin-desc':'查看全局数据及管理平台',
+    't-about':'关于 TranspaLog',
+    't-about-text':'TranspaLog 是国际物流透明化平台。所有港杂费、拆箱费、报关费等费用，在合同签署时全部锁定，彻底消除到港后被乱收费的问题。',
+    't-nav-home':'首页','t-nav-orders':'订单','t-nav-rates':'资费','t-nav-me':'我',
+    't-modal-buyer-title':'比较货代报价',
+    't-modal-buyer-sub':'选择最优货代，签订电子合同锁定所有费用。',
+    't-a-vb':'核放费','t-a-dc':'拆箱费','t-a-thc':'码头费（目的港）',
+    't-a-aduana':'进口报关费','t-a-transp':'运输费','t-a-otros':'其他费用',
+    't-a-locked':'价格已锁定','t-a-selected':'已选择',
+    't-warn-above':'拆箱费高于平均水平',
+    't-btn-sign':'✍️ 签署电子合同并锁定价格',
+    't-btn-cancel':'取消',
+    't-admin-title':'平台管理后台',
+    't-adm-users':'注册用户','t-adm-orders':'活跃订单',
+    't-adm-revenue':'月收入','t-adm-disputes':'待处理纠纷',
+    't-adm-alerts':'异常费用预警',
+    't-alert1':'🚨 <b>纠纷 #D-047</b> — LogiCali 收取拆箱费$500（合同价$160）',
+    't-alert2':'⚠️ "Shenzhen Fast" 码头费 = $620 — <b>超出平均值58%</b>',
+    't-alert3':'⚠️ "Lima Express" 核放费 = $210 — <b>正常区间：$80–$130</b>',
+    't-alert4':'✅ 合同 #TL-0428-001 三方签署完成 · 价格已锁定',
+    't-adm-pending':'待审核货代',
+    't-pending-docs':'文件不完整','t-docs-ok':'文件已验证 ✓',
+    't-btn-approve':'✓ 批准','t-btn-approve2':'✓ 批准','t-btn-reject':'✗',
+    't-btn-close':'关闭',
+    'toast-order':'询价已提交！货代将在24小时内联系您',
+    'toast-rates':'报价已提交并锁定入合同！',
+    'toast-sign':'合同已签署！所有价格正式锁定。',
+  }
+};
+
+let lang = 'es';
+
+function toggleLang() {
+  lang = lang === 'es' ? 'zh' : 'es';
+  applyLang();
+}
+
+function applyLang() {
+  const t = T[lang];
+  // lang toggle visual
+  document.getElementById('lo-es').classList.toggle('on', lang==='es');
+  document.getElementById('lo-zh').classList.toggle('on', lang==='zh');
+
+  // apply text/placeholder
+  for (const [id, val] of Object.entries(t)) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    if (el.tagName==='INPUT' || el.tagName==='TEXTAREA') {
+      el.placeholder = val;
+    } else if (el.tagName==='OPTION') {
+      el.textContent = val;
+    } else {
+      el.innerHTML = val;
+    }
+  }
+
+  // html lang
+  document.documentElement.lang = lang === 'zh' ? 'zh' : 'es';
+}
+
+// ── NAVIGATION ──────────────────────────────────────
+const pages = ['home','orders','rates','me'];
+function goPage(id) {
+  pages.forEach(p => {
+    document.getElementById('p-'+p).classList.toggle('on', p===id);
+    document.getElementById('bni-'+p).classList.toggle('on', p===id);
+  });
+  document.querySelector('.scroll').scrollTop = 0;
+}
+
+// ── MODALS ──────────────────────────────────────────
+function openModal(id) {
+  document.getElementById('modal-'+id).classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id) {
+  document.getElementById('modal-'+id).classList.remove('show');
+  document.body.style.overflow='';
+}
+
+// ── AGENT SELECT ────────────────────────────────────
+function selectAgent(card) {
+  document.querySelectorAll('.agent-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+}
+
+// ── SUBMIT ACTIONS ──────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.style.display='block';
+  setTimeout(()=>{ t.style.display='none'; }, 3000);
+}
+
+function submitOrder() {
+  showToast(T[lang]['toast-order']);
+  setTimeout(()=>goPage('home'), 600);
+}
+function submitRates() {
+  showToast(T[lang]['toast-rates']);
+  setTimeout(()=>goPage('home'), 600);
+}
+function signContract() {
+  closeModal('buyer');
+  showToast(T[lang]['toast-sign']);
+}
+
+// init
+applyLang();
+</script>
 </body>
 </html>
