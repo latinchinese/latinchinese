@@ -8,121 +8,136 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bg-logi-blue { background-color: #0047BB; }
-        .tab-active { color: #0047BB; font-weight: 900; border-bottom: 2px solid #0047BB; }
+        .tab-active { color: #0047BB; font-weight: bold; }
         .tab-inactive { color: #9CA3AF; }
-        .gradient-card { background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%); }
-        .fade-in { animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        /* 隐藏滚动条 */
+        .fade-in { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
-    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col bg-white shadow-2xl relative overflow-x-hidden">
+    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col bg-white shadow-2xl relative">
         
-        <header class="bg-logi-blue text-white p-5 sticky top-0 z-[100] shadow-md">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-lg font-black leading-tight">Plataforma Logística Transparente</h1>
-                    <p class="text-[9px] opacity-70 uppercase font-bold tracking-widest">Sistema Anti-Sobrecargos</p>
-                </div>
-                <button @click="toggleLang" class="bg-white/10 border border-white/30 px-3 py-1 rounded-full text-[10px] font-black hover:bg-white/20 transition-all">
-                    {{ lang === 'zh' ? 'ESPAÑOL' : '中文' }}
-                </button>
+        <header class="bg-logi-blue text-white p-5 flex justify-between items-center sticky top-0 z-[100] shadow-lg">
+            <div>
+                <h1 class="text-lg font-bold tracking-tight leading-tight">{{ t.brand_full }}</h1>
+                <p class="text-[9px] opacity-70 uppercase tracking-widest font-black">{{ t.sub_brand }}</p>
             </div>
+            <button @click="toggleLang" class="bg-white/10 border border-white/30 px-3 py-1 rounded-full text-xs font-bold">
+                {{ lang === 'zh' ? 'Español' : '中文' }}
+            </button>
         </header>
 
         <main class="flex-grow p-4 pb-28">
             
-            <div v-if="activeTab === 'home'" class="fade-in space-y-6">
-                <div>
+            <div v-if="activeTab === 'home'" class="fade-in space-y-5">
+                <div class="mb-4">
                     <h2 class="text-2xl font-black text-gray-800">{{ t.welcome_hi }}</h2>
-                    <p class="text-gray-400 text-[10px] font-black uppercase tracking-tighter">{{ t.welcome_sub }}</p>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">{{ t.welcome_sub }}</p>
                 </div>
                 
-                <div class="gradient-card p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-5 rounded-[28px] text-white shadow-xl relative overflow-hidden">
                     <div class="relative z-10">
-                        <h3 class="font-black text-xl mb-1">{{ t.post_title }}</h3>
-                        <p class="text-[11px] opacity-90 mb-6 leading-tight">{{ t.post_sub }}</p>
-                        <button @click="showModal = true" class="bg-white text-blue-700 text-[11px] px-8 py-3 rounded-2xl font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">
+                        <h3 class="font-black text-lg mb-1">{{ t.post_title }}</h3>
+                        <p class="text-[10px] opacity-80 mb-4">{{ t.post_sub }}</p>
+                        <button class="bg-white text-blue-700 text-[10px] px-5 py-2.5 rounded-xl font-black uppercase tracking-wider">
                             {{ t.post_btn }}
                         </button>
                     </div>
-                    <span class="absolute -right-6 -bottom-6 text-9xl opacity-10 rotate-12">📢</span>
+                    <span class="absolute -right-4 -bottom-4 text-8xl opacity-10">📢</span>
                 </div>
 
                 <div class="grid grid-cols-3 gap-3">
-                    <button v-for="btn in quickButtons" :key="btn.id" @click="btnAction(btn.id)" :class="btn.bg" class="p-4 rounded-[28px] flex flex-col items-center border transition-all active:brightness-90">
-                        <span class="text-2xl mb-2">{{ btn.icon }}</span>
-                        <span class="text-[9px] font-black text-gray-700 uppercase tracking-tighter">{{ t['btn_'+btn.id] }}</span>
+                    <button v-for="b in ['Consultar', 'Garantia', 'LogiAI']" :key="b" @click="btnAction(b)" class="bg-slate-50 p-4 rounded-[24px] flex flex-col items-center border border-slate-100 active:bg-slate-200 transition-colors">
+                        <span class="text-2xl mb-2">{{ {Consultar:'🚚', Garantia:'🛡️', LogiAI:'🤖'}[b] }}</span>
+                        <span class="text-[9px] font-black text-gray-700 uppercase">{{ t['btn_'+b.toLowerCase()] }}</span>
                     </button>
                 </div>
 
-                <div class="bg-white border-2 border-slate-50 shadow-sm p-6 rounded-[36px]">
-                    <div class="flex justify-between items-center mb-5">
-                        <div class="flex items-center space-x-2">
-                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            <span class="text-[11px] font-black text-green-600 uppercase">{{ t.costs_locked }}</span>
-                        </div>
-                        <span class="text-[9px] text-gray-300 font-mono">ID: LC20260429</span>
+                <div class="mt-6 space-y-4">
+                    <div class="flex justify-between items-center px-1">
+                        <h3 class="text-sm font-black text-gray-800 uppercase tracking-widest">{{ t.compare_section }}</h3>
+                        <button @click="activeTab = 'tariffs'" class="text-blue-600 text-[10px] font-bold">+ {{ t.add_offer }}</button>
                     </div>
-                    <div class="flex items-center space-x-3 mb-5">
-                        <div class="bg-slate-100 p-2.5 rounded-xl">🚢</div>
-                        <h3 class="font-black text-gray-800">Shanghai ➔ Callao</h3>
-                    </div>
-                    <div class="space-y-2.5">
-                        <div v-for="(val, key) in marketLimits" class="flex justify-between text-[11px] border-b border-slate-50 pb-2">
-                            <span class="text-gray-500 font-bold">{{ t['fee_'+key] }}</span>
-                            <span class="font-mono text-gray-900 font-black">${{ val.toFixed(2) }}</span>
+                    
+                    <div v-for="(f, index) in forwarders" :key="index" class="bg-white border-2 border-slate-50 p-5 rounded-[32px] shadow-sm">
+                        <div class="flex justify-between mb-3">
+                            <span class="text-[10px] font-black text-blue-600 uppercase">{{ f.name }}</span>
+                            <span class="font-mono font-black text-gray-900">${{ calculateTotal(f) }}</span>
                         </div>
+                        <button @click="selectForContract(f)" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest">
+                            {{ t.btn_contract }}
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div v-if="activeTab === 'tariffs'" class="fade-in">
-                <h2 class="text-2xl font-black mb-4">{{ t.audit_title }}</h2>
-                <p class="text-gray-400 text-sm italic">Módulo de auditoría activo...</p>
+            <div v-if="activeTab === 'tariffs'" class="fade-in space-y-6">
+                <h2 class="text-2xl font-black text-gray-800">{{ t.audit_title }}</h2>
+                <div class="bg-white border-2 border-slate-100 rounded-[32px] p-6 shadow-sm">
+                    <p class="text-[10px] text-gray-400 font-black uppercase mb-6 tracking-widest">{{ t.audit_sub }}</p>
+                    <div class="space-y-4">
+                        <div v-for="(val, key) in inputFees" :key="key">
+                            <div class="flex justify-between mb-1">
+                                <label class="text-[10px] font-black text-slate-500 uppercase">{{ t['fee_'+key] }}</label>
+                                <span v-if="inputFees[key] > marketLimits[key]" class="text-[9px] text-red-500 font-black italic">{{ t.alert_over }}</span>
+                            </div>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-mono">$</span>
+                                <input v-model.number="inputFees[key]" type="number" 
+                                    class="w-full pl-8 p-3 bg-slate-50 rounded-2xl border-2 transition-all outline-none font-mono text-sm font-bold"
+                                    :class="inputFees[key] > marketLimits[key] ? 'border-red-200 text-red-600' : 'border-transparent focus:border-blue-500'">
+                            </div>
+                        </div>
+                        <button @click="runAudit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg mt-4">
+                            {{ t.btn_run_audit }}
+                        </button>
+                    </div>
+                </div>
             </div>
 
+            <div v-if="activeTab === 'contract'" class="fade-in space-y-6">
+                <div @click="activeTab = 'home'" class="text-blue-600 text-xs font-black cursor-pointer">← {{ t.back }}</div>
+                <h2 class="text-2xl font-black text-gray-800">{{ t.contract_title }}</h2>
+                <div class="bg-slate-50 p-6 rounded-[32px] border-2 border-slate-200 text-sm italic font-serif text-slate-600">
+                    <p class="mb-4">Agreement between Importer and <strong>{{ selectedF.name }}</strong>.</p>
+                    <p>{{ t.contract_body }}</p>
+                    <p class="mt-4 font-bold text-slate-900 font-mono">TOTAL: ${{ calculateTotal(selectedF) }}</p>
+                </div>
+                <div class="h-32 border-2 border-dashed border-slate-200 rounded-3xl flex items-center justify-center text-slate-300 text-[10px] uppercase font-black">
+                    {{ t.sign_here }}
+                </div>
+                <button @click="confirmSign" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black shadow-xl shadow-green-100">
+                    {{ t.btn_sign_confirm }}
+                </button>
+            </div>
+
+            <div v-if="activeTab === 'me'" class="fade-in space-y-6">
+                <div class="flex items-center space-x-4 p-2">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-2xl text-white shadow-lg">👤</div>
+                    <div>
+                        <h2 class="text-xl font-black text-gray-800">Admin_User</h2>
+                        <p class="text-[10px] text-blue-600 font-black uppercase tracking-tighter">Premium Importer</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div v-for="item in t.me_menu" :key="item" class="bg-white p-5 rounded-[24px] border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50 transition-colors cursor-pointer">
+                        <span class="text-sm font-bold text-gray-700">{{ item }}</span>
+                        <span class="text-slate-300">→</span>
+                    </div>
+                </div>
+            </div>
         </main>
 
-        <nav class="bg-white/95 backdrop-blur-md border-t border-gray-100 flex justify-around p-4 fixed bottom-0 w-full max-w-md z-[100]">
-            <div v-for="nav in navItems" @click="activeTab = nav.id" :class="activeTab === nav.id ? 'tab-active' : 'tab-inactive'" class="flex flex-col items-center cursor-pointer pb-1 transition-all">
-                <span class="text-xl mb-1">{{ nav.icon }}</span>
-                <span class="text-[9px] font-black uppercase tracking-tighter">{{ t['nav_'+nav.id] }}</span>
+        <nav class="bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-around p-4 fixed bottom-0 w-full max-w-md z-[100]">
+            <div v-for="tab in [{id:'home',i:'🏠'},{id:'orders',i:'📋'},{id:'tariffs',i:'💰'},{id:'me',i:'👤'}]" 
+                 @click="activeTab = tab.id" 
+                 :class="activeTab === tab.id ? 'tab-active' : 'tab-inactive'" 
+                 class="flex flex-col items-center cursor-pointer transition-all">
+                <span class="text-xl mb-1">{{ tab.i }}</span>
+                <span class="text-[9px] font-black uppercase tracking-tighter">{{ t['nav_'+tab.id] }}</span>
             </div>
         </nav>
-
-        <div v-if="showModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-end justify-center">
-            <div class="bg-white w-full max-w-md rounded-t-[40px] p-8 fade-in shadow-2xl">
-                <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6"></div>
-                <h2 class="text-xl font-black text-gray-800 mb-2">{{ t.modal_title }}</h2>
-                <p class="text-xs text-gray-400 mb-6 font-bold">{{ t.modal_sub }}</p>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-[10px] font-black text-blue-600 uppercase mb-2 block">Carga / 货物描述</label>
-                        <input type="text" placeholder="Ej: Zapatos, 20 CBM..." class="w-full bg-slate-50 p-4 rounded-2xl border-2 border-transparent focus:border-blue-500 outline-none font-bold text-sm">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="text-[10px] font-black text-blue-600 uppercase mb-2 block">Origen / 起运港</label>
-                            <input type="text" placeholder="Shanghai" class="w-full bg-slate-50 p-4 rounded-2xl border-2 border-transparent focus:border-blue-500 outline-none font-bold text-sm">
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-black text-blue-600 uppercase mb-2 block">Destino / 目的港</label>
-                            <input type="text" placeholder="Callao" class="w-full bg-slate-50 p-4 rounded-2xl border-2 border-transparent focus:border-blue-500 outline-none font-bold text-sm">
-                        </div>
-                    </div>
-                    <button @click="showModal = false; alert('Publicado con éxito!')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest mt-4">
-                        {{ t.modal_submit }}
-                    </button>
-                    <button @click="showModal = false" class="w-full py-3 text-gray-400 text-[10px] font-black uppercase">
-                        {{ t.modal_cancel }}
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -131,53 +146,76 @@
             setup() {
                 const lang = ref('zh');
                 const activeTab = ref('home');
-                const showModal = ref(false);
+                const selectedF = ref(null);
 
-                const marketLimits = { vb: 300, descon: 320, handling: 130, tdi: 50, mach: 550, thc: 30 };
+                // 核心：市场基准价（含新增临时仓库费）
+                const marketLimits = {
+                    vb: 300, descon: 320, handling: 130, 
+                    tdi: 50, mach: 550, thc: 30, trans: 150,
+                    storage: 200 // 临时仓库费基准
+                };
 
-                const quickButtons = [
-                    { id: 'consultar', icon: '🚚', bg: 'bg-orange-50 border-orange-100' },
-                    { id: 'garantia', icon: '🛡️', bg: 'bg-green-50 border-green-100' },
-                    { id: 'logiai', icon: '🤖', bg: 'bg-blue-50 border-blue-100' }
-                ];
+                const inputFees = ref({
+                    vb: 0, descon: 0, handling: 0, tdi: 0, mach: 0, thc: 0, trans: 0, storage: 0
+                });
 
-                const navItems = [
-                    { id: 'home', icon: '🏠' }, { id: 'orders', icon: '📋' },
-                    { id: 'tariffs', icon: '💰' }, { id: 'me', icon: '👤' }
-                ];
+                const forwarders = ref([
+                    { name: 'Forwarder A', fees: { vb: 300, descon: 310, handling: 120, tdi: 40, mach: 530, thc: 25, trans: 100, storage: 150 } },
+                    { name: 'Forwarder B', fees: { vb: 450, descon: 350, handling: 150, tdi: 60, mach: 600, thc: 45, trans: 200, storage: 300 } }
+                ]);
 
                 const dictionary = {
                     zh: {
-                        welcome_hi: "您好，进口商", welcome_sub: "透明物流专家 / Especialista",
-                        post_title: "发布求购信息", post_sub: "Obtenga cotizaciones de forwarders rápidamente", post_btn: "立即发布 / PUBLICAR AHORA",
-                        btn_consultar: "查询 / Consultar", btn_garantia: "保障 / Garantía", btn_logiai: "智控 / Logi AI",
-                        costs_locked: "锁定费用 / Costos Bloqueados",
+                        brand_full: "Plataforma Logística Transparente", sub_brand: "透明物流平台",
                         nav_home: "首页 / Inicio", nav_orders: "订单 / Pedidos", nav_tariffs: "资费 / Tarifas", nav_me: "我的 / Yo",
-                        modal_title: "新求购信息", modal_sub: "请填写您的物流需求，平台将为您匹配优质报价",
-                        modal_submit: "确认发布 / PUBLICAR", modal_cancel: "取消 / CANCELAR",
-                        fee_vb: "Visto Bueno (核放费)", fee_descon: "Desconsolidación (拆箱费)", fee_handling: "Handling (操作费)",
-                        fee_tdi: "TDI (数据传输费)", fee_mach: "MACH (吊箱费)", fee_thc: "THC (码头费)",
-                        audit_title: "资费报价比对 / Oferta"
+                        welcome_hi: "您好，进口商", welcome_sub: "透明物流专家 / Especialista",
+                        post_title: "发布求购信息", post_sub: "快速获取货代精准报价", post_btn: "立即发布",
+                        btn_consultar: "查询 / Consultar", btn_garantia: "保障 / Garantía", btn_logiai: "智控 / Logi AI",
+                        compare_section: "报价比对 / Ofertas", add_offer: "添加报价",
+                        btn_contract: "签订电子合同 / Firmar",
+                        audit_title: "资费报价比对 / Oferta", audit_sub: "输入实际账单项",
+                        btn_run_audit: "启动自动审计", alert_over: "超过限额",
+                        fee_vb: "核放费 / V.B.", fee_descon: "拆箱费 / Descon.",
+                        fee_handling: "操作费 / Handling", fee_tdi: "数据费 / TDI",
+                        fee_mach: "吊箱费 / MACH", fee_thc: "码头费 / THC", 
+                        fee_trans: "运输费 / Transporte", fee_storage: "临时仓库费 / Almacén Temp.",
+                        contract_title: "电子合同签署", back: "返回", sign_here: "在此处签名",
+                        btn_sign_confirm: "确认签署电子合同",
+                        contract_body: "此报价包含所有目的港费用，禁止任何形式的乱收费。",
+                        me_menu: ["公司资料 (Perfil)", "合同管理 (Contratos)", "支付中心 (Pagos)", "设置 (Settings)"],
+                        success_msg: "✅ 合同签署成功！"
                     },
                     es: {
-                        welcome_hi: "Hola, Importador", welcome_sub: "Especialista en Logística Transparente",
-                        post_title: "Publicar Requerimiento", post_sub: "Obtenga cotizaciones de forwarders rápidamente", post_btn: "PUBLICAR AHORA",
-                        btn_consultar: "Consultar", btn_garantia: "Garantía", btn_logiai: "Logi AI",
-                        costs_locked: "Costos Bloqueados",
+                        brand_full: "Plataforma Logística Transparente", sub_brand: "Anti-Sobrecargos",
                         nav_home: "Inicio", nav_orders: "Pedidos", nav_tariffs: "Tarifas", nav_me: "Yo",
-                        modal_title: "Nuevo Requerimiento", modal_sub: "Complete los detalles para recibir cotizaciones",
-                        modal_submit: "PUBLICAR", modal_cancel: "CANCELAR",
-                        fee_vb: "Visto Bueno", fee_descon: "Desconsolidación", fee_handling: "Handling",
-                        fee_tdi: "TDI", fee_mach: "MACH", fee_thc: "THC",
-                        audit_title: "Tarifas - Oferta"
+                        welcome_hi: "Hola, Importador", welcome_sub: "Especialista en Logística Transparente",
+                        post_title: "Publicar Requerimiento", post_sub: "Cotizaciones rápidas", post_btn: "Publicar",
+                        btn_consultar: "Consultar", btn_garantia: "Garantía", btn_logiai: "Logi AI",
+                        compare_section: "Ofertas de Forwarders", add_offer: "Añadir",
+                        btn_contract: "Firmar Contrato",
+                        audit_title: "Tarifas - Oferta", audit_sub: "Ingrese montos de factura",
+                        btn_run_audit: "Iniciar Auditoría", alert_over: "Exceso",
+                        fee_vb: "Visto Bueno", fee_descon: "Desconsolidación",
+                        fee_handling: "Handling", fee_tdi: "TDI",
+                        fee_mach: "MACH", fee_thc: "THC", 
+                        fee_trans: "Transporte", fee_storage: "Almacén Temporal",
+                        contract_title: "Contrato Digital", back: "Atrás", sign_here: "Firme aquí",
+                        btn_sign_confirm: "Firmar Ahora",
+                        contract_body: "Esta oferta incluye todos los gastos en destino. Prohibido cargos adicionales.",
+                        me_menu: ["Perfil de Empresa", "Contratos", "Pagos", "Ajustes"],
+                        success_msg: "✅ ¡Contrato firmado!"
                     }
                 };
 
                 const t = computed(() => dictionary[lang.value]);
                 const toggleLang = () => lang.value = (lang.value === 'zh' ? 'es' : 'zh');
-                const btnAction = (name) => alert(`Acción: ${name.toUpperCase()} activa.`);
+                const calculateTotal = (f) => Object.values(f.fees).reduce((a, b) => a + b, 0).toFixed(2);
+                const btnAction = (n) => alert(`Modulo: ${n}`);
+                const selectForContract = (f) => { selectedF.value = f; activeTab.value = 'contract'; };
+                const confirmSign = () => { alert(t.value.success_msg); activeTab.value = 'home'; };
+                const runAudit = () => alert("Auditado con éxito.");
 
-                return { lang, t, toggleLang, activeTab, quickButtons, navItems, marketLimits, showModal, btnAction };
+                return { lang, t, toggleLang, activeTab, marketLimits, inputFees, forwarders, calculateTotal, btnAction, selectForContract, selectedF, confirmSign, runAudit };
             }
         }).mount('#app');
     </script>
