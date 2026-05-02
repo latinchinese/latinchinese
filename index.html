@@ -1,204 +1,232 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Plataforma logística transparente</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root { --logi-blue: #0047BB; }
-        .bg-logi-blue { background-color: var(--logi-blue); }
-        .text-logi-blue { color: var(--logi-blue); }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* 封面样式 */
-        #splash-screen {
-            position: fixed; inset: 0; z-index: 9999;
-            background: linear-gradient(135deg, #0047BB 0%, #002e7a 100%);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.8s ease;
-        }
-        
-        .page { display: none; }
-        .page.active { display: block; }
-        .nav-item.active { color: var(--logi-blue); font-weight: 800; }
-        ::-webkit-scrollbar { display: none; }
-    </style>
-</head>
-<body class="bg-gray-50 font-sans">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Plataforma logística transparente</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* 严格保留您原设计的 CSS 变量和风格 */
+:root {
+  --bg:#07111F; --surf:#0D1E33; --surf2:#122844;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.11);
+  --teal:#00C2A8; --teal-d:rgba(0,194,168,0.13);
+  --gold:#F5A623; --gold-d:rgba(245,166,35,0.13);
+  --red:#FF4D6A;  --red-d:rgba(255,77,106,0.13);
+  --green:#22C97A;--green-d:rgba(34,201,122,0.13);
+  --blue:#3E7BFF; --blue-d:rgba(62,123,255,0.13);
+}
 
-    <div id="splash-screen">
-        <div class="text-white text-center fade-in">
-            <div class="text-6xl mb-6">🚢</div>
-            <h1 class="text-2xl font-black tracking-tighter">Plataforma logística transparente</h1>
-            <p class="mt-2 text-sm opacity-60 font-light">Transparencia Total • Eficiencia Global</p>
-            <div class="mt-10 flex space-x-2 justify-center">
-                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { 
+  background: var(--bg); color:#fff; font-family:'DM Sans', sans-serif; 
+  margin:0; overflow:hidden; height:100vh;
+}
+
+/* 新增：平台封面样式 */
+#splash-screen {
+  position: fixed; inset: 0; z-index: 10000;
+  background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.8s ease;
+}
+.splash-logo { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--teal); text-align: center; }
+.splash-loader { margin-top: 20px; width: 40px; height: 2px; background: var(--border2); position: relative; overflow: hidden; }
+.splash-loader::after { content:''; position:absolute; width:40%; height:100%; background:var(--teal); animation: load 1.5s infinite; }
+@keyframes load { 0% { left:-40%; } 100% { left:100%; } }
+
+/* 基础布局（保留原样） */
+.app-container { height:100vh; display:flex; flex-direction:column; position:relative; }
+header { 
+  padding:20px; display:flex; justify-content:space-between; align-items:center; 
+  border-bottom:1px solid var(--border); background:rgba(7,17,31,0.8); backdrop-filter:blur(10px); z-index:100;
+}
+.brand { font-family:'Syne', sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:-0.5px; }
+.brand span { color:var(--teal); font-size: 0.7rem; display: block; opacity: 0.7; font-family: sans-serif; }
+
+.scroll { flex:1; overflow-y:auto; padding:20px 20px 100px; scroll-behavior:smooth; }
+.page { display:none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.page.on { display:block; }
+@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* 原有卡片风格 */
+.card { background:var(--surf); border:1px solid var(--border); border-radius:24px; padding:20px; margin-bottom:16px; }
+.btn-primary { 
+  background:var(--teal); color:var(--bg); border:none; border-radius:16px; 
+  padding:14px; width:100%; font-family:'Syne', sans-serif; font-weight:800; font-size:0.9rem; margin-top:10px;
+}
+
+/* 新增：登录模块网格风格 */
+.auth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+.auth-item { 
+  background: var(--surf2); border: 1px solid var(--border2); border-radius: 20px; 
+  padding: 15px; text-align: center; transition: 0.3s;
+}
+.auth-item:active { transform: scale(0.95); border-color: var(--teal); }
+.auth-item i { font-size: 1.5rem; display: block; margin-bottom: 8px; }
+.auth-item span { font-size: 0.75rem; font-weight: 700; color: #fff; }
+.auth-item small { display: block; font-size: 0.6rem; color: var(--teal); margin-top: 4px; font-weight: 500; }
+
+/* 底部导航（保留原样名称修改） */
+nav { 
+  position:fixed; bottom:0; left:0; right:0; background:rgba(13,30,51,0.9); 
+  backdrop-filter:blur(20px); border-top:1px solid var(--border); 
+  display:flex; justify-content:space-around; padding:12px 10px 30px; z-index:1000;
+}
+.nav-btn { background:none; border:none; color:rgba(255,255,255,0.3); display:flex; flex-direction:column; align-items:center; gap:5px; }
+.nav-btn.on { color:var(--teal); }
+.nav-btn svg { width:22px; height:22px; }
+.nav-btn span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<div id="splash-screen">
+    <div class="splash-logo">Plataforma<br><span style="color:#fff; font-size:1.5rem">logística transparente</span></div>
+    <div class="splash-loader"></div>
+    <p style="color:var(--border2); font-size:0.6rem; margin-top:20px; letter-spacing:2px">LOADING SYSTEM V4.9</p>
+</div>
+
+<div class="app-container">
+    <header>
+        <div class="brand">
+            Plataforma logística transparente
+            <span id="lang-sub">透明化物流平台</span>
+        </div>
+        <div onclick="toggleLang()" style="font-family:'JetBrains Mono'; font-size:10px; color:var(--teal); border:1px solid var(--teal); padding:4px 8px; border-radius:8px">ES/ZH</div>
+    </header>
+
+    <div class="scroll">
+        <div id="p-home" class="page on">
+            <div class="card" style="background:linear-gradient(135deg, var(--surf2) 0%, var(--bg) 100%); border-left:4px solid var(--teal)">
+                <h2 style="font-family:'Syne'; margin:0; font-size:1.4rem" data-zh="发布求购信息" data-es="Publicar Requerimiento">发布求购信息</h2>
+                <p style="font-size:0.8rem; opacity:0.6; margin:10px 0 20px" data-zh="获取货代精准报价" data-es="Obtenga cotizaciones exactas">获取货代精准报价</p>
+                <button class="btn-primary">POST NOW</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px">
+                <div class="card" style="text-align:center; padding:15px">
+                    <div style="font-size:1.5rem; margin-bottom:8px">🚚</div>
+                    <span style="font-size:10px; font-weight:700; opacity:0.7">CONSULTAR</span>
+                </div>
+                <div class="card" style="text-align:center; padding:15px">
+                    <div style="font-size:1.5rem; margin-bottom:8px">🛡️</div>
+                    <span style="font-size:10px; font-weight:700; opacity:0.7">GARANTÍA</span>
+                </div>
+                <div class="card" style="text-align:center; padding:15px">
+                    <div style="font-size:1.5rem; margin-bottom:8px">🤖</div>
+                    <span style="font-size:10px; font-weight:700; opacity:0.7">LOGI AI</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="p-rates" class="page">
+            <h3 style="font-family:'Syne'; margin-bottom:20px">AUDITORÍA DE TARIFAS</h3>
+            <div class="card" id="fee-fields">
+                </div>
+            <button class="btn-primary" style="background:var(--blue)">START AUDIT</button>
+        </div>
+
+        <div id="p-me" class="page">
+            <h3 style="font-family:'Syne'">USER CENTER / 用户中心</h3>
+            
+            <div class="auth-grid">
+                <div class="auth-item">
+                    <i>🛍️</i>
+                    <span data-zh="买方登录" data-es="Comprador">买方登录</span>
+                    <small>LOGIN / REG</small>
+                </div>
+                <div class="auth-item">
+                    <i>🏭</i>
+                    <span data-zh="卖方登录" data-es="Vendedor">卖方登录</span>
+                    <small>LOGIN / REG</small>
+                </div>
+                <div class="auth-item">
+                    <i>🚢</i>
+                    <span data-zh="货代登录" data-es="Forwarder">货代登录</span>
+                    <small>LOGIN / REG</small>
+                </div>
+                <div class="auth-item">
+                    <i>🛠️</i>
+                    <span data-zh="平台管理" data-es="Admin">平台管理</span>
+                    <small>ENTER</small>
+                </div>
+            </div>
+
+            <div style="margin-top:25px">
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px">
+                    <span style="font-weight:700; font-size:0.9rem">PERFIL / 公司资料</span>
+                    <span style="color:var(--teal)">→</span>
+                </div>
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px">
+                    <span style="font-weight:700; font-size:0.9rem">CONTRATOS / 合同管理</span>
+                    <span style="color:var(--teal)">→</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="main-app" class="max-w-md mx-auto min-h-screen flex flex-col bg-white shadow-2xl relative">
-        
-        <header class="bg-logi-blue text-white p-5 flex justify-between items-center sticky top-0 z-[100]">
-            <div>
-                <h1 class="text-sm font-bold leading-tight">Plataforma logística transparente</h1>
-                <p class="text-[9px] opacity-70 uppercase font-black">透明化物流平台</p>
+    <nav>
+        <button onclick="goPage('home')" id="b-home" class="nav-btn on">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Inicio</span>
+        </button>
+        <button onclick="goPage('rates')" id="b-rates" class="nav-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            <span>Tarifas</span>
+        </button>
+        <button onclick="goPage('me')" id="b-me" class="nav-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Yo</span>
+        </button>
+    </nav>
+</div>
+
+<script>
+// 1. 封面逻辑
+setTimeout(() => {
+    const splash = document.getElementById('splash-screen');
+    splash.style.opacity = '0';
+    setTimeout(() => splash.style.display = 'none', 800);
+}, 3000);
+
+// 2. 页面切换逻辑
+function goPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
+    document.getElementById('p-' + id).classList.add('on');
+    document.getElementById('b-' + id).classList.add('on');
+}
+
+// 3. 动态生成费用项（含临时仓库费，保持原设计样式）
+const fees = [
+    {id:'vb', label:'Visto Bueno / 核放费'},
+    {id:'des', label:'Desconsolidación / 拆箱费'},
+    {id:'tdi', label:'TDI / 数据费'},
+    {id:'mac', label:'MACH / 吊箱费'},
+    {id:'thc', label:'THC / 码头费'},
+    {id:'sto', label:'Almacén Temp. / 临时仓库费'}
+];
+const container = document.getElementById('fee-fields');
+fees.forEach(f => {
+    container.innerHTML += `
+        <div style="margin-bottom:15px">
+            <label style="display:block; font-size:10px; font-weight:700; color:var(--teal); margin-bottom:5px; text-transform:uppercase">${f.label}</label>
+            <div style="position:relative">
+                <span style="position:absolute; left:12px; top:12px; color:rgba(255,255,255,0.2); font-family:'JetBrains Mono'">$</span>
+                <input type="number" placeholder="0.00" style="width:100%; background:var(--surf2); border:1px solid var(--border2); padding:12px 12px 12px 30px; border-radius:12px; color:#fff; font-family:'JetBrains Mono'; outline:none">
             </div>
-            <button onclick="toggleLang()" class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-[10px] font-black">ES/ZH</button>
-        </header>
+        </div>
+    `;
+});
 
-        <main class="flex-grow p-4 pb-32">
-            
-            <div id="page-home" class="page active fade-in space-y-6">
-                <h2 class="text-2xl font-black text-gray-800" data-zh="您好，进口商" data-es="Hola, Importador">您好，进口商</h2>
-                
-                <section class="bg-gradient-to-br from-blue-600 to-blue-800 p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h3 class="font-black text-xl mb-1" data-zh="发布求购信息" data-es="Publicar Requerimiento">发布求购信息</h3>
-                        <p class="text-[10px] opacity-80 mb-5" data-zh="快速获取货代精准报价" data-es="Obtenga cotizaciones rápidamente">快速获取货代精准报价</p>
-                        <button class="bg-white text-blue-700 text-[11px] px-6 py-3 rounded-2xl font-black uppercase tracking-widest">立即发布 / POST</button>
-                    </div>
-                    <span class="absolute -right-6 -bottom-6 text-9xl opacity-10">📢</span>
-                </section>
-
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-slate-50 p-4 rounded-[28px] flex flex-col items-center border border-slate-100">
-                        <span class="text-2xl mb-1">🚚</span>
-                        <span class="text-[9px] font-black text-gray-500 uppercase" data-zh="查询" data-es="Consultar">查询</span>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-[28px] flex flex-col items-center border border-slate-100">
-                        <span class="text-2xl mb-1">🛡️</span>
-                        <span class="text-[9px] font-black text-gray-500 uppercase" data-zh="保障" data-es="Garantía">保障</span>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-[28px] flex flex-col items-center border border-slate-100">
-                        <span class="text-2xl mb-1">🤖</span>
-                        <span class="text-[9px] font-black text-gray-500 uppercase" data-zh="智控" data-es="Logi AI">智控</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-rates" class="page fade-in space-y-6">
-                <h2 class="text-2xl font-black text-gray-800" data-zh="资费报价比对" data-es="Tarifas - Oferta">资费报价比对</h2>
-                <div class="bg-white border-2 border-slate-50 rounded-[32px] p-6 shadow-sm space-y-4">
-                    <div id="fee-inputs-container" class="space-y-4">
-                        </div>
-                    <button class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg mt-4">启动审计 / AUDITAR</button>
-                </div>
-            </div>
-
-            <div id="page-me" class="page fade-in space-y-6">
-                <h2 class="text-2xl font-black text-gray-800" data-zh="账户中心" data-es="Centro de Usuario">账户中心</h2>
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
-                        <span class="text-xl mb-2">🛍️</span>
-                        <p class="text-[10px] font-black" data-zh="买方登录" data-es="Login Comprador">买方登录</p>
-                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Registro</button>
-                    </div>
-                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
-                        <span class="text-xl mb-2">🏭</span>
-                        <p class="text-[10px] font-black" data-zh="卖方登录" data-es="Login Vendedor">卖方登录</p>
-                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Registro</button>
-                    </div>
-                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
-                        <span class="text-xl mb-2">🚢</span>
-                        <p class="text-[10px] font-black" data-zh="货代登录" data-es="Login Forwarder">货代登录</p>
-                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Registro</button>
-                    </div>
-                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
-                        <span class="text-xl mb-2">🛠️</span>
-                        <p class="text-[10px] font-black" data-zh="管理员登录" data-es="Login Admin">管理员登录</p>
-                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Acceso</button>
-                    </div>
-                </div>
-
-                <div class="space-y-2 mt-4">
-                    <div class="p-4 bg-slate-50 rounded-xl flex justify-between items-center text-sm font-bold text-gray-700">
-                        <span data-zh="公司资料" data-es="Perfil de Empresa">公司资料</span><span>→</span>
-                    </div>
-                    <div class="p-4 bg-slate-50 rounded-xl flex justify-between items-center text-sm font-bold text-gray-700">
-                        <span data-zh="合同管理" data-es="Contratos">合同管理</span><span>→</span>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-        <nav class="bg-white border-t border-gray-100 flex justify-around p-4 fixed bottom-0 w-full max-w-md z-[100]">
-            <button onclick="goPage('home')" id="btn-home" class="nav-item active flex flex-col items-center">
-                <span class="text-xl">🏠</span><span class="text-[9px] mt-1">Inicio</span>
-            </button>
-            <button onclick="goPage('orders')" id="btn-orders" class="nav-item flex flex-col items-center text-gray-400">
-                <span class="text-xl">📋</span><span class="text-[9px] mt-1">Pedidos</span>
-            </button>
-            <button onclick="goPage('rates')" id="btn-rates" class="nav-item flex flex-col items-center text-gray-400">
-                <span class="text-xl">💰</span><span class="text-[9px] mt-1">Tarifas</span>
-            </button>
-            <button onclick="goPage('me')" id="btn-me" class="nav-item flex flex-col items-center text-gray-400">
-                <span class="text-xl">👤</span><span class="text-[9px] mt-1">Yo</span>
-            </button>
-        </nav>
-    </div>
-
-    <script>
-        // 1. 封面逻辑
-        setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            splash.style.opacity = '0';
-            setTimeout(() => splash.style.display = 'none', 800);
-        }, 3000);
-
-        // 2. 页面导航逻辑
-        function goPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => {
-                n.classList.remove('active', 'text-logi-blue');
-                n.classList.add('text-gray-400');
-            });
-            
-            document.getElementById('page-' + pageId).classList.add('active');
-            const btn = document.getElementById('btn-' + pageId);
-            btn.classList.add('active', 'text-logi-blue');
-            btn.classList.remove('text-gray-400');
-        }
-
-        // 3. 动态生成费用项
-        const fees = [
-            {id:'vb', zh:'核放费 / V.B.', es:'Visto Bueno'},
-            {id:'descon', zh:'拆箱费 / Descon.', es:'Desconsolidación'},
-            {id:'tdi', zh:'数据费 / TDI', es:'TDI'},
-            {id:'mach', zh:'吊箱费 / MACH', es:'MACH'},
-            {id:'thc', zh:'码头费 / THC', es:'THC'},
-            {id:'agencia', zh:'代理费 / Agencia', es:'S. Agencia'},
-            {id:'trans', zh:'运输费 / Transporte', es:'Transporte'},
-            {id:'storage', zh:'临时仓库费 / Almacén Temp.', es:'Almacén Temporal'}
-        ];
-
-        const feeContainer = document.getElementById('fee-inputs-container');
-        fees.forEach(f => {
-            feeContainer.innerHTML += `
-                <div class="space-y-1">
-                    <label class="text-[10px] font-black text-gray-500 uppercase">${f.zh}</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
-                        <input type="number" placeholder="0.00" class="w-full pl-8 p-3 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-blue-500 outline-none font-mono text-sm font-bold">
-                    </div>
-                </div>
-            `;
-        });
-
-        // 4. 语言切换逻辑
-        let currentLang = 'zh';
-        function toggleLang() {
-            currentLang = currentLang === 'zh' ? 'es' : 'zh';
-            document.querySelectorAll('[data-zh]').forEach(el => {
-                el.innerText = el.getAttribute('data-' + currentLang);
-            });
-        }
-    </script>
+// 4. 语言切换
+let lang = 'zh';
+function toggleLang() {
+    lang = lang === 'zh' ? 'es' : 'zh';
+    document.getElementById('lang-sub').innerText = lang === 'zh' ? '透明化物流平台' : 'Logística Transparente';
+    // 可扩展更多 data-属性切换
+}
+</script>
 </body>
 </html>
