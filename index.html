@@ -1,357 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>透明物流平台 · Transparent Logistics</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:#07111F; --surf:#0D1E33; --surf2:#122844;
-  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.11);
-  --teal:#00C2A8; --teal-d:rgba(0,194,168,0.13);
-  --gold:#F5A623; --gold-d:rgba(245,166,35,0.13);
-  --red:#FF4D6A;  --red-d:rgba(255,77,106,0.13);
-  --green:#22C97A;--green-d:rgba(34,201,122,0.11);
-  --purple:#8B6FE8;
-  --muted:#4E6A88; --text:#E2EDF8; --text2:#7A9AB8;
-  --nav:72px; --top:58px;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
-body{
-  background:var(--bg); color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  max-width:430px; margin:0 auto;
-  overflow:hidden; height:100%;
-  position: relative;
-}
-body::before{
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:
-    radial-gradient(ellipse 90% 45% at 50% -5%,rgba(0,194,168,0.07) 0%,transparent 65%),
-    radial-gradient(ellipse 55% 40% at 95% 85%,rgba(139,111,232,0.05) 0%,transparent 55%);
-}
-
-/* ══ TOPBAR ══ */
-.topbar{
-  position:fixed;top:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:430px;height:var(--top);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 18px;
-  background:rgba(7,17,31,0.94);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  z-index:200;
-}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.5px}
-.logo em{color:var(--teal);font-style:normal}
-
-.auth-btn{
-  background:var(--teal-d); border:1px solid rgba(0,194,168,0.3);
-  border-radius:30px; padding:6px 14px; font-size:12px; font-weight:700;
-  color:var(--teal); cursor:pointer; transition:0.2s;
-}
-.auth-btn:hover{ background:var(--teal); color:#07111F;}
-.user-badge{
-  display:flex; align-items:center; gap:10px;
-  background:var(--surf2); border-radius:40px; padding:4px 12px 4px 8px;
-  border:1px solid var(--border);
-}
-.user-avatar{
-  width:30px; height:30px; border-radius:40px;
-  background:linear-gradient(135deg,var(--teal),#0081c9);
-  display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:14px;
-}
-.user-name{font-size:13px; font-weight:500;}
-.logout-btn{ font-size:12px; color:var(--muted); cursor:pointer; margin-left:6px; }
-
-/* 登录/注册容器 */
-.auth-container{
-  position:fixed; top:var(--top); left:50%; transform:translateX(-50%);
-  width:100%; max-width:430px; bottom:0;
-  background:var(--bg); z-index:150;
-  overflow-y:auto; padding:28px 20px;
-  display:flex; flex-direction:column;
-}
-.auth-card{
-  background:var(--surf); border:1px solid var(--border2);
-  border-radius:28px; padding:24px 20px 32px;
-  margin-top:20px;
-}
-.auth-tabs{
-  display:flex; gap:12px; margin-bottom:28px;
-  border-bottom:1px solid var(--border); padding-bottom:12px;
-}
-.auth-tab{
-  font-weight:700; font-size:16px; color:var(--muted);
-  cursor:pointer; transition:0.2s; padding:4px 0;
-}
-.auth-tab.active{ color:var(--teal); border-bottom:2px solid var(--teal);}
-.input-group{ margin-bottom:18px;}
-.input-group label{ font-size:12px; font-weight:600; color:var(--text2); display:block; margin-bottom:6px;}
-.input-group input, .input-group select{
-  width:100%; background:var(--surf2); border:1px solid var(--border);
-  border-radius:12px; padding:12px 14px; color:var(--text);
-  font-family:'DM Sans',sans-serif; font-size:14px; outline:none;
-}
-.input-group input:focus{ border-color:var(--teal);}
-.auth-btn-full{
-  background:var(--teal); color:#07111F; font-weight:800; padding:14px;
-  border-radius:14px; width:100%; border:none; font-size:15px;
-  margin-top:8px; cursor:pointer;
-}
-.auth-switch-text{ text-align:center; margin-top:16px; font-size:12px; color:var(--text2);}
-.auth-switch-text span{ color:var(--teal); cursor:pointer; font-weight:600;}
-.demo-hint{font-size:11px; color:var(--muted); text-align:center; margin-top:16px; background:rgba(255,255,255,0.03); padding:8px; border-radius:12px;}
-
-.main-app{ display:none; height:100%;}
-/* 原有滚动区等复用 */
-.scroll{
-  position:fixed;
-  top:var(--top);left:50%;transform:translateX(-50%);
-  width:100%;max-width:430px;
-  bottom:var(--nav);
-  overflow-y:auto;overflow-x:hidden;
-  z-index:1;
-}
-.scroll::-webkit-scrollbar{display:none}
-.page{display:none;padding:22px 18px 20px;min-height:100%}
-.page.on{display:block;animation:up .22s ease}
-@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.bnav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:430px;height:var(--nav);
-  background:rgba(7,17,31,0.97); backdrop-filter:blur(24px);
-  border-top:1px solid var(--border);
-  display:flex; z-index:200;
-  padding-bottom:env(safe-area-inset-bottom,0px);
-}
-.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;background:transparent;border:none;}
-.bni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;}
-.bni-label{font-size:11px;font-weight:600;color:var(--muted);}
-.bni.on .bni-icon{background:var(--teal-d);}
-.bni.on .bni-label{color:var(--teal);}
-.card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;}
-/* 其他组件样式沿用原有 */
-.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
-.p-teal{background:var(--teal-d);color:var(--teal)}
-.p-gold{background:var(--gold-d);color:var(--gold)}
-.p-red {background:var(--red-d); color:var(--red)}
-.p-green{background:var(--green-d);color:var(--green)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:12px;border:none;font-weight:700;cursor:pointer;width:100%;}
-.btn-teal{background:var(--teal);color:#07111F}
-.agent-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:10px;cursor:pointer;}
-.agent-card.selected{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal);}
-.lock{display:inline-flex;align-items:center;gap:5px;background:var(--green-d);border:1px solid rgba(34,201,122,.2);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;}
-.toast{
-  position:fixed;top:70px;left:50%;transform:translateX(-50%);
-  background:var(--green);color:#07111F;font-weight:700;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap;
-}
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);}
-.modal-bg.show{display:flex;}
-.modal{width:100%;max-width:430px;background:var(--surf);border-radius:24px 24px 0 0;padding:24px 20px 32px;max-height:85vh;overflow-y:auto;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plataforma logística transparente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --logi-blue: #0047BB; }
+        .bg-logi-blue { background-color: var(--logi-blue); }
+        .text-logi-blue { color: var(--logi-blue); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 封面样式 */
+        #splash-screen {
+            position: fixed; inset: 0; z-index: 9999;
+            background: linear-gradient(135deg, #0047BB 0%, #002e7a 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+        
+        .page { display: none; }
+        .page.active { display: block; }
+        .nav-item.active { color: var(--logi-blue); font-weight: 800; }
+        ::-webkit-scrollbar { display: none; }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 font-sans">
 
-<div class="toast" id="toast">✓ <span id="toast-msg">Enviado</span></div>
+    <div id="splash-screen">
+        <div class="text-white text-center fade-in">
+            <div class="text-6xl mb-6">🚢</div>
+            <h1 class="text-2xl font-black tracking-tighter">Plataforma logística transparente</h1>
+            <p class="mt-2 text-sm opacity-60 font-light">Transparencia Total • Eficiencia Global</p>
+            <div class="mt-10 flex space-x-2 justify-center">
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            </div>
+        </div>
+    </div>
 
-<!-- TOPBAR 固定顶栏 -->
-<div class="topbar">
-  <div class="logo" id="app-logo">Transpa<em>Log</em></div>
-  <div style="display:flex;align-items:center;gap:12px">
-    <div class="lang-toggle" onclick="toggleLang()">
-      <div class="lang-opt" id="lo-es">ES</div>
-      <div class="lang-opt" id="lo-zh">中文</div>
-    </div>
-    <div id="auth-widget">
-      <!-- 动态显示登录或用户信息 -->
-    </div>
-  </div>
-</div>
+    <div id="main-app" class="max-w-md mx-auto min-h-screen flex flex-col bg-white shadow-2xl relative">
+        
+        <header class="bg-logi-blue text-white p-5 flex justify-between items-center sticky top-0 z-[100]">
+            <div>
+                <h1 class="text-sm font-bold leading-tight">Plataforma logística transparente</h1>
+                <p class="text-[9px] opacity-70 uppercase font-black">透明化物流平台</p>
+            </div>
+            <button onclick="toggleLang()" class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-[10px] font-black">ES/ZH</button>
+        </header>
 
-<!-- 登录/注册容器 (未登录时显示) -->
-<div id="authContainer" class="auth-container" style="display: flex;">
-  <div class="auth-card">
-    <div class="auth-tabs">
-      <div class="auth-tab active" data-tab="login" id="tabLoginBtn"><span id="auth-login-tab">Iniciar sesión</span></div>
-      <div class="auth-tab" data-tab="register" id="tabRegBtn"><span id="auth-reg-tab">Registrarse</span></div>
-    </div>
-    <!-- 登录表单 -->
-    <div id="loginForm">
-      <div class="input-group">
-        <label id="auth-email-label">Correo electrónico</label>
-        <input type="email" id="loginEmail" placeholder="importador@ejemplo.com">
-      </div>
-      <div class="input-group">
-        <label id="auth-pass-label">Contraseña</label>
-        <input type="password" id="loginPassword" placeholder="••••••">
-      </div>
-      <button class="auth-btn-full" id="doLoginBtn"><span id="auth-login-action">Ingresar</span></button>
-      <div class="demo-hint" id="demoHintLogin">✨ Demo: haz clic en Ingresar (cualquier email/contraseña) o selecciona rol abajo.</div>
-      <div class="input-group" style="margin-top: 8px;">
-        <label id="auth-role-label">Rol de demostración</label>
-        <select id="demoRoleSelect">
-          <option value="buyer" id="roleOptBuyer">Comprador / Importador</option>
-          <option value="ff" id="roleOptFF">Agente de Carga</option>
-          <option value="admin" id="roleOptAdmin">Administrador</option>
-        </select>
-      </div>
-    </div>
-    <!-- 注册表单 (默认隐藏) -->
-    <div id="registerForm" style="display:none;">
-      <div class="input-group">
-        <label id="reg-name-label">Nombre completo</label>
-        <input type="text" id="regName" placeholder="Rodrigo Silva">
-      </div>
-      <div class="input-group">
-        <label id="reg-email-label">Correo electrónico</label>
-        <input type="email" id="regEmail" placeholder="contacto@empresa.com">
-      </div>
-      <div class="input-group">
-        <label id="reg-pass-label">Contraseña</label>
-        <input type="password" id="regPassword" placeholder="••••••">
-      </div>
-      <div class="input-group">
-        <label id="reg-role-label">Rol principal</label>
-        <select id="regRoleSelect">
-          <option value="buyer" id="regOptBuyer">Comprador / Importador</option>
-          <option value="ff" id="regOptFF">Agente de Carga</option>
-          <option value="admin" id="regOptAdmin">Administrador</option>
-        </select>
-      </div>
-      <button class="auth-btn-full" id="doRegisterBtn"><span id="auth-reg-action">Crear cuenta</span></button>
-      <div class="demo-hint" id="demoHintReg">✨ Registro demo: complete cualquier dato, accederá automáticamente.</div>
-    </div>
-    <div class="auth-switch-text" id="authSwitchText">¿No tienes cuenta? <span id="switchToReg">Regístrate</span></div>
-  </div>
-</div>
+        <main class="flex-grow p-4 pb-32">
+            
+            <div id="page-home" class="page active fade-in space-y-6">
+                <h2 class="text-2xl font-black text-gray-800" data-zh="您好，进口商" data-es="Hola, Importador">您好，进口商</h2>
+                
+                <section class="bg-gradient-to-br from-blue-600 to-blue-800 p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h3 class="font-black text-xl mb-1" data-zh="发布求购信息" data-es="Publicar Requerimiento">发布求购信息</h3>
+                        <p class="text-[10px] opacity-80 mb-5" data-zh="快速获取货代精准报价" data-es="Obtenga cotizaciones rápidamente">快速获取货代精准报价</p>
+                        <button class="bg-white text-blue-700 text-[11px] px-6 py-3 rounded-2xl font-black uppercase tracking-widest">立即发布 / POST</button>
+                    </div>
+                    <span class="absolute -right-6 -bottom-6 text-9xl opacity-10">📢</span>
+                </section>
 
-<!-- 主应用界面 (登录后显示) -->
-<div id="mainApp" class="main-app">
-  <div class="scroll">
-    <!-- HOME -->
-    <div class="page on" id="p-home">
-      <div class="pg-title" id="t-home-title">Inicio</div>
-      <div class="pg-sub" id="t-home-sub">Bienvenido, <span id="displayUserName">Usuario</span></div>
-      <div class="g2" style="margin-bottom:14px">
-        <div class="sc"><div class="sc-lbl" id="t-active-orders">Pedidos Activos</div><div class="sc-val" style="color:var(--teal)">4</div></div>
-        <div class="sc"><div class="sc-lbl" id="t-quotes-recv">Cotizaciones</div><div class="sc-val" style="color:var(--gold)">7</div></div>
-      </div>
-      <div class="sc" style="margin-bottom:14px">
-        <div><div class="sc-lbl" id="t-locked-fees">Costos Bloqueados</div><div class="sc-val" style="color:var(--green)">$18,240</div><div style="font-size:12px;color:var(--text2);margin-top:4px" id="t-no-extra">↑ Sin cargos extra al contrato</div></div>
-        <div class="lock" style="margin-top:6px">🔒 <span id="t-locked">Bloqueado</span></div>
-      </div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px" id="t-recent">Pedidos Recientes</div>
-      <div class="card" style="padding:0"> <div onclick="goPage('orders')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer">
-        <div style="font-size:22px">📦</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d1">Accesorios Bicicleta Eléc. ×500</div><div style="font-size:12px;color:var(--text2)">Ningbo → Lima · 20GP</div></div>
-        <div style="text-align:right"><div class="pill p-teal" id="t-transit">🚢 Tránsito</div><div style="font-size:11px;color:var(--muted);margin-top:4px">ETA: 12 Jun</div></div></div>
-        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div style="font-size:22px">🪑</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d2">Sillas Ergonómicas ×200</div><div style="font-size:12px;color:var(--text2)">Guangzhou → Bogotá · LCL</div></div>
-        <div style="text-align:right"><div class="pill p-gold" id="t-quoting">💬 Cotizando</div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="t-today">Hoy</div></div></div>
-      </div>
-      <div class="card" style="margin-top:4px"><div style="font-weight:700;font-size:14px;margin-bottom:12px" id="t-transp">Índice de Transparencia</div>
-      <div style="display:flex;align-items:center;gap:14px"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:52px;color:var(--green);line-height:1">96</div>
-      <div><div style="font-size:13px;color:var(--text2)" id="t-transp-desc">Todos los costos bloqueados al firmar. Cero cargos extra al llegar al puerto.</div><div style="margin-top:8px" class="lock">🔒 <span id="t-transp-lock">Precio garantizado</span></div></div></div></div>
-    </div>
-    <!-- ORDERS -->
-    <div class="page" id="p-orders">
-      <div class="pg-title" id="t-orders-title">Nuevo Pedido</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar cotizaciones de flete</div>
-      <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
-        <textarea class="fta" id="t-ph-desc" placeholder="Ej: Sillas ergonómicas..."></textarea>
-        <div class="g2"><div class="pw"><input class="fi" type="number" id="t-ph-weight" placeholder="2400"><span class="pp">kg</span></div>
-        <div class="pw"><input class="fi" type="number" id="t-ph-vol" placeholder="18.5"><span class="pp">m³</span></div></div>
-        <select class="fs" id="t-sel-origin"><option>Ningbo</option><option>Guangzhou</option><option>Shenzhen</option></select>
-        <select class="fs" id="t-sel-dest"><option>Callao (Lima)</option><option>Bogotá (BOG)</option></select>
-        <button class="btn btn-teal" style="margin-top:14px" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button>
-      </div>
-    </div>
-    <!-- RATES (FF quote) -->
-    <div class="page" id="p-rates"><div class="pg-title" id="t-rates-title">Oferta de Flete</div>
-      <div class="card"><div class="fg"><div class="fl"><span id="t-vb-lbl">Visto Bueno</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="number" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-dc-lbl">Desconsolidación</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="number"></div></div>
-      <div class="fg"><div class="fl"><span id="t-thc-lbl">THC</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="number"></div></div>
-      <div class="fg"><div class="fl"><span id="t-of-lbl">Flete Base</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="number"></div></div>
-      <button class="btn btn-teal" onclick="submitRates()"><span id="t-btn-rates">✅ Enviar Oferta Bloqueada</span></button></div>
-    </div>
-    <!-- PROFILE -->
-    <div class="page" id="p-me"><div class="pg-title" id="t-me-title">Mi Perfil</div><div class="pg-sub" id="t-me-sub">Gestión de cuenta y roles</div>
-      <div class="card" style="text-align:center"><div id="userRoleBadge" class="lock" style="margin:0 auto 12px">👤 Rol: Importador</div><button class="btn btn-outline" id="logoutFromProfileBtn"><span id="t-logout-action">Cerrar sesión</span></button></div>
-      <div class="card"><div id="t-about-text">TranspaLog garantiza transparencia total. Todos los cargos quedan bloqueados desde la firma digital.</div></div>
-    </div>
-  </div>
-  <div class="bnav">
-    <button class="bni on" id="bni-home" onclick="goPage('home')"><div class="bni-icon">🏠</div><div class="bni-label" id="t-nav-home">Inicio</div></button>
-    <button class="bni" id="bni-orders" onclick="goPage('orders')"><div class="bni-icon">📋</div><div class="bni-label" id="t-nav-orders">Pedido</div></button>
-    <button class="bni" id="bni-rates" onclick="goPage('rates')"><div class="bni-icon">💰</div><div class="bni-label" id="t-nav-rates">Oferta</div></button>
-    <button class="bni" id="bni-me" onclick="goPage('me')"><div class="bni-icon">👤</div><div class="bni-label" id="t-nav-me">Yo</div></button>
-  </div>
-</div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-[28px] flex flex-col items-center border border-slate-100">
+                        <span class="text-2xl mb-1">🚚</span>
+                        <span class="text-[9px] font-black text-gray-500 uppercase" data-zh="查询" data-es="Consultar">查询</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-[28px] flex flex-col items-center border border-slate-100">
+                        <span class="text-2xl mb-1">🛡️</span>
+                        <span class="text-[9px] font-black text-gray-500 uppercase" data-zh="保障" data-es="Garantía">保障</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-[28px] flex flex-col items-center border border-slate-100">
+                        <span class="text-2xl mb-1">🤖</span>
+                        <span class="text-[9px] font-black text-gray-500 uppercase" data-zh="智控" data-es="Logi AI">智控</span>
+                    </div>
+                </div>
+            </div>
 
-<!-- MODALS -->
-<div class="modal-bg" id="modal-buyer" onclick="closeModal('buyer')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-title" id="t-modal-buyer-title">Comparar Agentes</div><button class="btn btn-teal" onclick="signContract()" id="t-btn-sign">✍️ Firmar Contrato</button></div></div>
-<div class="modal-bg" id="modal-admin" onclick="closeModal('admin')"><div class="modal"><div class="modal-title" id="t-admin-title">Panel Admin</div><button class="btn btn-outline" onclick="closeModal('admin')">Cerrar</button></div></div>
+            <div id="page-rates" class="page fade-in space-y-6">
+                <h2 class="text-2xl font-black text-gray-800" data-zh="资费报价比对" data-es="Tarifas - Oferta">资费报价比对</h2>
+                <div class="bg-white border-2 border-slate-50 rounded-[32px] p-6 shadow-sm space-y-4">
+                    <div id="fee-inputs-container" class="space-y-4">
+                        </div>
+                    <button class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg mt-4">启动审计 / AUDITAR</button>
+                </div>
+            </div>
 
-<script>
-// 双语词库扩展 + 原T合并
-const T = {
-  es: {
-    'app-name':'Plataforma Logística Transparente','lo-es':'ES','lo-zh':'中',
-    'auth-login-tab':'Iniciar sesión','auth-reg-tab':'Registrarse','auth-email-label':'Correo electrónico','auth-pass-label':'Contraseña','auth-login-action':'Ingresar','auth-role-label':'Rol de demostración','roleOptBuyer':'Comprador / Importador','roleOptFF':'Agente de Carga','roleOptAdmin':'Administrador','reg-name-label':'Nombre completo','reg-email-label':'Correo','reg-pass-label':'Contraseña','reg-role-label':'Rol principal','regOptBuyer':'Importador','regOptFF':'Agente de carga','regOptAdmin':'Admin','auth-reg-action':'Crear cuenta','authSwitchText':'¿No tienes cuenta? ','switchToReg':'Regístrate','demoHintLogin':'✨ Demo: inicia con cualquier dato o selecciona rol.','t-logout-action':'Cerrar sesión',
-    't-home-title':'Inicio','t-home-sub':'Bienvenido, ','t-active-orders':'Pedidos Activos','t-quotes-recv':'Cotizaciones','t-locked-fees':'Costos Bloqueados','t-no-extra':'Sin cargos extra','t-locked':'Bloqueado','t-recent':'Pedidos Recientes','t-d1':'Accesorios Bici ×500','t-d2':'Sillas Ergonómicas','t-transit':'🚢 Tránsito','t-quoting':'💬 Cotizando','t-transp':'Índice de Transparencia','t-transp-desc':'Todos costos bloqueados','t-transp-lock':'Precio garantizado','t-orders-title':'Nuevo Pedido','t-cargo-info':'📋 Información','t-btn-submit':'🚀 Enviar Solicitud','t-rates-title':'Oferta de Flete','t-vb-lbl':'Visto Bueno','t-dc-lbl':'Desconsolidación','t-thc-lbl':'THC','t-of-lbl':'Flete Base','t-btn-rates':'✅ Enviar Oferta','t-me-title':'Mi Perfil','t-me-sub':'Cuenta','t-nav-home':'Inicio','t-nav-orders':'Pedido','t-nav-rates':'Oferta','t-nav-me':'Yo','t-modal-buyer-title':'Comparar Agentes','t-btn-sign':'✍️ Firmar Contrato','t-admin-title':'Panel Admin','toast-order':'¡Solicitud enviada!','toast-rates':'Oferta bloqueada enviada','toast-sign':'Contrato firmado, precios bloqueados.'
-  },
-  zh: {
-    'app-name':'透明物流平台','lo-es':'ES','lo-zh':'中',
-    'auth-login-tab':'登录','auth-reg-tab':'注册','auth-email-label':'电子邮箱','auth-pass-label':'密码','auth-login-action':'登录','auth-role-label':'演示角色','roleOptBuyer':'买方 / 进口商','roleOptFF':'货运代理','roleOptAdmin':'平台管理员','reg-name-label':'姓名','reg-email-label':'邮箱','reg-pass-label':'密码','reg-role-label':'主要角色','regOptBuyer':'进口商','regOptFF':'货代','regOptAdmin':'管理员','auth-reg-action':'注册','authSwitchText':'还没有账号？','switchToReg':'立即注册','demoHintLogin':'✨ 演示：任意邮箱/密码即可登录，或选择角色','t-logout-action':'退出登录',
-    't-home-title':'首页','t-home-sub':'欢迎回来, ','t-active-orders':'进行中订单','t-quotes-recv':'待选报价','t-locked-fees':'已锁定费用','t-no-extra':'无合同外收费','t-locked':'已锁定','t-recent':'最近订单','t-d1':'电动车配件×500','t-d2':'人体工学椅','t-transit':'🚢 运输中','t-quoting':'💬 报价中','t-transp':'费用透明度评分','t-transp-desc':'所有费用签约锁定','t-transp-lock':'价格保障','t-orders-title':'新建询价单','t-cargo-info':'📋 货物信息','t-btn-submit':'🚀 提交询价','t-rates-title':'报价单（货代）','t-vb-lbl':'核放费','t-dc-lbl':'拆箱费','t-thc-lbl':'码头费','t-of-lbl':'基本运费','t-btn-rates':'✅ 提交锁定报价','t-me-title':'我的账户','t-me-sub':'账号','t-nav-home':'首页','t-nav-orders':'订单','t-nav-rates':'资费','t-nav-me':'我','t-modal-buyer-title':'比较货代','t-btn-sign':'✍️ 签署合同锁定价格','t-admin-title':'管理面板','toast-order':'询价已提交！','toast-rates':'报价已锁定提交','toast-sign':'合同签署，价格已锁定。'
-  }
-};
-let lang = 'es';
-let currentUser = null;   // { name, email, role }
-let isLoggedIn = false;
+            <div id="page-me" class="page fade-in space-y-6">
+                <h2 class="text-2xl font-black text-gray-800" data-zh="账户中心" data-es="Centro de Usuario">账户中心</h2>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
+                        <span class="text-xl mb-2">🛍️</span>
+                        <p class="text-[10px] font-black" data-zh="买方登录" data-es="Login Comprador">买方登录</p>
+                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Registro</button>
+                    </div>
+                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
+                        <span class="text-xl mb-2">🏭</span>
+                        <p class="text-[10px] font-black" data-zh="卖方登录" data-es="Login Vendedor">卖方登录</p>
+                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Registro</button>
+                    </div>
+                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
+                        <span class="text-xl mb-2">🚢</span>
+                        <p class="text-[10px] font-black" data-zh="货代登录" data-es="Login Forwarder">货代登录</p>
+                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Registro</button>
+                    </div>
+                    <div class="bg-white border p-4 rounded-2xl flex flex-col items-center shadow-sm">
+                        <span class="text-xl mb-2">🛠️</span>
+                        <p class="text-[10px] font-black" data-zh="管理员登录" data-es="Login Admin">管理员登录</p>
+                        <button class="mt-2 text-[9px] text-blue-600 font-bold">Acceso</button>
+                    </div>
+                </div>
 
-// 辅助函数
-function showToast(msg){ let t=document.getElementById('toast'); document.getElementById('toast-msg').innerHTML=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',2500);}
-function toggleLang(){ lang = (lang==='es'?'zh':'es'); applyUILang(); }
-function applyUILang(){
-  const t = T[lang];
-  document.getElementById('lo-es').classList.toggle('on', lang==='es');
-  document.getElementById('lo-zh').classList.toggle('on', lang==='zh');
-  for(let id in t){ let el=document.getElementById(id); if(el){ if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=t[id]; else if(el.tagName==='OPTION') el.textContent=t[id]; else el.innerHTML=t[id]; } }
-  document.getElementById('app-logo').innerHTML = lang==='zh' ? '透明<em>物流平台</em>' : 'Transpa<em>Log</em>';
-  if(!isLoggedIn){ document.getElementById('auth-login-tab').innerHTML = t['auth-login-tab']; document.getElementById('auth-reg-tab').innerHTML = t['auth-reg-tab']; document.getElementById('auth-email-label').innerHTML=t['auth-email-label']; document.getElementById('auth-pass-label').innerHTML=t['auth-pass-label']; document.getElementById('auth-login-action').innerHTML=t['auth-login-action']; document.getElementById('auth-role-label').innerHTML=t['auth-role-label']; document.getElementById('roleOptBuyer').innerHTML=t['roleOptBuyer']; document.getElementById('roleOptFF').innerHTML=t['roleOptFF']; document.getElementById('roleOptAdmin').innerHTML=t['roleOptAdmin']; document.getElementById('reg-name-label').innerHTML=t['reg-name-label']; document.getElementById('reg-email-label').innerHTML=t['reg-email-label']; document.getElementById('reg-pass-label').innerHTML=t['reg-pass-label']; document.getElementById('reg-role-label').innerHTML=t['reg-role-label']; document.getElementById('regOptBuyer').innerHTML=t['regOptBuyer']; document.getElementById('regOptFF').innerHTML=t['regOptFF']; document.getElementById('regOptAdmin').innerHTML=t['regOptAdmin']; document.getElementById('auth-reg-action').innerHTML=t['auth-reg-action']; document.getElementById('authSwitchText').innerHTML = t['authSwitchText']+'<span id="switchToReg">'+t['switchToReg']+'</span>'; document.getElementById('demoHintLogin').innerHTML = t['demoHintLogin']; if(document.getElementById('switchToReg')) document.getElementById('switchToReg').onclick = ()=>switchAuthMode('register'); }
-  if(isLoggedIn && currentUser) document.getElementById('displayUserName').innerText = currentUser.name.split(' ')[0];
-  document.getElementById('t-logout-action').innerHTML = t['t-logout-action'];
-  document.querySelectorAll('[id^="t-"]').forEach(el=>{ if(T[lang][el.id]) el.innerHTML=T[lang][el.id]; });
-}
-function switchAuthMode(mode){ const loginDiv=document.getElementById('loginForm'); const regDiv=document.getElementById('registerForm'); const tabLogin=document.getElementById('tabLoginBtn'); const tabReg=document.getElementById('tabRegBtn'); if(mode==='login'){ loginDiv.style.display='block'; regDiv.style.display='none'; tabLogin.classList.add('active'); tabReg.classList.remove('active'); } else{ loginDiv.style.display='none'; regDiv.style.display='block'; tabReg.classList.add('active'); tabLogin.classList.remove('active'); } }
-function doLogin(email, pwd, roleFromSelect){ const roleSelect=document.getElementById('demoRoleSelect'); const role = roleFromSelect || roleSelect.value; const userName = email.split('@')[0] || (role==='buyer'?'Importador':'Agente'); currentUser={ name:userName, email:email || 'demo@transpalog.com', role:role }; isLoggedIn=true; localStorage.setItem('tl_user', JSON.stringify(currentUser)); document.getElementById('authContainer').style.display='none'; document.getElementById('mainApp').style.display='block'; applyUILang(); adjustByRole(role); showToast(T[lang]['toast-order']||'Bienvenido'); }
-function adjustByRole(role){ if(role==='admin') showToast('🔐 Vista de administrador activada'); if(role==='ff') goPage('rates'); else goPage('home'); document.getElementById('userRoleBadge') && (document.getElementById('userRoleBadge').innerHTML = `👤 Rol: ${role==='buyer'?'Importador':role==='ff'?'Agente Carga':'Administrador'}`); }
-function doRegister(name, email, pwd, role){ if(!email||!name) { showToast('Complete los datos'); return; } currentUser={ name:name, email:email, role:role }; isLoggedIn=true; localStorage.setItem('tl_user', JSON.stringify(currentUser)); document.getElementById('authContainer').style.display='none'; document.getElementById('mainApp').style.display='block'; applyUILang(); adjustByRole(role); showToast(`✅ Registro exitoso, bienvenido ${name}`); }
-function logout(){ isLoggedIn=false; currentUser=null; localStorage.removeItem('tl_user'); document.getElementById('mainApp').style.display='none'; document.getElementById('authContainer').style.display='flex'; applyUILang(); goPage('home'); }
-function goPage(id){ if(!isLoggedIn) return; const pages=['home','orders','rates','me']; pages.forEach(p=>{ document.getElementById('p-'+p).classList.toggle('on', p===id); document.getElementById('bni-'+p).classList.toggle('on', p===id); }); document.querySelector('.scroll').scrollTop=0; }
-function submitOrder(){ showToast(T[lang]['toast-order']); setTimeout(()=>goPage('home'),500); }
-function submitRates(){ showToast(T[lang]['toast-rates']); setTimeout(()=>goPage('home'),500); }
-function signContract(){ closeModal('buyer'); showToast(T[lang]['toast-sign']); }
-function openModal(id){ document.getElementById('modal-'+id).classList.add('show'); document.body.style.overflow='hidden'; }
-function closeModal(id){ document.getElementById('modal-'+id).classList.remove('show'); document.body.style.overflow=''; }
+                <div class="space-y-2 mt-4">
+                    <div class="p-4 bg-slate-50 rounded-xl flex justify-between items-center text-sm font-bold text-gray-700">
+                        <span data-zh="公司资料" data-es="Perfil de Empresa">公司资料</span><span>→</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl flex justify-between items-center text-sm font-bold text-gray-700">
+                        <span data-zh="合同管理" data-es="Contratos">合同管理</span><span>→</span>
+                    </div>
+                </div>
+            </div>
 
-// 绑定事件
-window.onload = () => {
-  const stored = localStorage.getItem('tl_user');
-  if(stored){ try{ currentUser=JSON.parse(stored); isLoggedIn=true; document.getElementById('authContainer').style.display='none'; document.getElementById('mainApp').style.display='block'; adjustByRole(currentUser.role); applyUILang(); }catch(e){} }
-  else{ document.getElementById('authContainer').style.display='flex'; document.getElementById('mainApp').style.display='none'; }
-  applyUILang();
-  document.getElementById('doLoginBtn').onclick = ()=>{ const email=document.getElementById('loginEmail').value; const pwd=document.getElementById('loginPassword').value; if(!email) { showToast('Ingrese un correo'); return; } doLogin(email,pwd); };
-  document.getElementById('doRegisterBtn').onclick = ()=>{ const name=document.getElementById('regName').value; const email=document.getElementById('regEmail').value; const pwd=document.getElementById('regPassword').value; const role=document.getElementById('regRoleSelect').value; doRegister(name,email,pwd,role); };
-  document.getElementById('tabLoginBtn').onclick = ()=>switchAuthMode('login');
-  document.getElementById('tabRegBtn').onclick = ()=>switchAuthMode('register');
-  document.getElementById('switchToReg') && (document.getElementById('switchToReg').onclick = ()=>switchAuthMode('register'));
-  const logoutBtn = document.getElementById('logoutFromProfileBtn');
-  if(logoutBtn) logoutBtn.onclick = ()=>{ logout(); };
-  document.querySelectorAll('.agent-card').forEach(c=>c.addEventListener('click',function(){ document.querySelectorAll('.agent-card').forEach(c2=>c2.classList.remove('selected')); this.classList.add('selected');}));
-};
-</script>
+        </main>
+
+        <nav class="bg-white border-t border-gray-100 flex justify-around p-4 fixed bottom-0 w-full max-w-md z-[100]">
+            <button onclick="goPage('home')" id="btn-home" class="nav-item active flex flex-col items-center">
+                <span class="text-xl">🏠</span><span class="text-[9px] mt-1">Inicio</span>
+            </button>
+            <button onclick="goPage('orders')" id="btn-orders" class="nav-item flex flex-col items-center text-gray-400">
+                <span class="text-xl">📋</span><span class="text-[9px] mt-1">Pedidos</span>
+            </button>
+            <button onclick="goPage('rates')" id="btn-rates" class="nav-item flex flex-col items-center text-gray-400">
+                <span class="text-xl">💰</span><span class="text-[9px] mt-1">Tarifas</span>
+            </button>
+            <button onclick="goPage('me')" id="btn-me" class="nav-item flex flex-col items-center text-gray-400">
+                <span class="text-xl">👤</span><span class="text-[9px] mt-1">Yo</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        // 1. 封面逻辑
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
+            setTimeout(() => splash.style.display = 'none', 800);
+        }, 3000);
+
+        // 2. 页面导航逻辑
+        function goPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => {
+                n.classList.remove('active', 'text-logi-blue');
+                n.classList.add('text-gray-400');
+            });
+            
+            document.getElementById('page-' + pageId).classList.add('active');
+            const btn = document.getElementById('btn-' + pageId);
+            btn.classList.add('active', 'text-logi-blue');
+            btn.classList.remove('text-gray-400');
+        }
+
+        // 3. 动态生成费用项
+        const fees = [
+            {id:'vb', zh:'核放费 / V.B.', es:'Visto Bueno'},
+            {id:'descon', zh:'拆箱费 / Descon.', es:'Desconsolidación'},
+            {id:'tdi', zh:'数据费 / TDI', es:'TDI'},
+            {id:'mach', zh:'吊箱费 / MACH', es:'MACH'},
+            {id:'thc', zh:'码头费 / THC', es:'THC'},
+            {id:'agencia', zh:'代理费 / Agencia', es:'S. Agencia'},
+            {id:'trans', zh:'运输费 / Transporte', es:'Transporte'},
+            {id:'storage', zh:'临时仓库费 / Almacén Temp.', es:'Almacén Temporal'}
+        ];
+
+        const feeContainer = document.getElementById('fee-inputs-container');
+        fees.forEach(f => {
+            feeContainer.innerHTML += `
+                <div class="space-y-1">
+                    <label class="text-[10px] font-black text-gray-500 uppercase">${f.zh}</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
+                        <input type="number" placeholder="0.00" class="w-full pl-8 p-3 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-blue-500 outline-none font-mono text-sm font-bold">
+                    </div>
+                </div>
+            `;
+        });
+
+        // 4. 语言切换逻辑
+        let currentLang = 'zh';
+        function toggleLang() {
+            currentLang = currentLang === 'zh' ? 'es' : 'zh';
+            document.querySelectorAll('[data-zh]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + currentLang);
+            });
+        }
+    </script>
 </body>
 </html>
