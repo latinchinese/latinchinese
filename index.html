@@ -93,7 +93,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <button class="btn" onclick="submitRates()"><span id="t-btn-rates">✅ Enviar Oferta Bloqueada</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-rates-note">El importador podrá comparar y firmar digitalmente.</div>
   </div>
 
-  <!-- 核实供应商 INSPECCIÓN (Formspree 免注册版) -->
+  <!-- 核实供应商 INSPECCIÓN (FormSubmit 免注册版) -->
   <div class="page" id="p-inspeccion">
     <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div>
     <div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
@@ -126,7 +126,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
-// 多语言字典
+// 多语言字典 (精简版，保留核心翻译)
 const T={es:{'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, Rodrigo Silva','t-active-orders':'Pedidos Activos','t-quotes-recv':'Cotizaciones','t-locked-fees':'Costos Bloqueados','t-no-extra':'↑ Sin cargos extra','t-locked':'Bloqueado','t-recent':'Pedidos Recientes','t-d1':'Accesorios Bicicleta Eléc. ×500','t-d2':'Sillas Ergonómicas ×200','t-d3':'Piezas Industriales','t-transit':'🚢 Tránsito','t-quoting':'💬 Cotizando','t-new':'🆕 Nuevo','t-today':'Hoy','t-transp':'Índice de Transparencia','t-transp-desc':'Costos bloqueados al firmar.','t-transp-lock':'Precio garantizado','t-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin','t-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.','t-nav-login':'Entrada','t-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario para solicitar el costo de flete y la operación logística','t-cargo-info':'📋 Información','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Origen','t-fl-dest':'Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS Code','t-contact-info':'📱 Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar','t-submit-note':'Recibirá cotizaciones en 24h','t-rates-title':'Oferta de Flete','t-rates-sub':'Complete costos bloqueados','t-rate-order':'📦 Referencia','t-fl-orderref':'N° Solicitud','t-fl-validity':'Validez','t-dest-fees':'⚓ Cargos Destino','t-dest-fees-sub':'Todos valores bloqueados','t-vb-lbl':'Visto Bueno','t-dc-lbl':'Desconsolidación','t-hd-lbl':'Handling','t-tdi-lbl':'TDI','t-mach-lbl':'MACH','t-thc-lbl':'THC','t-tr-lbl':'Transporte','t-alm-lbl':'Almacén','t-aduana-lbl':'Aduana','t-bl-lbl':'B/L','t-sea-fees':'🚢 Flete','t-of-lbl':'Flete Base','t-baf-lbl':'BAF','t-otros-lbl':'Otros','t-fl-notes-r':'Notas','t-lock-notice':'Oferta envía precios bloqueados','t-btn-rates':'✅ Enviar Oferta','t-rates-note':'Importador podrá comparar','t-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.','t-ins-btn':'📩 Enviar solicitud de verificación','t-nav-ins':'Verificar','t-modal-buyer-title':'Comparar Agentes','t-modal-buyer-sub':'Seleccione mejor oferta','t-a-vb':'Visto Bueno','t-a-dc':'Desconsolidación','t-a-thc':'THC','t-a-locked':'Precio bloqueado','t-warn-above':'Desconsolidación alta','t-btn-sign':'✍️ Firmar Contrato','t-btn-cancel':'Cancelar','t-admin-title':'Panel Admin','t-adm-users':'Usuarios','t-adm-orders':'Pedidos','t-adm-alerts':'Alertas','t-alert1':'🚨 Disputa #D-047','t-alert2':'⚠️ THC elevado','t-btn-close':'Cerrar','toast-order':'¡Solicitud enviada!','toast-rates':'¡Oferta bloqueada enviada!','toast-sign':'¡Contrato firmado!','toast-login':'Bienvenido','toast-register':'Registro exitoso'},zh:{'lo-es':'ES','lo-zh':'中','t-home-title':'首页','t-home-sub':'欢迎回来','t-active-orders':'进行中订单','t-quotes-recv':'待选报价','t-locked-fees':'已锁定费用','t-no-extra':'↑ 无额外收费','t-locked':'已锁定','t-recent':'最近订单','t-d1':'电动自行车配件','t-d2':'人体工学椅','t-d3':'工业零件','t-transit':'🚢 运输中','t-quoting':'💬 报价中','t-new':'🆕 新建','t-today':'今天','t-transp':'费用透明度评分','t-transp-desc':'费用签约锁定','t-transp-lock':'价格保障','t-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员','t-login-name-label':'姓名 / 用户名','t-fl-login-email':'电子邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意平台使用条款。','t-nav-login':'入口','t-orders-title':'询价单（买方填写）','t-orders-sub':'填写表格以申请海运费及物流操作费用','t-cargo-info':'📋 货物信息','t-fl-desc':'货物描述','t-fl-weight':'总重量','t-fl-vol':'总体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL拼箱','t-opt-20':'20GP整箱','t-opt-40':'40HQ','t-fl-hs':'HS编码','t-contact-info':'📱 联系方式','t-fl-email':'电子邮箱','t-fl-company':'公司名称','t-fl-notes':'补充说明','t-btn-submit':'🚀 提交询价','t-submit-note':'货代24h内报价','t-rates-title':'报价单(货代)','t-rates-sub':'填写各项锁定费用','t-rate-order':'📦 询价单号','t-fl-orderref':'编号','t-fl-validity':'有效期','t-dest-fees':'⚓ 目的港费用','t-dest-fees-sub':'所有费用锁定入合同','t-vb-lbl':'核放费','t-dc-lbl':'拆箱费','t-hd-lbl':'操作费','t-tdi-lbl':'数据传输费','t-mach-lbl':'吊箱费','t-thc-lbl':'码头费','t-tr-lbl':'运输费','t-alm-lbl':'临时仓库费','t-aduana-lbl':'报关费','t-bl-lbl':'提单费','t-sea-fees':'🚢 海运费','t-of-lbl':'基本运费','t-baf-lbl':'燃油附加费','t-otros-lbl':'其他费用','t-fl-notes-r':'货代备注','t-lock-notice':'报价提交后价格锁定','t-btn-rates':'✅ 提交锁定报价','t-rates-note':'进口商可比较签约','t-ins-title':'🔍 核实供应商','t-ins-sub':'提交中国供应商信息，我们帮您核查真实性并提供独立物流方案','t-ins-btn':'📩 提交核实请求','t-nav-ins':'核实','t-modal-buyer-title':'比较货代报价','t-modal-buyer-sub':'选择最优货代','t-a-vb':'核放费','t-a-dc':'拆箱费','t-a-thc':'码头费','t-a-locked':'价格锁定','t-warn-above':'拆箱费偏高','t-btn-sign':'✍️ 签署电子合同','t-btn-cancel':'取消','t-admin-title':'管理后台','t-adm-users':'注册用户','t-adm-orders':'活跃订单','t-adm-alerts':'异常预警','t-alert1':'🚨 纠纷拆箱费异常','t-alert2':'⚠️ 码头费超均值','t-btn-close':'关闭','toast-order':'询价已提交','toast-rates':'报价已提交锁定','toast-sign':'合同已签署','toast-login':'登录成功','toast-register':'注册完成'}};
 let lang='es',loginRole='buyer';
 function toggleLang(){lang=lang==='es'?'zh':'es';applyLang();updateLoginRoleUI();}
@@ -144,7 +144,7 @@ function openModal(id){document.getElementById('modal-'+id).classList.add('show'
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('show');document.body.style.overflow='';}
 function selectAgent(card){document.querySelectorAll('.agent-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');}
 
-// ========== Formspree 免注册版（直接发送到您的邮箱）==========
+// ========== 使用 FormSubmit 免注册版 ==========
 function submitInspeccion() {
   const name = document.getElementById('ins-name').value.trim();
   const url = document.getElementById('ins-url').value.trim();
@@ -157,8 +157,8 @@ function submitInspeccion() {
     return;
   }
 
-  // Formspree 免注册端点：将邮箱写在路径中（注意 @ 符号会被自动处理）
-  const formspreeUrl = 'https://formspree.io/f/latinavance.latinavance@gmail.com';
+  // FormSubmit 免注册端点 (直接发到您的邮箱)
+  const formSubmitUrl = 'https://formsubmit.co/ajax/latinavance.latinavance@gmail.com';
 
   const data = {
     name: name,
@@ -169,7 +169,7 @@ function submitInspeccion() {
     _subject: 'Nueva solicitud de verificación de proveedor'
   };
 
-  fetch(formspreeUrl, {
+  fetch(formSubmitUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -177,13 +177,14 @@ function submitInspeccion() {
     },
     body: JSON.stringify(data)
   })
-  .then(response => {
-    if (response.ok) {
-      showToast(lang === 'zh' ? '✅ 已提交，我们将在48小时内核实并回复' : '✅ Solicitud enviada, revisaremos en 48h');
-      setTimeout(() => goPage('home'), 1500);
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast(lang === 'zh' ? '✅ 已提交，请查收邮件确认（如未收到请检查垃圾箱）' : '✅ Solicitud enviada. Revisa tu correo para confirmar (verifica spam)');
+      setTimeout(() => goPage('home'), 2000);
     } else {
       showToast(lang === 'zh' ? '提交失败，请稍后重试' : 'Error, intente de nuevo');
-      console.error('Formspree error:', response.status);
+      console.error('FormSubmit error:', data);
     }
   })
   .catch(error => {
