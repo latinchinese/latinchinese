@@ -93,7 +93,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <button class="btn" onclick="submitRates()"><span id="t-btn-rates">✅ Enviar Oferta Bloqueada</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-rates-note">El importador podrá comparar y firmar digitalmente.</div>
   </div>
 
-  <!-- 核实供应商 INSPECCIÓN -->
+  <!-- 核实供应商 INSPECCIÓN (Formspree 免注册版) -->
   <div class="page" id="p-inspeccion">
     <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div>
     <div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
@@ -120,7 +120,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
   <button class="bni" onclick="goPage('inspeccion')"><div class="bni-icon">🔍</div><div class="bni-label" id="t-nav-ins">Verificar</div></button>
 </div>
 
-<!-- 模态框 -->
+<!-- 模态框（买家对比 + 管理员） -->
 <div class="modal-bg" id="modal-buyer" onclick="closeModal('buyer')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-title" id="t-modal-buyer-title">Comparar Agentes</div><div id="t-modal-buyer-sub" style="font-size:13px;color:var(--text2);margin-bottom:16px">Seleccione la mejor oferta y firme.</div><div class="agent-card selected" onclick="selectAgent(this)"><div class="agent-head"><div><div class="agent-name">TransOcean Logistics</div><div>⭐ 4.9</div></div><div><div class="agent-total">$3,420</div></div></div><div class="fr"><div class="fn" id="t-a-vb">Visto Bueno</div><div class="fv">$85</div></div><div class="fr"><div class="fn" id="t-a-dc">Desconsolidación</div><div class="fv">$320</div></div><div class="fr"><div class="fn" id="t-a-thc">THC Destino</div><div class="fv">$380</div></div><div class="lock" style="margin-top:8px">🔒 <span id="t-a-locked">Precio bloqueado</span></div></div><div class="agent-card" onclick="selectAgent(this)"><div class="agent-head"><div><div class="agent-name">LogiPeru SAC</div><div>⭐ 4.7</div></div><div><div class="agent-total">$3,890</div></div></div><div class="fr"><div class="fn">Visto Bueno</div><div class="fv warn">$120</div></div><div class="fr"><div class="fn">Desconsolidación</div><div class="fv warn">$410</div></div><div class="fr"><div class="fn">THC Destino</div><div class="fv">$380</div></div><div style="margin-top:8px;font-size:11px;color:var(--gold)">⚠ <span id="t-warn-above">Desconsolidación alta</span></div></div><button class="btn" onclick="signContract()" style="margin-top:12px"><span id="t-btn-sign">✍️ Firmar Contrato Digital</span></button><button class="btn btn-outline" style="margin-top:8px" onclick="closeModal('buyer')" id="t-btn-cancel">Cancelar</button></div></div>
 <div class="modal-bg" id="modal-admin" onclick="closeModal('admin')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-handle"></div><div class="modal-title" id="t-admin-title">Panel Admin</div><div class="g2"><div class="sc"><div class="sc-lbl" id="t-adm-users">Usuarios</div><div class="sc-val">1,284</div></div><div class="sc"><div class="sc-lbl" id="t-adm-orders">Pedidos</div><div class="sc-val">238</div></div></div><div style="font-weight:700;margin:12px 0 8px" id="t-adm-alerts">Alertas</div><div class="aalert red"><div class="aalert-text" id="t-alert1">🚨 Disputa #D-047 — $500 en Desconsolidación</div></div><div class="aalert yellow"><div class="aalert-text" id="t-alert2">⚠️ THC Shenzhen Fast = $620 (+58%)</div></div><button class="btn btn-outline" onclick="closeModal('admin')" id="t-btn-close">Cerrar</button></div></div>
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
@@ -143,7 +143,8 @@ function signContract(){closeModal('buyer');showToast(T[lang]['toast-sign']);}
 function openModal(id){document.getElementById('modal-'+id).classList.add('show');document.body.style.overflow='hidden';}
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('show');document.body.style.overflow='';}
 function selectAgent(card){document.querySelectorAll('.agent-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');}
-// ========== 唯一 submitInspeccion 函数（使用 Web3Forms）==========
+
+// ========== Formspree 免注册版（直接发送到您的邮箱）==========
 function submitInspeccion() {
   const name = document.getElementById('ins-name').value.trim();
   const url = document.getElementById('ins-url').value.trim();
@@ -156,34 +157,41 @@ function submitInspeccion() {
     return;
   }
 
-  const formData = new FormData();
-  formData.append('access_key', '076d4835-bcc7-4a7a-bb59-929f001e9ba9');
-  formData.append('name', name);
-  formData.append('website', url);
-  formData.append('phone', phone);
-  formData.append('product_desc', desc);
-  formData.append('contact', wa);
-  formData.append('_subject', 'Nueva solicitud de verificación de proveedor');
-  formData.append('_captcha', 'false');
+  // Formspree 免注册端点：将邮箱写在路径中（注意 @ 符号会被自动处理）
+  const formspreeUrl = 'https://formspree.io/f/latinavance.latinavance@gmail.com';
 
-  fetch('https://api.web3forms.com/submit', {
+  const data = {
+    name: name,
+    website: url,
+    phone: phone,
+    product_desc: desc,
+    contact: wa,
+    _subject: 'Nueva solicitud de verificación de proveedor'
+  };
+
+  fetch(formspreeUrl, {
     method: 'POST',
-    body: formData
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(data)
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
+  .then(response => {
+    if (response.ok) {
       showToast(lang === 'zh' ? '✅ 已提交，我们将在48小时内核实并回复' : '✅ Solicitud enviada, revisaremos en 48h');
       setTimeout(() => goPage('home'), 1500);
     } else {
       showToast(lang === 'zh' ? '提交失败，请稍后重试' : 'Error, intente de nuevo');
+      console.error('Formspree error:', response.status);
     }
   })
   .catch(error => {
-    console.error('Error:', error);
+    console.error('Fetch error:', error);
     showToast(lang === 'zh' ? '网络错误，请检查连接' : 'Error de red');
   });
 }
+
 window.addEventListener('load',()=>{applyLang();setLoginRole('buyer');updateLoginRoleUI();});
 </script>
 </body>
