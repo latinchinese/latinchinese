@@ -38,43 +38,174 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 <body>
 <div class="topbar"><div class="logo"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Plataforma Logística Transparente</span></div><div style="display:flex;align-items:center;gap:10px"><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div><div class="notif-btn">🔔<div class="notif-dot"></div></div></div></div>
 <div class="scroll">
-  <!-- 首页 -->
-  <div class="page on" id="p-home">
-    <div class="pg-title" id="t-home-title">Inicio</div><div class="pg-sub" id="t-home-sub">Bienvenido, Rodrigo Silva</div>
-    <!-- 板块1：费用对比 -->
-    <div class="card" style="background:var(--teal-d); border-color:var(--teal); cursor:pointer;" onclick="goPage('costcompare')"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📊</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-compare-title">💰 透明物流费用对比</div><div style="font-size:12px; color:var(--text2);" id="t-cost-compare-desc">Ver costos por puerto (Callao, Valparaíso, Buenaventura, Guayaquil)</div></div></div></div>
-    <!-- 板块2：融资需求 -->
-    <div class="card" style="background:var(--gold-d); border-color:var(--gold); cursor:pointer;" onclick="goPage('financing')"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💸</div><div><div style="font-weight:800; font-size:16px;" id="t-financing-title">📋 融资需求板</div><div style="font-size:12px; color:var(--text2);" id="t-financing-desc">Publica o busca financiamiento para tus compras</div></div></div></div>
-    <!-- 板块3：工业化协作 -->
-    <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple); cursor:pointer;" onclick="goPage('industrial')"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🏭</div><div><div style="font-weight:800; font-size:16px;" id="t-industrial-title">⚙️ 拉美工业化协作</div><div style="font-size:12px; color:var(--text2);" id="t-industrial-desc">SKD组装 · 散件供应 · 技术指导 · 本地化生产</div></div></div></div>
-    <!-- 板块4：产品目录（新增） -->
-    <div class="card" style="background:rgba(255,77,106,0.13); border-color:var(--red); cursor:pointer;" onclick="window.location.href='productos.html'">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <div style="font-size:28px;">🛒</div>
-        <div>
-          <div style="font-weight:800; font-size:16px;" id="t-catalog-title">📦 Catálogo Industrial</div>
-          <div style="font-size:12px; color:var(--text2);" id="t-catalog-desc">Máquinas, repuestos, equipos – Precios FOB</div>
-        </div>
+  <!-- ==================== 首页 ==================== -->
+
+<div class="page on" id="p-home">
+  <div class="pg-title" id="t-home-title">Inicio</div>
+  <div class="pg-sub" id="t-home-sub">Bienvenido, Rodrigo Silva</div>
+
+  <!-- 板块1：费用对比 -->
+  <div class="card" style="background:var(--teal-d); border-color:var(--teal); cursor:pointer;" onclick="goPage('costcompare')">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="font-size:28px;">📊</div>
+      <div>
+        <div style="font-weight:800; font-size:16px;" id="t-cost-compare-title">💰 透明物流费用对比</div>
+        <div style="font-size:12px; color:var(--text2);" id="t-cost-compare-desc">Ver costos por puerto (Callao, Valparaíso, Buenaventura, Guayaquil)</div>
       </div>
     </div>
-    <!-- 最近订单 -->
-    <div style="font-weight:700;font-size:15px;margin-bottom:12px" id="t-recent">Pedidos Recientes</div>
-    <div class="card" style="padding:0"><div onclick="goPage('orders')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer"><div>📦</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d1">Accesorios Bicicleta Eléc. ×500</div><div style="font-size:12px;color:var(--text2)">Ningbo → Lima · 20GP</div></div><div style="text-align:right"><div class="pill p-teal" id="t-transit">🚢 Tránsito</div><div style="font-size:11px;color:var(--muted);margin-top:4px">ETA: 12 Jun</div></div></div>
-    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)"><div>🪑</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d2">Sillas Ergonómicas ×200</div><div style="font-size:12px;color:var(--text2)">Guangzhou → Bogotá · LCL</div></div><div style="text-align:right"><div class="pill p-gold" id="t-quoting">💬 Cotizando</div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="t-today">Hoy</div></div></div>
-    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div>🔧</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d3">Piezas Industriales</div><div style="font-size:12px;color:var(--text2)">Shenzhen → Santiago</div></div><div style="text-align:right"><div class="pill p-purple" id="t-new">🆕 Nuevo</div></div></div></div>
   </div>
 
-  <!-- 其他页面（登录、订单、资费、核实、费用对比、融资、工业化）保持不变（因篇幅省略，实际操作请保留原有完整代码） -->
-  <!-- 此处为简洁，仅示例结构，实际使用时需包含所有原有页面内容 -->
-  <div class="page" id="p-login"><!-- 登录页面内容 --></div>
-  <div class="page" id="p-orders"><!-- 订单页面内容 --></div>
-  <div class="page" id="p-rates"><!-- 资费页面内容 --></div>
-  <div class="page" id="p-inspeccion"><!-- 核实页面内容 --></div>
-  <div class="page" id="p-costcompare"><!-- 费用对比页面内容 --></div>
-  <div class="page" id="p-financing"><!-- 融资需求板内容 --></div>
-  <div class="page" id="p-industrial"><!-- 工业化协作内容 --></div>
+  <!-- 板块2：融资需求 -->
+  <div class="card" style="background:var(--gold-d); border-color:var(--gold); cursor:pointer;" onclick="goPage('financing')">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="font-size:28px;">💸</div>
+      <div>
+        <div style="font-weight:800; font-size:16px;" id="t-financing-title">📋 融资需求板</div>
+        <div style="font-size:12px; color:var(--text2);" id="t-financing-desc">Publica o busca financiamiento para tus compras</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块3：工业化协作 -->
+  <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple); cursor:pointer;" onclick="goPage('industrial')">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="font-size:28px;">🏭</div>
+      <div>
+        <div style="font-weight:800; font-size:16px;" id="t-industrial-title">⚙️ 拉美工业化协作</div>
+        <div style="font-size:12px; color:var(--text2);" id="t-industrial-desc">SKD组装 · 散件供应 · 技术指导 · 本地化生产</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块4：产品目录（新增） -->
+  <div class="card" style="background:rgba(255,77,106,0.13); border-color:var(--red); cursor:pointer;" onclick="window.location.href='productos.html'">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="font-size:28px;">🛒</div>
+      <div>
+        <div style="font-weight:800; font-size:16px;" id="t-catalog-title">📦 Catálogo Industrial</div>
+        <div style="font-size:12px; color:var(--text2);" id="t-catalog-desc">Máquinas, repuestos, equipos – Precios FOB</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近订单 -->
+  <div style="font-weight:700;font-size:15px;margin-bottom:12px" id="t-recent">Pedidos Recientes</div>
+  <div class="card" style="padding:0">
+    <div onclick="goPage('orders')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer">
+      <div>📦</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d1">Accesorios Bicicleta Eléc. ×500</div><div style="font-size:12px;color:var(--text2)">Ningbo → Lima · 20GP</div></div>
+      <div style="text-align:right"><div class="pill p-teal" id="t-transit">🚢 Tránsito</div><div style="font-size:11px;color:var(--muted);margin-top:4px">ETA: 12 Jun</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)">
+      <div>🪑</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d2">Sillas Ergonómicas ×200</div><div style="font-size:12px;color:var(--text2)">Guangzhou → Bogotá · LCL</div></div>
+      <div style="text-align:right"><div class="pill p-gold" id="t-quoting">💬 Cotizando</div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="t-today">Hoy</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px">
+      <div>🔧</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d3">Piezas Industriales</div><div style="font-size:12px;color:var(--text2)">Shenzhen → Santiago</div></div>
+      <div style="text-align:right"><div class="pill p-purple" id="t-new">🆕 Nuevo</div></div>
+    </div>
+  </div>
 </div>
 
+
+  <!-- ==================== 登录页面 ==================== -->
+  <div class="page" id="p-login">
+    <div class="login-tabs"><div class="login-tab active" id="tab-buyer" onclick="setLoginRole('buyer')"><div>🛒</div><div class="login-tab-name" id="t-tab-buyer">Comprador</div></div><div class="login-tab" id="tab-seller" onclick="setLoginRole('seller')"><div>🏭</div><div class="login-tab-name" id="t-tab-seller">Vendedor</div></div><div class="login-tab" id="tab-ff" onclick="setLoginRole('ff')"><div>🚢</div><div class="login-tab-name" id="t-tab-ff">Agente</div></div><div class="login-tab" id="tab-admin" onclick="setLoginRole('admin')"><div>⚙️</div><div class="login-tab-name" id="t-tab-admin">Admin</div></div></div>
+    <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--teal-d);border-radius:10px"><div id="login-role-icon">🛒</div><div><div style="font-size:12px;font-weight:700;color:var(--teal)" id="login-role-label">Comprador</div><div style="font-size:11px;color:var(--text2)" id="login-role-desc">Compare cotizaciones</div></div></div>
+      <div class="fg"><div class="fl"><span id="t-login-name-label">Nombre / Usuario</span></div><input class="fi" type="text" id="login-name" placeholder="Tu nombre"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-login-email">Correo Electrónico</span></div><input class="fi" type="email" id="login-email" placeholder="nombre@empresa.com"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-login-pw">Contraseña</span></div><div class="pw"><input class="fi" type="password" id="login-pw" placeholder="••••••••"><span class="pw-eye" onclick="togglePw()">👁</span></div></div>
+      <button class="btn" onclick="submitLogin()"><span id="t-login-btn">🔐 Entrada</span></button>
+    </div>
+    <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
+  </div>
+
+  <!-- ==================== 订单页面 ==================== -->
+  <div class="page" id="p-orders">
+    <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
+    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
+      <div class="fg"><div class="fl"><span id="t-fl-desc">Descripción</span></div><textarea class="fta" id="t-ph-desc" placeholder="Ej: Sillas ergonómicas..."></textarea></div>
+      <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-weight">Peso Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-weight" placeholder="2400 kg"></div><div class="fg"><div class="fl"><span id="t-fl-vol">Volumen Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-vol" placeholder="18.5 m³"></div></div>
+      <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen</span></div><select class="fs" id="t-sel-origin"><option id="t-opt-nb">Ningbo</option><option id="t-opt-gz">Guangzhou</option><option id="t-opt-sz">Shenzhen</option></select></div><div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino</span></div><select class="fs" id="t-sel-dest"><option>Callao (Lima)</option><option>Bogotá</option><option>Valparaíso</option></select></div></div>
+      <div class="fg"><div class="fl"><span id="t-fl-mode">Modo de Envío</span></div><select class="fs"><option id="t-opt-lcl">LCL Consolidado</option><option id="t-opt-20">FCL 20GP</option><option id="t-opt-40">FCL 40HQ</option></select></div>
+      <div class="fg"><div class="fl"><span id="t-fl-hs">Código HS</span></div><input class="fi" id="t-ph-hs" placeholder="Ej: 9401.30"></div>
+    </div>
+    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-contact-info">📱 Datos de Contacto</div>
+      <div class="fg"><div class="fl"><span>WhatsApp</span></div><div style="display:flex;gap:8px"><select class="fs" style="width:110px"><option>🇵🇪 +51</option><option>🇨🇴 +57</option></select><input class="fi" type="tel" id="t-ph-wa" placeholder="999 123 456"></div></div>
+      <div class="fg"><div class="fl"><span id="t-fl-email">Correo</span></div><input class="fi" type="email" id="t-ph-email" placeholder="nombre@empresa.com"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-company">Empresa</span></div><input class="fi" id="t-ph-company" placeholder="Importadora Silva EIRL"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-notes">Notas</span></div><textarea class="fta" id="t-ph-notes" placeholder="Requisitos especiales..."></textarea></div>
+    </div>
+    <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
+  </div>
+
+  <!-- ==================== 资费报价页面 ==================== -->
+
+  <div class="page" id="p-rates">
+    <div class="pg-title" id="t-rates-title">Oferta de Flete</div><div class="pg-sub" id="t-rates-sub">Ingrese su cotización detallada</div>
+    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-rate-order">📦 Pedido de Referencia</div><div class="g2"><div class="fg"><div class="fl"><span id="t-fl-orderref">N° Solicitud</span></div><input class="fi" placeholder="TL-2025-XXX"></div><div class="fg"><div class="fl"><span id="t-fl-validity">Validez (días)</span></div><input class="fi" type="text" inputmode="numeric" placeholder="7"></div></div></div>
+    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-dest-fees">⚓ Cargos en Destino</div><div style="font-size:12px;color:var(--text2);margin-bottom:14px" id="t-dest-fees-sub">Todos los valores quedan bloqueados</div>
+      <div class="fg"><div class="fl"><span id="t-vb-lbl">Visto Bueno</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-dc-lbl">Desconsolidación</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-hd-lbl">Handling</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-tdi-lbl">TDI</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-mach-lbl">MACH</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-thc-lbl">THC</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-tr-lbl">Transporte Interior</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-alm-lbl">Almacén Temp.</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-aduana-lbl">Servicio Aduana</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+      <div class="fg"><div class="fl"><span id="t-bl-lbl">B/L</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
+    </div>
+    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-sea-fees">🚢 Flete Marítimo</div><div class="fg"><div class="fl"><span id="t-of-lbl">Flete Base</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div><div class="fg"><div class="fl"><span id="t-baf-lbl">BAF</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div><div class="fg"><div class="fl"><span id="t-otros-lbl">Otros Cargos</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div><div class="fg"><div class="fl"><span id="t-fl-notes-r">Notas del Agente</span></div><textarea class="fta" id="t-ph-ff-notes" placeholder="Condiciones especiales..."></textarea></div></div>
+    <div style="background:var(--green-d);border-radius:12px;padding:12px;margin-bottom:14px;display:flex;gap:10px"><div>🔒</div><div style="font-size:12px;color:var(--green)" id="t-lock-notice">Al enviar, los valores quedan bloqueados contractualmente.</div></div>
+    <button class="btn" onclick="submitRates()"><span id="t-btn-rates">✅ Enviar Oferta Bloqueada</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-rates-note">El importador podrá comparar y firmar digitalmente.</div>
+  </div>
+
+  <!-- ==================== 核实供应商页面 ==================== -->
+  <div class="page" id="p-inspeccion">
+    <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div><div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
+    <div class="card"><div class="fg"><div class="fl"><span>Nombre del proveedor</span></div><input class="fi" type="text" id="ins-name" placeholder="Ej: Shanghai XX Machinery Co."></div>
+      <div class="fg"><div class="fl"><span>Sitio web</span></div><input class="fi" type="url" id="ins-url" placeholder="https://..."></div>
+      <div class="fg"><div class="fl"><span>Teléfono / WeChat</span></div><input class="fi" type="text" id="ins-phone" placeholder="WeChat: xxx"></div>
+      <div class="fg"><div class="fl"><span>Descripción del producto</span></div><textarea class="fta" id="ins-desc" placeholder="Ej: excavadora pequeña" rows="2"></textarea></div>
+      <div class="fg"><div class="fl"><span>Tu WhatsApp</span></div><input class="fi" type="tel" id="ins-wa" placeholder="+51 999 123 456"></div>
+      <button class="btn" onclick="submitInspeccion()" id="t-ins-btn">📩 Enviar solicitud de verificación</button>
+      <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px">Te responderemos en < 48h</div>
+    </div>
+  </div>
+
+  <!-- ==================== 费用对比页面 ==================== -->
+  <div class="page" id="p-costcompare">
+    <div class="back-home-btn" onclick="goPage('home')"><span class="back-home-text">← Volver al Inicio</span></div>
+    <div class="pg-title" id="t-cc-title">✨ Costos Logísticos por Puerto</div>
+    <div class="pg-sub" id="t-cc-sub">Referencia de tarifas estándar para evitar sobrecostos</div>
+    <div id="cost-compare-container"></div>
+    <div class="back-home-btn" style="margin-top:16px" onclick="goPage('home')"><span class="back-home-text">← Volver al Inicio</span></div>
+  </div>
+
+  <!-- ==================== 融资需求板页面 ==================== -->
+  <div class="page" id="p-financing">
+    <div class="back-home-btn" onclick="goPage('home')"><span class="back-home-text">← Volver al Inicio</span></div>
+    <div class="pg-title" id="t-fn-title">📢 Financiamiento para Importadores</div>
+    <div class="pg-sub" id="t-fn-sub">Publica tu necesidad de crédito o busca financiamiento</div>
+    <button class="btn btn-outline" style="margin-bottom:16px" onclick="openFinancingModal()" id="t-fn-post">+ Publicar necesidad</button>
+    <div id="financing-list"></div>
+    <div class="back-home-btn" style="margin-top:16px" onclick="goPage('home')"><span class="back-home-text">← Volver al Inicio</span></div>
+  </div>
+
+  <!-- ==================== 工业化协作页面 ==================== -->
+  <div class="page" id="p-industrial">
+    <div class="back-home-btn" onclick="goPage('home')"><span class="back-home-text">← Volver al Inicio</span></div>
+    <div class="pg-title" id="t-industrial-page-title">⚙️ 拉美工业化协作</div>
+    <div class="pg-sub" id="t-industrial-page-sub">SKD散件供应 · 组装技术转移 · 当地技工招募</div>
+    <div class="card" style="text-align:center; padding:40px 20px;"><div style="font-size:48px; margin-bottom:16px;">🏭🔧</div><div style="font-weight:700; margin-bottom:8px;" id="t-industrial-msg1">平台即将推出</div><div style="font-size:14px; color:var(--text2);" id="t-industrial-msg2">提供中国工厂散件、组装线设计、本地化生产支持</div><div style="margin-top:24px;"><button class="btn" onclick="showToast('功能开发中，敬请期待')" id="t-industrial-notify">📧 通知我上线</button></div></div>
+    <div class="back-home-btn" style="margin-top:16px" onclick="goPage('home')"><span class="back-home-text">← Volver al Inicio</span></div>
+  </div>
+</div>
+
+<!-- 底部导航 -->
 <div class="bnav">
   <button class="bni on" onclick="goPage('home')"><div class="bni-icon">🏠</div><div class="bni-label" id="t-nav-home">Inicio</div></button>
   <button class="bni" onclick="goPage('login')"><div class="bni-icon">🔐</div><div class="bni-label" id="t-nav-login">Entrada</div></button>
@@ -89,6 +220,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 
 <script>
 // ========== 多语言数据 ==========
+
 const T = {
   es: {
     'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, Rodrigo Silva',
