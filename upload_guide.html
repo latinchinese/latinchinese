@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir productos · 工厂产品上传指南</title>
+    <style>
+        body {
+            background: #07111F;
+            color: #E2EDF8;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            padding: 24px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #0D1E33;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0,194,168,0.2);
+        }
+        h1 { font-size: 22px; margin-bottom: 8px; color: #00C2A8; }
+        .sub { font-size: 14px; color: #7A9AB8; margin-bottom: 24px; }
+        label { display: block; margin: 12px 0 4px; font-weight: 600; font-size: 13px; }
+        input, textarea, select {
+            width: 100%;
+            background: #122844;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 10px;
+            color: white;
+        }
+        .btn {
+            background: #00C2A8;
+            color: #07111F;
+            border: none;
+            border-radius: 30px;
+            padding: 12px;
+            font-weight: 700;
+            margin-top: 20px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .note {
+            font-size: 12px;
+            color: #F5A623;
+            margin-top: 16px;
+            text-align: center;
+        }
+        a { color: #00C2A8; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📤 Sube tu producto / 上传产品</h1>
+        <div class="sub">Completa el siguiente formulario y te contactaremos para publicarlo en nuestra vitrina industrial.<br>填写以下信息，我们会尽快将您的产品上架到工业产品橱窗。</div>
+
+        <form id="factoryForm">
+            <label>Nombre del producto (ES) / 产品西语名称</label>
+            <input type="text" id="name_es" required>
+
+            <label>Nombre del producto (ZH) / 产品中文名称</label>
+            <input type="text" id="name_zh" required>
+
+            <label>Categoría / 类别</label>
+            <select id="category">
+                <option value="agricultura">Agricultura / 农业</option>
+                <option value="agua">Tratamiento de agua / 水处理</option>
+                <option value="motor">Motores / 发动机</option>
+                <option value="energia">Energía solar / 太阳能</option>
+                <option value="herramientas">Herramientas / 工具</option>
+                <option value="industrial">Equipos industriales / 工业设备</option>
+            </select>
+
+            <label>Precio FOB (USD) / 美金价格</label>
+            <input type="number" id="price" step="1" required>
+
+            <label>Origen / 产地 (Ej: Zhejiang, China)</label>
+            <input type="text" id="origin" required>
+
+            <label>Enlace a imagen (URL) / 图片链接 (opcional)</label>
+            <input type="url" id="image" placeholder="https://...">
+
+            <label>Tu WhatsApp / 您的WhatsApp</label>
+            <input type="tel" id="whatsapp" required>
+
+            <button type="submit" class="btn">📧 Enviar / 发送</button>
+        </form>
+        <div class="note">⚠️ Al enviar se abrirá tu correo. Solo debes hacer clic en enviar. / 点击后打开邮件客户端，发送即可。</div>
+    </div>
+
+    <script>
+        document.getElementById('factoryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name_es = document.getElementById('name_es').value.trim();
+            const name_zh = document.getElementById('name_zh').value.trim();
+            const category = document.getElementById('category').value;
+            const price = document.getElementById('price').value;
+            const origin = document.getElementById('origin').value.trim();
+            const image = document.getElementById('image').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+
+            if (!name_es || !name_zh || !price || !origin || !whatsapp) {
+                alert('Por favor completa todos los campos obligatorios / 请填写所有必填项');
+                return;
+            }
+
+            const subject = `Nuevo producto: ${name_es}`;
+            const body = `Nombre ES: ${name_es}%0ANombre ZH: ${name_zh}%0ACategoría: ${category}%0APrecio USD: ${price}%0AOrigen: ${origin}%0AImagen: ${image}%0AWhatsApp contacto: ${whatsapp}`;
+            window.location.href = `mailto:latinavance.latinavance@gmail.com?subject=${subject}&body=${body}`;
+            alert('✅ Se abrió tu correo. Envíanos los datos y en 48h publicaremos tu producto. / 已打开邮件，发送后我们将在48小时内上架。');
+        });
+    </script>
+</body>
+</html>
