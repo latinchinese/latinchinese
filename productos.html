@@ -19,17 +19,13 @@
         </div>
     </div>
 
-    <!-- 新增返回首页按钮 -->
     <div class="back-home-btn" onclick="window.location.href='index.html'">
         <span id="back-home-text">← Volver al Inicio</span>
     </div>
 
     <div class="search-filter">
-        <input type="text" id="searchInput" placeholder="🔍  Buscar producto / 搜索产品" class="search-box">
-        <!-- 分类按钮：使用自定义属性 data-cat-es 和 data-cat-zh，js动态渲染 -->
-        <div class="category-grid" id="categoryGrid">
-            <!-- 按钮将由 js 动态生成，以支持语言切换 -->
-        </div>
+        <input type="text" id="searchInput" placeholder="🔍 Buscar producto / 搜索产品" class="search-box">
+        <div class="category-grid" id="categoryGrid"></div>
     </div>
 
     <div class="product-grid" id="productGrid">
@@ -37,16 +33,16 @@
     </div>
 
     <div class="footer-note">
-        <span id="footer-text">¿Eres fabricante? <a href="upload_guide.html" id="upload-link">Sube tus productos aquí</a></span>
+        <span id="footer-text">¿Eres fabricante? <a href="upload_guide.html">Sube tus productos aquí</a></span>
     </div>
 
-    <!-- 询价模态框（完善取消按钮样式） -->
+    <!-- 询价模态框 -->
     <div id="inquiryModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h3 id="modal-title">Solicitar cotización</h3>
             <form id="inquiryForm">
-                <input type="hidden" id="productName" name="productName">
+                <input type="hidden" id="productName">
                 <div class="form-group">
                     <label for="userName">Nombre / 姓名</label>
                     <input type="text" id="userName" required placeholder="Ej: Carlos Gomez">

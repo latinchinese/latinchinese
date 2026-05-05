@@ -1,7 +1,7 @@
 let currentLang = 'es';
 let allProducts = [];
 
-// 分类数据（西文和中文）
+// 分类数据
 const categories = [
     { cat: 'all', es: 'Todos', zh: '全部' },
     { cat: 'agricultura', es: '🚜 Agricultura', zh: '🚜 农业' },
@@ -39,7 +39,7 @@ async function loadProducts() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         allProducts = await res.json();
         if (!allProducts.length) throw new Error('No hay productos');
-        renderProducts(allProducts);
+        filterProducts(); // 初始显示全部
     } catch (err) {
         console.error(err);
         grid.innerHTML = `<div class="loading">❌ Error cargando productos. ${err.message}<br>Intenta recargar o contacta al administrador.</div>`;
@@ -99,7 +99,7 @@ function closeModal() {
     document.getElementById('inquiryForm').reset();
 }
 
-// 提交询价 (增加邮箱字段)
+// 提交询价
 document.getElementById('inquiryForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const name = document.getElementById('userName').value.trim();
@@ -125,26 +125,22 @@ function toggleLang() {
     // 更新语言切换按钮样式
     document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
     document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
-    // 重新生成分类按钮（更新文字）
+    // 重新生成分类按钮
     renderCategoryButtons();
     // 更新返回按钮文字
-    const backBtnText = document.getElementById('back-home-text');
-    if (backBtnText) {
-        backBtnText.textContent = currentLang === 'es' ? '← Volver al Inicio' : '← 返回首页';
-    }
+    const backBtn = document.getElementById('back-home-text');
+    if (backBtn) backBtn.textContent = currentLang === 'es' ? '← Volver al Inicio' : '← 返回首页';
     // 更新页脚文字
-    const footerText = document.getElementById('footer-text');
-    if (footerText) {
-        footerText.innerHTML = currentLang === 'es' 
-            ? '¿Eres fabricante? <a href="upload_guide.html" id="upload-link">Sube tus productos aquí</a>'
-            : '您是工厂吗？<a href="upload_guide.html" id="upload-link">免费上传您的产品</a>';
+    const footerSpan = document.getElementById('footer-text');
+    if (footerSpan) {
+        footerSpan.innerHTML = currentLang === 'es' 
+            ? '¿Eres fabricante? <a href="upload_guide.html">Sube tus productos aquí</a>'
+            : '您是工厂吗？<a href="upload_guide.html">免费上传您的产品</a>';
     }
     // 更新模态框标题
     const modalTitle = document.getElementById('modal-title');
-    if (modalTitle) {
-        modalTitle.textContent = currentLang === 'es' ? 'Solicitar cotización' : '询价';
-    }
-    // 重新筛选并渲染产品
+    if (modalTitle) modalTitle.textContent = currentLang === 'es' ? 'Solicitar cotización' : '询价';
+    // 重新筛选产品（重新渲染）
     filterProducts();
 }
 
