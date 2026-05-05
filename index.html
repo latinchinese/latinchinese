@@ -16,8 +16,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;transition:all 0.2s;background:rgba(245,166,35,0.2);color:var(--gold)}
 .lang-opt.on{background:var(--teal);color:#07111F}
 .notif-btn{width:34px;height:34px;border-radius:50%;background:var(--surf2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative}.notif-dot{position:absolute;top:7px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
-.scroll{position:fixed;top:var(--top);left:50%;transform:translateX(-50%);width:100%;max-width:430px;bottom:var(--nav);overflow-y:auto;z-index:1}.scroll::-webkit-scrollbar{display:none}
-.page{display:none;padding:22px 18px 20px}.page.on{display:block;animation:fadeUp .2s}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.scroll{position:fixed;top:var(--top);left:50%;transform:translateX(-50%);width:100%;max-width:430px;bottom:var(--nav);overflow-y:auto;overflow-x:hidden;z-index:1}
+.scroll::-webkit-scrollbar{display:none}
+.page{display:none;padding:22px 18px 20px;min-height:100%}
+.page.on{display:block;animation:fadeUp .2s}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .pg-title{font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:4px;background:linear-gradient(135deg,#E2EDF8 0%,#00C2A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .pg-sub{font-weight:600;font-size:14px;color:var(--text2);margin-bottom:20px;letter-spacing:-0.2px}
 .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav);background:rgba(7,17,31,0.97);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0)}.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:6px 4px;background:transparent;border:none}.bni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}.bni-label{font-size:10px;font-weight:600;color:var(--muted)}.bni.on .bni-icon{background:var(--teal-d)}.bni.on .bni-label{color:var(--teal)}
@@ -25,23 +27,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
 .p-teal{background:var(--teal-d);color:var(--teal)}.p-gold{background:var(--gold-d);color:var(--gold)}.p-purple{background:rgba(139,111,232,0.13);color:var(--purple)}
 .fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
-.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:11px 14px;outline:none}.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}.fta{min-height:80px;resize:none}.fs{cursor:pointer}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:12px;border:none;font-weight:700;cursor:pointer;width:100%;background:var(--teal);color:#07111F}.btn:hover{background:#00d4b8}.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}.lock{display:inline-flex;align-items:center;gap:5px;background:var(--green-d);border:1px solid rgba(34,201,122,.2);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:11px 14px;outline:none;pointer-events:auto}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}.fta{min-height:80px;resize:none}.fs{cursor:pointer}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:12px;border:none;font-weight:700;cursor:pointer;width:100%;background:var(--teal);color:#07111F}.btn:hover{background:#00d4b8}.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}.lock{display:inline-flex;align-items:center;gap:5px;background:var(--green-d);border:1px solid rgba(34,201,122,.2);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
 .agent-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:10px;cursor:pointer}.agent-card.selected{border-color:var(--teal)}.agent-name{font-weight:700;font-size:14px}.agent-total{font-family:monospace;font-size:20px;font-weight:700;color:var(--gold);text-align:right}
 .login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}.login-tab{padding:10px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surf);cursor:pointer;text-align:center}.login-tab.active{border-color:var(--teal);background:var(--teal-d)}.login-tab-name{font-size:11px;font-weight:700;color:var(--text2)}.login-tab.active .login-tab-name{color:var(--teal)}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;align-items:flex-end;justify-content:center}.modal-bg.show{display:flex}.modal{width:100%;max-width:430px;background:var(--surf);border-radius:24px 24px 0 0;padding:24px 20px 32px;max-height:85vh;overflow-y:auto}.modal-handle{width:36px;height:4px;background:var(--border2);margin:0 auto 20px}.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
 .cost-compare-card{margin-bottom:12px}.cost-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)}.cost-label{color:var(--text2)}.cost-value{font-family:monospace;font-weight:700;color:var(--gold);font-size:16px}.port-title{font-size:18px;font-weight:700;margin-bottom:12px;color:var(--teal)}.financing-item{margin-bottom:16px;padding:12px;background:var(--surf2);border-radius:12px}.financing-amount{font-size:18px;font-weight:700;color:var(--gold)}.financing-term{font-size:12px;color:var(--text2)}.pill-sm{background:var(--teal-d);color:var(--teal);padding:3px 8px;border-radius:20px;font-size:10px;display:inline-block}.back-home-btn{display:inline-block;margin-bottom:16px;padding:8px 16px;background:var(--surf2);border-radius:30px;font-size:13px;color:var(--teal);cursor:pointer;width:auto;border:1px solid var(--border2)}
-/* 修复眼睛图标位置 */
-.pw { position: relative; }
-.pw-eye {
-    position: absolute;
-    right: 13px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 1;
-}
+.pw{position:relative}
+.pw-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
 </style>
 </head>
 <body>
@@ -56,7 +49,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div style="font-weight:700;font-size:15px;margin-bottom:12px" id="t-recent">Pedidos Recientes</div>
     <div class="card" style="padding:0"><div onclick="goPage('orders')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer"><div>📦</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d1">Accesorios Bicicleta Eléc. ×500</div><div style="font-size:12px;color:var(--text2)">Ningbo → Lima · 20GP</div></div><div style="text-align:right"><div class="pill p-teal" id="t-transit">🚢 Tránsito</div><div style="font-size:11px;color:var(--muted);margin-top:4px">ETA: 12 Jun</div></div></div>
     <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)"><div>🪑</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d2">Sillas Ergonómicas ×200</div><div style="font-size:12px;color:var(--text2)">Guangzhou → Bogotá · LCL</div></div><div style="text-align:right"><div class="pill p-gold" id="t-quoting">💬 Cotizando</div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="t-today">Hoy</div></div></div>
-    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div>🔧</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d3">Piezas Industriales</div><div style="font-size:12px;color:var(--text2)">Shenzhen → Santiago</div></div><div style="text-align:right"><di>v class="pill p-purple" id="t-new">🆕 Nuevo</div></div></div></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div>🔧</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d3">Piezas Industriales</div><div style="font-size:12px;color:var(--text2)">Shenzhen → Santiago</div></div><div style="text-align:right"><div class="pill p-purple" id="t-new">🆕 Nuevo</div></div></div></div>
   </div>
   <!-- 费用对比页面 -->
   <div class="page" id="p-costcompare">
@@ -204,26 +197,25 @@ function submitOrder() { showToast('Solicitud enviada'); setTimeout(() => goPage
 function submitRates() { showToast('Oferta enviada'); setTimeout(() => goPage('home'), 600); }
 function submitInspeccion(){ showToast('Enviado (simulado)'); setTimeout(()=>goPage('home'),1500); }
 
-// 费用对比数据 (已根据您提供的单据修正秘鲁卡亚俄港的费用)
+// 费用对比数据 (Callao 费用已根据您的单据修正)
 const costData = {
   "Callao (Perú)": {
-    "Handling": 41,          // 操作费 (对应单据中 Handling 41.30)
-    "Desconsolidación": 83,  // 拆箱费 (对应 Descarga/Desc. 83.44)
-    "TDI": 18,               // 数据传输费 (Transmisión Fee 17.70)
-    "Emergency Fee": 35,     // 紧急附加费 (Emergency Fee 35.40)
-    "Visto Bueno": 142,      // 核放费 (VoBo 141.60)
-    "THC": 0,                // 码头费 (单据中未单独列出)
+    "Handling": 41,
+    "Desconsolidación": 83,
+    "TDI": 18,
+    "Emergency Fee": 35,
+    "Visto Bueno": 142,
+    "THC": 0,
     "Transporte Interior": 0,
-    "Almacén Temporal": 310, // 临时仓储费 (发动机单据 Retiro almacen 310)
+    "Almacén Temporal": 310,
     "Aduana": 0,
-    "B/L": 20                // 文件费 (发动机单据 doc fee 20)
+    "B/L": 20
   },
   "Valparaíso (Chile)": {"Visto Bueno":110,"Desconsolidación":390,"Handling":85,"TDI":40,"MACH":160,"THC":450,"Transporte Interior":530,"Almacén Temporal":160,"Aduana":230,"B/L":65},
   "Buenaventura (Colombia)": {"Visto Bueno":140,"Desconsolidación":460,"Handling":105,"TDI":50,"MACH":200,"THC":520,"Transporte Interior":620,"Almacén Temporal":200,"Aduana":280,"B/L":80},
   "Guayaquil (Ecuador)": {"Visto Bueno":115,"Desconsolidación":405,"Handling":90,"TDI":42,"MACH":170,"THC":470,"Transporte Interior":560,"Almacén Temporal":175,"Aduana":245,"B/L":68}
 };
 
-// 费用标签中文化映射 (仅为中文显示使用，西文仍显示原始英文/西文)
 const costLabelMap = {
   "Handling": "操作费 (Handling)",
   "Desconsolidación": "拆箱费 (Desconsolidación)",
