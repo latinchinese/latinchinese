@@ -19,17 +19,16 @@
         </div>
     </div>
 
+    <!-- 新增返回首页按钮 -->
+    <div class="back-home-btn" onclick="window.location.href='index.html'">
+        <span id="back-home-text">← Volver al Inicio</span>
+    </div>
+
     <div class="search-filter">
         <input type="text" id="searchInput" placeholder="🔍  Buscar producto / 搜索产品" class="search-box">
-        <!-- 分类按钮改为两行固定，使用 flex-wrap -->
-        <div class="category-grid">
-            <button class="cat-btn active" data-cat="all">Todos / 全部</button>
-            <button class="cat-btn" data-cat="agricultura">🚜 Agricultura / 农业</button>
-            <button class="cat-btn" data-cat="agua">💧 Tratamiento agua / 水处理</button>
-            <button class="cat-btn" data-cat="motor">⚙️ Motores / 发动机</button>
-            <button class="cat-btn" data-cat="energia">☀️ Energía solar / 太阳能</button>
-            <button class="cat-btn" data-cat="herramientas">🔧 Herramientas / 工具</button>
-            <button class="cat-btn" data-cat="industrial">🏭 Equipos industriales / 工业设备</button>
+        <!-- 分类按钮：使用自定义属性 data-cat-es 和 data-cat-zh，js动态渲染 -->
+        <div class="category-grid" id="categoryGrid">
+            <!-- 按钮将由 js 动态生成，以支持语言切换 -->
         </div>
     </div>
 
@@ -41,7 +40,7 @@
         <span id="footer-text">¿Eres fabricante? <a href="upload_guide.html" id="upload-link">Sube tus productos aquí</a></span>
     </div>
 
-    <!-- 询价模态框（增加了邮箱字段） -->
+    <!-- 询价模态框（完善取消按钮样式） -->
     <div id="inquiryModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>

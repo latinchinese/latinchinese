@@ -1,14 +1,46 @@
-/* 分类按钮改为网格布局，两行固定 */
+/* 原有样式保留，只增加和修改以下部分 */
+
+/* 返回首页按钮样式 */
+.back-home-btn {
+    display: inline-block;
+    margin: 16px 0 0 18px;
+    padding: 8px 16px;
+    background: #122844;
+    border-radius: 30px;
+    font-size: 13px;
+    color: #00C2A8;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    width: auto;
+    text-align: center;
+}
+
+/* 分类网格布局 */
 .category-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 12px;
 }
-.category-grid .cat-btn {
+.cat-btn {
+    background: #122844;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #7A9AB8;
+    cursor: pointer;
+    transition: all 0.2s;
     flex: 0 0 auto;
 }
-/* 模态框取消按钮 */
+.cat-btn.active {
+    background: #00C2A8;
+    color: #07111F;
+    border-color: #00C2A8;
+}
+
+/* 询价模态框取消按钮 */
 .btn-cancel {
     background: transparent;
     border: 1px solid rgba(255,255,255,0.2);
@@ -19,8 +51,23 @@
     margin-top: 8px;
     cursor: pointer;
     font-weight: 600;
+    transition: all 0.2s;
 }
 .btn-cancel:hover {
     border-color: #F5A623;
     color: #F5A623;
+    background: rgba(245,166,35,0.05);
+}
+
+/* 确保模态框按钮不冲突 */
+.btn-submit {
+    background: #00C2A8;
+    border: none;
+    border-radius: 30px;
+    padding: 12px;
+    width: 100%;
+    font-weight: 700;
+    color: #07111F;
+    cursor: pointer;
+    margin-top: 8px;
 }
