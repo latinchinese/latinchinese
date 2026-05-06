@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>透明化物流平台 · 智运链</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:#07111F;color:#E2EDF8;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;max-width:430px;margin:0 auto;overflow:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 90% 45% at 50% -5%,rgba(0,194,168,0.07)0%,transparent 65%),radial-gradient(ellipse 55% 40% at 95% 85%,rgba(139,111,232,0.05)0%,transparent 55%)}
+:root{--bg:#07111F;--surf:#0D1E33;--surf2:#122844;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.11);--teal:#00C2A8;--teal-d:rgba(0,194,168,0.13);--gold:#F5A623;--gold-d:rgba(245,166,35,0.13);--red:#FF4D6A;--red-d:rgba(255,77,106,0.13);--green:#22C97A;--green-d:rgba(34,201,122,0.11);--purple:#8B6FE8;--muted:#4E6A88;--text:#E2EDF8;--text2:#7A9AB8;--nav:72px;--top:58px}
+.topbar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--top);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,17,31,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:200}
+.logo{display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}.logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px;letter-spacing:.5px}.logo-es{font-weight:600;font-size:9px;color:var(--teal)}
+.lang-toggle{display:flex;background:var(--surf2);border:1px solid var(--border2);border-radius:20px;padding:3px;cursor:pointer}
+.lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;transition:all 0.2s;background:rgba(245,166,35,0.2);color:var(--gold);white-space:nowrap}
+.lang-opt.on{background:var(--teal);color:#07111F}
+.notif-btn{width:34px;height:34px;border-radius:50%;background:var(--surf2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative}.notif-dot{position:absolute;top:7px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.scroll{position:fixed;top:var(--top);left:50%;transform:translateX(-50%);width:100%;max-width:430px;bottom:var(--nav);overflow-y:auto;overflow-x:hidden;z-index:1}
+.scroll::-webkit-scrollbar{display:none}
+.page{display:none;padding:22px 18px 20px;min-height:100%}
+.page.on{display:block;animation:fadeUp .2s}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.pg-title{font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:4px;background:linear-gradient(135deg,#E2EDF8 0%,#00C2A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pg-sub{font-weight:600;font-size:14px;color:var(--text2);margin-bottom:20px;letter-spacing:-0.2px}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav);background:rgba(7,17,31,0.97);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0)}.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:6px 4px;background:transparent;border:none}.bni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}.bni-label{font-size:10px;font-weight:600;color:var(--muted)}.bni.on .bni-icon{background:var(--teal-d)}.bni.on .bni-label{color:var(--teal)}
+.card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;cursor:pointer}
+.card:hover{border-color:rgba(0,194,168,0.3)}
+.fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
+.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:11px 14px;outline:none}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}.fta{min-height:80px;resize:none}.fs{cursor:pointer}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:12px;border:none;font-weight:700;cursor:pointer;width:100%;background:var(--teal);color:#07111F}.btn:hover{background:#00d4b8}.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}.lock{display:inline-flex;gap:5px;background:var(--green-d);border:1px solid rgba(34,201,122,.2);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}.login-tab{padding:10px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surf);cursor:pointer;text-align:center}.login-tab.active{border-color:var(--teal);background:var(--teal-d)}.login-tab-name{font-size:11px;font-weight:700;color:var(--text2)}.login-tab.active .login-tab-name{color:var(--teal)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;align-items:flex-end;justify-content:center}.modal-bg.show{display:flex}.modal{width:100%;max-width:430px;background:var(--surf);border-radius:24px 24px 0 0;padding:24px 20px 32px;max-height:85vh;overflow-y:auto}.modal-handle{width:36px;height:4px;background:var(--border2);margin:0 auto 20px}.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
+.pw{position:relative}.pw-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="logo"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Plataforma Logística Transparente</span></div><div style="display:flex;align-items:center;gap:10px"><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div><div class="notif-btn">🔔<div class="notif-dot"></div></div></div></div>
+<div class="scroll">
+  <!-- 首页 -->
+  <div class="page on" id="p-home">
+    <div class="pg-title" id="t-home-title">Inicio</div><div class="pg-sub" id="t-home-sub">Bienvenido, Rodrigo Silva</div>
+    <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📊</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-title">物流费用对比</div><div style="font-size:12px; color:var(--text2);" id="t-cost-desc">Compare tarifas marítimas y bloquea precios</div></div></div></div>
+    <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento/r_financiero.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💸</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-title">买方融资需求</div><div style="font-size:12px; color:var(--text2);" id="t-fin-desc">Publica o busca financiamiento para tus compras</div></div></div></div>
+    <div class="card" style="background:rgba(255,77,106,0.13); border-color:var(--red);" onclick="window.location.href='catalogo/productos.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-catalog-title">工业产品目录</div><div style="font-size:12px; color:var(--text2);" id="t-catalog-desc">Máquinas, repuestos, equipos – Precios FOB</div></div></div></div>
+    <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.location.href='ensamblaje/ensamblaje.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🏭</div><div><div style="font-weight:800; font-size:16px;" id="t-ensamblaje-title">拉美工业化协作</div><div style="font-size:12px; color:var(--text2);" id="t-ensamblaje-desc">SKD组装 · 散件供应 · 技术指导 · 本地化生产</div></div></div></div>
+  </div>
+
+  <!-- 入口页面 -->
+  <div class="page" id="p-login">
+    <div class="login-tabs"><div class="login-tab active" id="tab-buyer" onclick="setLoginRole('buyer')"><div>🛒</div><div class="login-tab-name" id="t-tab-buyer">Comprador</div></div><div class="login-tab" id="tab-seller" onclick="setLoginRole('seller')"><div>🏭</div><div class="login-tab-name" id="t-tab-seller">Vendedor</div></div><div class="login-tab" id="tab-ff" onclick="setLoginRole('ff')"><div>🚢</div><div class="login-tab-name" id="t-tab-ff">Agente</div></div><div class="login-tab" id="tab-admin" onclick="setLoginRole('admin')"><div>⚙️</div><div class="login-tab-name" id="t-tab-admin">Admin</div></div></div>
+    <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--teal-d);border-radius:10px"><div id="login-role-icon">🛒</div><div><div style="font-size:12px;font-weight:700;color:var(--teal)" id="login-role-label">Comprador</div><div style="font-size:11px;color:var(--text2)" id="login-role-desc">Compare cotizaciones</div></div></div>
+      <div class="fg"><div class="fl"><span id="t-login-name-label">Nombre / Usuario</span></div><input class="fi" type="text" id="login-name" placeholder="Tu nombre"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-login-email">Correo Electrónico</span></div><input class="fi" type="email" id="login-email" placeholder="nombre@empresa.com"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-login-pw">Contraseña</span></div><div class="pw"><input class="fi" type="password" id="login-pw" placeholder="••••••••"><span class="pw-eye" onclick="togglePw()">👁</span></div></div>
+      <button class="btn" onclick="submitLogin()"><span id="t-login-btn">🔐 Entrada</span></button>
+    </div>
+    <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
+  </div>
+
+  <!-- 询价页面（修正：增加上海港） -->
+ <div class="page" id="p-orders">
+    <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
+    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
+      <div class="fg"><div class="fl"><span id="t-fl-desc">Descripción</span></div><textarea class="fta" id="t-ph-desc" placeholder="Ej: Sillas ergonómicas..."></textarea></div>
+      <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-weight">Peso Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-weight" placeholder="2400 kg"></div><div class="fg"><div class="fl"><span id="t-fl-vol">Volumen Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-vol" placeholder="18.5 m³"></div></div>
+      <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen</span></div><select class="fs" id="t-sel-origin"><option id="t-opt-nb">Ningbo</option><option id="t-opt-gz">Guangzhou</option><option id="t-opt-sz">Shenzhen</option><option id="t-opt-sh">Shanghai</option></select></div><div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino</span></div><select class="fs" id="t-sel-dest"><option>Callao (Lima)</option><option>Bogotá</option><option>Valparaíso</option></select></div></div>
+      <div class="fg"><div class="fl"><span id="t-fl-mode">Modo de Envío</span></div><select class="fs"><option id="t-opt-lcl">LCL Consolidado</option><option id="t-opt-20">FCL 20GP</option><option id="t-opt-40">FCL 40HQ</option></select></div>
+      <div class="fg"><div class="fl"><span id="t-fl-hs">Código HS</span></div><input class="fi" id="t-ph-hs" placeholder="Ej: 9401.30"></div>
+    </div>
+    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-contact-info">📱 Datos de Contacto</div>
+      <div class="fg"><div class="fl"><span>WhatsApp</span></div><div style="display:flex;gap:8px"><select class="fs" style="width:110px"><option>🇵🇪 +51</option><option>🇨🇴 +57</option></select><input class="fi" type="tel" id="t-ph-wa" placeholder="999 123 456"></div></div>
+      <div class="fg"><div class="fl"><span id="t-fl-email">Correo</span></div><input class="fi" type="email" id="t-ph-email" placeholder="nombre@empresa.com"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-company">Empresa</span></div><input class="fi" id="t-ph-company" placeholder="Importadora Silva EIRL"></div>
+      <div class="fg"><div class="fl"><span id="t-fl-notes">Notas</span></div><textarea class="fta" id="t-ph-notes" placeholder="Requisitos especiales..."></textarea></div>
+    </div>
+    <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
+  </div>
+
+  <!-- 核实供应商页面（修正：中文标签补充完整） -->
+  <div class="page" id="p-inspeccion">
+    <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div><div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
+    <div class="card">
+      <div class="fg"><div class="fl"><span id="ins-name-label">Nombre del proveedor / 供应商名称</span></div><input class="fi" type="text" id="ins-name" placeholder="Ej: Shanghai XX Machinery Co."></div>
+      <div class="fg"><div class="fl"><span id="ins-url-label">Sitio web / 网站链接</span></div><input class="fi" type="url" id="ins-url" placeholder="https://..."></div>
+      <div class="fg"><div class="fl"><span id="ins-phone-label">Teléfono / WeChat del vendedor / 供应商电话/微信</span></div><input class="fi" type="text" id="ins-phone" placeholder="WeChat: xxx"></div>
+      <div class="fg"><div class="fl"><span id="ins-desc-label">Descripción del producto / 货物名称</span></div><textarea class="fta" id="ins-desc" placeholder="Ej: excavadora pequeña" rows="2"></textarea></div>
+      <div class="fg"><div class="fl"><span id="ins-wa-label">Tu WhatsApp / correo (para respuesta) / 您的联系方式</span></div><input class="fi" type="tel" id="ins-wa" placeholder="+51 999 123 456"></div>
+      <button class="btn" onclick="submitInspeccion()" id="t-ins-btn">📩 Enviar solicitud de verificación</button>
+      <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px">Te responderemos en < 48h</div>
+    </div>
+  </div>
+</div>
+
+<div class="bnav">
+  <button class="bni on" onclick="goPage('home')"><div class="bni-icon">🏠</div><div class="bni-label" id="t-nav-home">Inicio</div></button>
+  <button class="bni" onclick="goPage('login')"><div class="bni-icon">🔐</div><div class="bni-label" id="t-nav-login">Entrada</div></button>
+  <button class="bni" onclick="goPage('orders')"><div class="bni-icon">📋</div><div class="bni-label" id="t-nav-orders">Cotizar</div></button>
+  <button class="bni" onclick="goPage('inspeccion')"><div class="bni-icon">🔍</div><div class="bni-label" id="t-nav-verify">Verificar</div></button>
+</div>
+
+<script>
+const T = {
+  es: {
+    'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, Rodrigo Silva',
+    't-cost-title':'Comparador de Costos','t-cost-desc':'Compare tarifas marítimas y bloquea precios',
+    't-fin-title':'Financiamiento para compradores','t-fin-desc':'Publica o busca financiamiento para tus compras',
+    't-catalog-title':'Catálogo Industrial','t-catalog-desc':'Máquinas, repuestos, equipos – Precios FOB',
+    't-ensamblaje-title':'Industrialización Colaborativa','t-ensamblaje-desc':'SKD · Suministro de piezas · Asistencia técnica',
+    't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar',
+    't-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin',
+    't-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.',
+    't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario para solicitar el costo de flete y la operación logística',
+    't-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Origen','t-fl-dest':'Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'Shanghai','t-fl-hs':'HS Code',
+    't-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
+    't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.','t-ins-btn':'📩 Enviar solicitud de verificación',
+    'ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
+  },
+  zh: {
+    'lo-es':'ES','lo-zh':'中','t-home-title':'首页','t-home-sub':'欢迎回来，Rodrigo Silva',
+    't-cost-title':'物流费用对比','t-cost-desc':'比较海运费并锁定价格',
+    't-fin-title':'买方融资需求','t-fin-desc':'发布或寻找采购融资',
+    't-catalog-title':'工业产品目录','t-catalog-desc':'机械设备、配件、整机 – FOB价格',
+    't-ensamblaje-title':'拉美工业化协作','t-ensamblaje-desc':'SKD散件供应 · 组装技术转移 · 本地化生产',
+    't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实',
+    't-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员',
+    't-login-name-label':'姓名 / 用户名','t-fl-login-email':'邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意平台使用条款。',
+    't-orders-title':'询价单','t-orders-sub':'填写表格以申请海运费及物流操作费用',
+    't-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'上海港','t-fl-hs':'HS编码',
+    't-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交','t-submit-note':'货代24h内报价',
+    't-ins-title':'🔍 核实供应商','t-ins-sub':'提交供应商信息，我们帮您核查真实性','t-ins-btn':'📩 提交核实',
+    'ins-name-label':'供应商名称','ins-url-label':'网站链接','ins-phone-label':'供应商电话/微信','ins-desc-label':'货物名称','ins-wa-label':'您的联系方式'
+  }
+};
+let lang = 'es', loginRole = 'buyer';
+function applyLang() { const t = T[lang]; for (let [id, val] of Object.entries(t)) { let el = document.getElementById(id); if (el) { if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val; else el.innerHTML = val; } } }
+function toggleLang() { lang = lang === 'es' ? 'zh' : 'es'; applyLang(); updateLoginRoleUI(); document.getElementById('lo-es').classList.toggle('on', lang==='es'); document.getElementById('lo-zh').classList.toggle('on', lang==='zh'); }
+function goPage(id) { const pages = ['home','login','orders','inspeccion']; pages.forEach(p => { document.getElementById('p-'+p)?.classList.remove('on'); const btn = document.getElementById('bni-'+p); if(btn) btn.classList.remove('on'); }); document.getElementById('p-'+id).classList.add('on'); const btn = document.getElementById('bni-'+id); if(btn) btn.classList.add('on'); document.querySelector('.scroll').scrollTop = 0; }
+function setLoginRole(role) { loginRole = role; ['buyer','seller','ff','admin'].forEach(r => { const tab = document.getElementById('tab-'+r); if(tab) tab.classList.toggle('active', r===role); }); updateLoginRoleUI(); }
+function updateLoginRoleUI() { const m = { buyer:{icon:'🛒',label_es:'Comprador',label_zh:'买方'}, seller:{icon:'🏭',label_es:'Vendedor',label_zh:'卖方'}, ff:{icon:'🚢',label_es:'Agente',label_zh:'货代'}, admin:{icon:'⚙️',label_es:'Admin',label_zh:'管理员'} }; let r=loginRole; document.getElementById('login-role-icon').textContent=m[r].icon; document.getElementById('login-role-label').textContent=lang==='zh'?m[r].label_zh:m[r].label_es; const descMap = { buyer: lang==='zh'?'比较报价':'Compare cotizaciones', seller: lang==='zh'?'提供FOB':'Cotice en FOB', ff: lang==='zh'?'报价服务':'Publique oferta', admin: lang==='zh'?'后台管理':'Panel Admin' }; document.getElementById('login-role-desc').textContent = descMap[r] || ''; }
+function togglePw() { let p=document.getElementById('login-pw'); p.type=p.type==='password'?'text':'password'; }
+function showToast(m) { let t=document.getElementById('toast'); if(t){ document.getElementById('toast-msg').textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',2500); } else { alert(m); } }
+function submitLogin() { let name=document.getElementById('login-name').value.trim(), email=document.getElementById('login-email').value.trim(), pw=document.getElementById('login-pw').value; if(!name||!email||!pw){ showToast(lang==='zh'?'请填写姓名、邮箱和密码':'Complete nombre, correo y contraseña'); return; } showToast(lang==='zh'?'登录成功':'Bienvenido'); setTimeout(()=>goPage('home'),500); }
+function submitOrder() { showToast(lang==='zh'?'询价已提交':'Solicitud enviada'); setTimeout(()=>goPage('home'),600); }
+function submitInspeccion(){ showToast(lang==='zh'?'已提交（模拟）':'Enviado (simulado)'); setTimeout(()=>goPage('home'),1500); }
+window.addEventListener('load',()=>{ applyLang(); setLoginRole('buyer'); });
+</script>
+</body>
+</html>
