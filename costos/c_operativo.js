@@ -1,0 +1,58 @@
+let lang = 'es';
+let costData = {};
+
+async function loadCostData() {
+    try {
+        const res = await fetch('cost_data.json');
+        costData = await res.json();
+        renderCompare();
+    } catch(e) { console.error(e); }
+}
+function renderCompare() {
+    const container = document.getElementById('cost-compare-container');
+    if (!container) return;
+    container.innerHTML = '';
+    for (let [port, fees] of Object.entries(costData)) {
+        let itemsHtml = '';
+        for (let [key, value] of Object.entries(fees)) {
+            let label = key;
+            if (lang === 'zh') {
+                const map = { 'Visto Bueno':'核放费','Desconsolidación':'拆箱费','Handling':'操作费','TDI':'数据传输费','MACH':'吊箱费','THC':'码头费','Transporte Interior':'内陆运输','Almacén Temporal':'临时仓储','Aduana':'报关费','B/L':'提单费' };
+                label = map[key] || key;
+            }
+            itemsHtml += `<div class="cost-item"><span class="cost-label">${label}</span><span class="cost-value">$${value}</span></div>`;
+        }
+        container.innerHTML += `<div class="card cost-compare-card"><div class="port-title">⚓ ${port}</div>${itemsHtml}</div>`;
+    }
+}
+function submitOffer() {
+    alert(lang === 'es' ? 'Oferta enviada (simulada)' : '报价已提交（模拟）');
+}
+function toggleLang() {
+    lang = lang === 'es' ? 'zh' : 'es';
+    document.getElementById('lo-es').classList.toggle('on', lang === 'es');
+    document.getElementById('lo-zh').classList.toggle('on', lang === 'zh');
+    const backSpan = document.getElementById('back-text');
+    backSpan.textContent = lang === 'es' ? 'Volver al Inicio' : '返回首页';
+    const texts = {
+        'form-title': lang === 'es' ? '📝 Cargos en Destino (para agentes)' : '📝 目的港费用（货代填写）',
+        'compare-title': lang === 'es' ? '⚓ Costos Logísticos por Puerto' : '⚓ 港口物流费用参考',
+        'lbl-vb': lang === 'es' ? 'Visto Bueno' : '核放费',
+        'lbl-dc': lang === 'es' ? 'Desconsolidación' : '拆箱费',
+        'lbl-hd': lang === 'es' ? 'Handling' : '操作费',
+        'lbl-tdi': lang === 'es' ? 'TDI' : '数据传输费',
+        'lbl-mach': lang === 'es' ? 'MACH' : '吊箱费',
+        'lbl-thc': lang === 'es' ? 'THC' : '码头费',
+        'lbl-transp': lang === 'es' ? 'Transporte Interior' : '内陆运输',
+        'lbl-alm': lang === 'es' ? 'Almacén Temporal' : '临时仓储',
+        'lbl-aduana': lang === 'es' ? 'Aduana' : '报关费',
+        'lbl-bl': lang === 'es' ? 'B/L' : '提单费',
+        'btn-submit': lang === 'es' ? '🔒 Enviar Oferta Bloqueada' : '🔒 提交锁定报价'
+    };
+    for (let [id, val] of Object.entries(texts)) {
+        let el = document.getElementById(id);
+        if (el) el.textContent = val;
+    }
+    renderCompare();
+}
+window.addEventListener('load', () => { loadCostData(); toggleLang(); });
