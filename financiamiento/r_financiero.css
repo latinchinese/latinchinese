@@ -1,0 +1,17 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto;padding-bottom:30px}
+.topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1);z-index:100}
+.logo{display:flex;align-items:baseline;gap:6px;cursor:pointer}
+.logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px}.logo-es{font-weight:600;font-size:9px;color:#00C2A8}
+.lang-toggle{display:flex;background:#122844;border-radius:20px;padding:3px;cursor:pointer}
+.lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;background:rgba(245,166,35,0.2);color:#F5A623}
+.lang-opt.on{background:#00C2A8;color:#07111F}
+.back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1)}
+.pg-title{font-weight:800;font-size:24px;margin:12px 18px}
+.btn-outline{background:transparent;border:1px solid #00C2A8;border-radius:30px;padding:10px;margin:0 18px 20px;width:calc(100% - 36px);color:#00C2A8;font-weight:600;cursor:pointer}
+.financing-item{background:#0D1E33;margin:12px 18px;padding:16px;border-radius:16px}
+.financing-amount{font-size:20px;font-weight:700;color:#F5A623}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);align-items:center;justify-content:center}
+.modal-content{background:#0D1E33;max-width:340px;width:90%;border-radius:28px;padding:24px;border:1px solid #00C2A8}
+.modal input{width:100%;margin-bottom:12px;padding:10px;background:#122844;border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:white}
+.close{float:right;font-size:24px;cursor:pointer}
