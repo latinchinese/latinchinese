@@ -58,13 +58,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
   </div>
 
-  <!-- 询价页面（修正：增加上海港） -->
- <div class="page" id="p-orders">
+  <!-- 询价页面（修正港口多语言） -->
+  <div class="page" id="p-orders">
     <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
     <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
       <div class="fg"><div class="fl"><span id="t-fl-desc">Descripción</span></div><textarea class="fta" id="t-ph-desc" placeholder="Ej: Sillas ergonómicas..."></textarea></div>
       <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-weight">Peso Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-weight" placeholder="2400 kg"></div><div class="fg"><div class="fl"><span id="t-fl-vol">Volumen Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-vol" placeholder="18.5 m³"></div></div>
-      <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen</span></div><select class="fs" id="t-sel-origin"><option id="t-opt-nb">Ningbo</option><option id="t-opt-gz">Guangzhou</option><option id="t-opt-sz">Shenzhen</option><option id="t-opt-sh">Shanghai</option></select></div><div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino</span></div><select class="fs" id="t-sel-dest"><option>Callao (Lima)</option><option>Bogotá</option><option>Valparaíso</option></select></div></div>
+      <div class="g2">
+        <div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen / 出发港</span></div><select class="fs" id="t-sel-origin">
+          <option value="Ningbo" data-es="Puerto Ningbo" data-zh="宁波港">Puerto Ningbo</option>
+          <option value="Guangzhou" data-es="Puerto Guangzhou" data-zh="广州港">Puerto Guangzhou</option>
+          <option value="Shenzhen" data-es="Puerto Shenzhen" data-zh="深圳港">Puerto Shenzhen</option>
+          <option value="Shanghai" data-es="Puerto Shanghai" data-zh="上海港">Puerto Shanghai</option>
+        </select></div>
+        <div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino / 目的港</span></div><select class="fs" id="t-sel-dest">
+          <option value="Callao" data-es="Puerto Callao (Perú)" data-zh="卡亚俄港（秘鲁）">Puerto Callao (Perú)</option>
+          <option value="Buenaventura" data-es="Puerto Buenaventura (Colombia)" data-zh="布埃纳文图拉港（哥伦比亚）">Puerto Buenaventura (Colombia)</option>
+          <option value="Valparaiso" data-es="Puerto Valparaíso (Chile)" data-zh="瓦尔帕莱索港（智利）">Puerto Valparaíso (Chile)</option>
+          <option value="Guayaquil" data-es="Puerto Guayaquil (Ecuador)" data-zh="瓜亚基尔港（厄瓜多尔）">Puerto Guayaquil (Ecuador)</option>
+        </select></div>
+      </div>
       <div class="fg"><div class="fl"><span id="t-fl-mode">Modo de Envío</span></div><select class="fs"><option id="t-opt-lcl">LCL Consolidado</option><option id="t-opt-20">FCL 20GP</option><option id="t-opt-40">FCL 40HQ</option></select></div>
       <div class="fg"><div class="fl"><span id="t-fl-hs">Código HS</span></div><input class="fi" id="t-ph-hs" placeholder="Ej: 9401.30"></div>
     </div>
@@ -77,7 +90,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
   </div>
 
-  <!-- 核实供应商页面（修正：中文标签补充完整） -->
+  <!-- 核实供应商页面 -->
   <div class="page" id="p-inspeccion">
     <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div><div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
     <div class="card">
@@ -111,7 +124,7 @@ const T = {
     't-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin',
     't-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.',
     't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario para solicitar el costo de flete y la operación logística',
-    't-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Origen','t-fl-dest':'Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'Shanghai','t-fl-hs':'HS Code',
+    't-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Puerto Origen','t-fl-dest':'Puerto Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS Code',
     't-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
     't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.','t-ins-btn':'📩 Enviar solicitud de verificación',
     'ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
@@ -126,14 +139,27 @@ const T = {
     't-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员',
     't-login-name-label':'姓名 / 用户名','t-fl-login-email':'邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意平台使用条款。',
     't-orders-title':'询价单','t-orders-sub':'填写表格以申请海运费及物流操作费用',
-    't-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'上海港','t-fl-hs':'HS编码',
+    't-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS编码',
     't-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交','t-submit-note':'货代24h内报价',
     't-ins-title':'🔍 核实供应商','t-ins-sub':'提交供应商信息，我们帮您核查真实性','t-ins-btn':'📩 提交核实',
     'ins-name-label':'供应商名称','ins-url-label':'网站链接','ins-phone-label':'供应商电话/微信','ins-desc-label':'货物名称','ins-wa-label':'您的联系方式'
   }
 };
 let lang = 'es', loginRole = 'buyer';
-function applyLang() { const t = T[lang]; for (let [id, val] of Object.entries(t)) { let el = document.getElementById(id); if (el) { if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val; else el.innerHTML = val; } } }
+
+function updateOriginDestOptions() {
+  const originSelect = document.getElementById('t-sel-origin');
+  const destSelect = document.getElementById('t-sel-dest');
+  if (!originSelect || !destSelect) return;
+  for (let opt of originSelect.options) {
+    opt.text = lang === 'es' ? opt.getAttribute('data-es') : opt.getAttribute('data-zh');
+  }
+  for (let opt of destSelect.options) {
+    opt.text = lang === 'es' ? opt.getAttribute('data-es') : opt.getAttribute('data-zh');
+  }
+}
+
+function applyLang() { const t = T[lang]; for (let [id, val] of Object.entries(t)) { let el = document.getElementById(id); if (el) { if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val; else el.innerHTML = val; } } updateOriginDestOptions(); }
 function toggleLang() { lang = lang === 'es' ? 'zh' : 'es'; applyLang(); updateLoginRoleUI(); document.getElementById('lo-es').classList.toggle('on', lang==='es'); document.getElementById('lo-zh').classList.toggle('on', lang==='zh'); }
 function goPage(id) { const pages = ['home','login','orders','inspeccion']; pages.forEach(p => { document.getElementById('p-'+p)?.classList.remove('on'); const btn = document.getElementById('bni-'+p); if(btn) btn.classList.remove('on'); }); document.getElementById('p-'+id).classList.add('on'); const btn = document.getElementById('bni-'+id); if(btn) btn.classList.add('on'); document.querySelector('.scroll').scrollTop = 0; }
 function setLoginRole(role) { loginRole = role; ['buyer','seller','ff','admin'].forEach(r => { const tab = document.getElementById('tab-'+r); if(tab) tab.classList.toggle('active', r===role); }); updateLoginRoleUI(); }
