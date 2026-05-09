@@ -1,5 +1,6 @@
 let lang = 'es';
 let costData = {};
+const WORKER_URL = 'https://cold-cake-3008.latinagro.workers.dev';  // 您的 Cloudflare Worker 地址
 
 async function loadCostData() {
     try {
@@ -28,12 +29,32 @@ function renderCompare() {
 function submitOffer() {
     alert(lang === 'es' ? 'Oferta enviada (simulada)' : '报价已提交（模拟）');
 }
+async function aiCheck() {
+    const text = document.getElementById('quoteText').value.trim();
+    if (!text) {
+        alert(lang === 'es' ? 'Por favor pega la cotización primero.' : '请先粘贴报价文字');
+        return;
+    }
+    const prompt = `你是一个拉美物流成本审计专家。以下是货代提供的费用清单（非结构化文本）：\n${text}\n\n已知各港口基准费用为（仅作参考，不要直接输出）：${JSON.stringify(costData)}\n请分析清单中的费用哪些明显高于市场价（超过20%），用西语和中文分别给出简洁警告（每个警告一行）。格式：⚠️ [西语] / ⚠️ [中文]`;
+    try {
+        const response = await fetch(`${WORKER_URL}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: prompt }] })
+        });
+        const data = await response.json();
+        const resultText = data.choices[0].message.content;
+        document.getElementById('aiResult').innerHTML = resultText.replace(/\n/g, '<br>');
+    } catch (err) {
+        document.getElementById('aiResult').innerHTML = lang === 'es' ? 'Error de conexión con AI.' : 'AI 连接错误。';
+    }
+}
 function toggleLang() {
     lang = lang === 'es' ? 'zh' : 'es';
     document.getElementById('lo-es').classList.toggle('on', lang === 'es');
     document.getElementById('lo-zh').classList.toggle('on', lang === 'zh');
-    const backSpan = document.getElementById('back-text');
-    backSpan.textContent = lang === 'es' ? 'Volver al Inicio' : '返回首页';
+    const backSpan = document.getElementById('back-home-text');
+    if (backSpan) backSpan.textContent = lang === 'es' ? '← Volver al Inicio' : '← 返回首页';
     const texts = {
         'form-title': lang === 'es' ? '📝 Cargos en Destino (para agentes)' : '📝 目的港费用（货代填写）',
         'compare-title': lang === 'es' ? '⚓ Costos Logísticos por Puerto' : '⚓ 港口物流费用参考',
@@ -47,7 +68,10 @@ function toggleLang() {
         'lbl-alm': lang === 'es' ? 'Almacén Temporal' : '临时仓储',
         'lbl-aduana': lang === 'es' ? 'Aduana' : '报关费',
         'lbl-bl': lang === 'es' ? 'B/L' : '提单费',
-        'btn-submit': lang === 'es' ? '🔒 Enviar Oferta Bloqueada' : '🔒 提交锁定报价'
+        'btn-submit': lang === 'es' ? '🔒 Enviar Oferta Bloqueada' : '🔒 提交锁定报价',
+        'ai-title': lang === 'es' ? '🤖 AI Alerta de Costos' : '🤖 AI 费用预警',
+        'ai-label': lang === 'es' ? 'Pega aquí el texto de la cotización del agente' : '粘贴货代报价文字',
+        'ai-btn': lang === 'es' ? '🔍 Analizar con AI' : '🔍 AI 分析'
     };
     for (let [id, val] of Object.entries(texts)) {
         let el = document.getElementById(id);

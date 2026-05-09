@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>融资管理后台</title>
+    <style>
+        body{background:#07111F;color:#E2EDF8;font-family:system-ui;max-width:600px;margin:20px auto;padding:20px}
+        textarea{width:100%;background:#122844;border:1px solid #00C2A8;color:white;padding:12px;border-radius:12px}
+        button{background:#00C2A8;border:none;border-radius:30px;padding:10px 20px;margin-top:10px;cursor:pointer;color:#07111F;font-weight:700}
+        .card{background:#0D1E33;border-radius:16px;padding:20px;margin-bottom:20px}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>📊 融资需求导出与 AI 摘要</h2>
+        <div id="requests-container"></div>
+        <button onclick="exportAsJSON()">📄 导出 JSON</button>
+        <button onclick="generateAISummary()">🤖 生成 AI 摘要</button>
+        <div id="summaryResult" class="card" style="margin-top:20px;"></div>
+    </div>
+    <script>
+        const WORKER_URL = 'https://cold-cake-3008.latinagro.workers.dev'; // 您的 Worker 地址
+        let allRequests = [];
+
+        function loadData() {
+            const stored = localStorage.getItem('financing_requests');
+            allRequests = stored ? JSON.parse(stored) : [];
+            const container = document.getElementById('requests-container');
+            if (allRequests.length === 0) {
+                container.innerHTML = '<p>暂无融资需求</p>';
+            } else {
+                container.innerHTML = allRequests.map((r,i) => `<div style="border-bottom:1px solid #555; padding:8px;"><strong>#${i+1}</strong> ${r.product}<br>Monto: $${r.amount} | Pagado: ${r.paid}% | Plazo: ${r.term} días<br>Contacto: ${r.contact}</div>`).join('');
+            }
+        }
+        function exportAsJSON() {
+            const dataStr = JSON.stringify(allRequests, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'financing_requests.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        async function generateAISummary() {
+            if (allRequests.length === 0) {
+                alert('没有需求，无法生成摘要');
+                return;
+            }
+            const prompt = `以下是来自拉美进口商的融资需求列表（JSON格式）：\n${JSON.stringify(allRequests, null, 2)}\n请为每一笔需求用西语和中文分别生成一条简短的推介语，并汇总总的资金需求量和平均账期。最后输出为清晰的报告，适合发给资金方。`;
+            try {
+                const resp = await fetch(`${WORKER_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: prompt }] })
+                });
+                const data = await resp.json();
+                const result = data.choices[0].message.content;
+                document.getElementById('summaryResult').innerHTML = result.replace(/\n/g, '<br>');
+            } catch(e) {
+                document.getElementById('summaryResult').innerHTML = 'AI 生成失败，请检查 Worker 地址。';
+            }
+        }
+        window.onload = loadData;
+    </script>
+</body>
+</html>

@@ -1,7 +1,6 @@
 let currentLang = 'es';
 let allProducts = [];
 
-// 分类数据
 const categories = [
     { cat: 'all', es: 'Todos', zh: '全部' },
     { cat: 'agricultura', es: '🚜 Agricultura', zh: '🚜 农业' },
@@ -39,7 +38,7 @@ async function loadProducts() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         allProducts = await res.json();
         if (!allProducts.length) throw new Error('No hay productos');
-        filterProducts(); // 初始显示全部
+        filterProducts();
     } catch (err) {
         console.error(err);
         grid.innerHTML = `<div class="loading">❌ Error cargando productos. ${err.message}<br>Intenta recargar o contacta al administrador.</div>`;
@@ -99,7 +98,6 @@ function closeModal() {
     document.getElementById('inquiryForm').reset();
 }
 
-// 提交询价
 document.getElementById('inquiryForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const name = document.getElementById('userName').value.trim();
@@ -107,12 +105,10 @@ document.getElementById('inquiryForm').addEventListener('submit', function(e) {
     const whatsapp = document.getElementById('userWhatsapp').value.trim();
     const msg = document.getElementById('userMsg').value.trim();
     const productName = document.getElementById('productName').value;
-
     if (!name || !email || !whatsapp) {
         alert(currentLang === 'es' ? 'Por favor completa nombre, email y WhatsApp.' : '请填写姓名、邮箱和WhatsApp');
         return;
     }
-
     const subject = `Consulta sobre ${productName}`;
     const body = `Nombre: ${name}%0AEmail: ${email}%0AWhatsApp: ${whatsapp}%0AProducto: ${productName}%0AMensaje: ${msg}`;
     window.location.href = `mailto:latinavance.latinavance@gmail.com?subject=${subject}&body=${body}`;
@@ -122,26 +118,20 @@ document.getElementById('inquiryForm').addEventListener('submit', function(e) {
 
 function toggleLang() {
     currentLang = currentLang === 'es' ? 'zh' : 'es';
-    // 更新语言切换按钮样式
     document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
     document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
-    // 重新生成分类按钮
     renderCategoryButtons();
-    // 更新返回按钮文字
-    const backBtn = document.getElementById('back-home-text');
-    if (backBtn) backBtn.textContent = currentLang === 'es' ? '← Volver al Inicio' : '← 返回首页';
-    // 更新页脚文字
-    const footerSpan = document.getElementById('footer-text');
-    if (footerSpan) {
-        footerSpan.innerHTML = currentLang === 'es' 
-            ? '¿Eres fabricante? <a href="upload_guide.html">Sube tus productos aquí</a>'
-            : '您是工厂吗？<a href="upload_guide.html">免费上传您的产品</a>';
+    filterProducts();
+    const backSpan = document.getElementById('back-home-text');
+    if (backSpan) backSpan.textContent = currentLang === 'es' ? '← Volver al Inicio' : '← 返回首页';
+    const footerText = document.getElementById('footer-text');
+    if (footerText) {
+        footerText.innerHTML = currentLang === 'es' 
+            ? '¿Eres fabricante? <a href="../upload_guide.html">Sube tus productos aquí</a>'
+            : '您是工厂吗？<a href="../upload_guide.html">免费上传您的产品</a>';
     }
-    // 更新模态框标题
     const modalTitle = document.getElementById('modal-title');
     if (modalTitle) modalTitle.textContent = currentLang === 'es' ? 'Solicitar cotización' : '询价';
-    // 重新筛选产品（重新渲染）
-    filterProducts();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

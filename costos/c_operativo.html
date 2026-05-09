@@ -18,7 +18,9 @@
             <div class="lang-opt" id="lo-zh">中文</div>
         </div>
     </div>
-    <div class="back-home" onclick="window.location.href='../index.html'">← <span id="back-text">Volver al Inicio</span></div>
+    <div class="back-home" onclick="window.location.href='../index.html'">
+        <span id="back-home-text">← Volver al Inicio</span>
+    </div>
 
     <!-- 货代报价表单 -->
     <div class="section">
@@ -42,6 +44,17 @@
     <div class="section">
         <h2 id="compare-title">⚓ Costos Logísticos por Puerto</h2>
         <div id="cost-compare-container"></div>
+    </div>
+
+    <!-- AI 费用预警 -->
+    <div class="section" style="margin-top: 30px;">
+        <h3 id="ai-title">🤖 AI 费用预警</h3>
+        <div class="card">
+            <label id="ai-label">Pega aquí el texto de la cotización del agente / 粘贴货代报价文字</label>
+            <textarea id="quoteText" rows="5" placeholder="Ej: Visto Bueno: 150 USD, Desconsolidación: 500 USD, ..."></textarea>
+            <button class="btn" onclick="aiCheck()" id="ai-btn">🔍 Analizar con AI / AI 分析</button>
+            <div id="aiResult" style="margin-top: 15px; background: #122844; padding: 12px; border-radius: 12px;"></div>
+        </div>
     </div>
 
     <script src="c_operativo.js"></script>
