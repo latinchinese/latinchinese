@@ -1,0 +1,11 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto}
+.topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.logo{display:flex;align-items:baseline;gap:6px;cursor:pointer}
+.logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px}.logo-es{font-weight:600;font-size:9px;color:#00C2A8}
+.lang-toggle{display:flex;background:#122844;border-radius:20px;padding:3px;cursor:pointer}
+.lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;background:rgba(245,166,35,0.2);color:#F5A623}
+.lang-opt.on{background:#00C2A8;color:#07111F}
+.back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
+.card{background:#0D1E33;border-radius:16px;margin:20px;padding:30px}
+.btn{background:#00C2A8;border:none;border-radius:30px;padding:12px;font-weight:700;color:#07111F;width:100%;cursor:pointer;margin-top:20px}
