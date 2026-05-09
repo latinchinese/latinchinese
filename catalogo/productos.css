@@ -1,0 +1,5 @@
+/* 在原有样式基础上，确保 .lang-opt 有 white-space: nowrap */
+/* 只需要添加或确认这一条 */
+.lang-opt {
+    white-space: nowrap;
+}
