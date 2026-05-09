@@ -68,7 +68,7 @@
         <div id="cost-compare-container"></div>
     </div>
 
-    <!-- AI 费用预警区域（模拟版） -->
+    <!-- AI 费用预警区域 -->
     <div class="section" style="margin-top: 30px;">
         <h3 id="ai-title">🤖 AI Alerta de Costos</h3>
         <div class="card">
@@ -111,11 +111,9 @@
         };
 
         let currentLang = 'es';
+        let costData = {};        // 存储所有港口的费用基准
+        let benchmark = {};       // 存储用于对比的基准费用（目前取 Callao 港口）
 
-        // 费用基准数据（从 cost_data.json 加载）
-        let costData = {};
-
-        // 费用中文映射（用于费用对比表的项名称）
         const costLabelMap = {
             'Visto Bueno': '核放费', 'Desconsolidación': '拆箱费', 'Handling': '操作费',
             'TDI': '数据传输费', 'MACH': '吊箱费', 'THC': '码头费',
@@ -123,20 +121,43 @@
             'Aduana': '报关费', 'B/L': '提单费'
         };
 
-        // 加载费用基准数据
+        // 支持的中西文关键词映射（用于正则提取）
+        const keywordMap = {
+            'Visto Bueno': ['visto bueno', '核放费', 'vb'],
+            'Desconsolidación': ['desconsolidación', '拆箱费', 'dc'],
+            'Handling': ['handling', '操作费', 'hd'],
+            'TDI': ['tdi', '数据传输费'],
+            'MACH': ['mach', '吊箱费'],
+            'THC': ['thc', '码头费'],
+            'Transporte Interior': ['transporte interior', '内陆运输', 'transporte'],
+            'Almacén Temporal': ['almacén temporal', '临时仓储', 'almacen'],
+            'Aduana': ['aduana', '报关费'],
+            'B/L': ['b/l', 'bl', '提单费']
+        };
+
         async function loadCostData() {
             try {
                 const res = await fetch('cost_data.json');
                 costData = await res.json();
+                // 取 Callao 港口作为基准（也可以让用户选择目的港，这里简化）
+                if (costData["Callao (Perú)"]) {
+                    benchmark = costData["Callao (Perú)"];
+                } else if (Object.keys(costData).length > 0) {
+                    benchmark = costData[Object.keys(costData)[0]];
+                }
                 renderCompareTable();
             } catch(e) {
                 console.error('加载费用数据失败', e);
-                // 如果文件加载失败，使用默认空对象，用户可以看到错误提示
                 document.getElementById('cost-compare-container').innerHTML = '<div class="card">Error al cargar datos de costos.</div>';
+                // 如果加载失败，使用默认基准（防止 AI 分析完全无法工作）
+                benchmark = {
+                    "Visto Bueno": 142, "Desconsolidación": 420, "Handling": 95,
+                    "TDI": 18, "MACH": 180, "THC": 480, "Transporte Interior": 580,
+                    "Almacén Temporal": 180, "Aduana": 250, "B/L": 70
+                };
             }
         }
 
-        // 渲染费用对比表
         function renderCompareTable() {
             const container = document.getElementById('cost-compare-container');
             if (!container) return;
@@ -145,61 +166,108 @@
                 let itemsHtml = '';
                 for (let [key, value] of Object.entries(fees)) {
                     let label = key;
-                    if (currentLang === 'zh' && costLabelMap[key]) {
-                        label = costLabelMap[key];
-                    }
+                    if (currentLang === 'zh' && costLabelMap[key]) label = costLabelMap[key];
                     itemsHtml += `<div class="cost-item"><span class="cost-label">${label}</span><span class="cost-value">$${value}</span></div>`;
                 }
                 container.innerHTML += `<div class="card cost-compare-card"><div class="port-title">⚓ ${port}</div>${itemsHtml}</div>`;
             }
         }
 
-        // 应用语言（更新所有文本）
         function applyLang() {
             const t = langData[currentLang];
             for (let [id, val] of Object.entries(t)) {
                 const el = document.getElementById(id);
                 if (el) el.innerText = val;
             }
-            // 更新返回按钮（因为它是单独span）
             const backSpan = document.getElementById('back-home-text');
             if (backSpan) backSpan.innerText = t['back-home-text'];
-            // 重新渲染费用对比表（因为标签需要中/西）
             renderCompareTable();
         }
 
-        // 语言切换
         function toggleLang() {
             currentLang = currentLang === 'es' ? 'zh' : 'es';
-            // 更新按钮样式
             document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
             document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
             applyLang();
         }
 
-        // 提交报价模拟
         function submitOffer() {
             alert(currentLang === 'es' ? 'Oferta enviada (simulada)' : '报价已提交（模拟）');
         }
 
-        // AI 费用预警（模拟版，不调用任何 API）
-        function aiCheck() {
+        // 从文本中提取指定费用项的数字（支持货币符号、冒号、空格等）
+        function extractAmount(text, keywords) {
+            for (let kw of keywords) {
+                // 匹配模式: (keyword) [optional separators] $? number
+                const regex = new RegExp(`(?:^|[\\s,;:])${kw}\\s*[:：]?\\s*\\$?\\s*(\\d+(?:\\.\\d+)?)`, 'i');
+                const match = text.match(regex);
+                if (match) return parseFloat(match[1]);
+            }
+            return null;
+        }
+
+        // 动态分析：只报告文本中实际出现的费用项
+        async function aiCheck() {
             const text = document.getElementById('quoteText').value.trim();
             if (!text) {
                 alert(currentLang === 'es' ? 'Por favor pega la cotización primero.' : '请先粘贴报价文字');
                 return;
             }
-            // 模拟分析结果（根据实际文本可以简单解析，这里给一个固定示例）
-            const mockResultEs = `⚠️ Visto Bueno $340 está un 139% por encima del promedio ($142 USD).\n⚠️ Desconsolidación $350 dentro del rango normal.\n✅ Otros costos sin anomalías.`;
-            const mockResultZh = `⚠️ 核放费 340 美元 比均价 142 美元高出 139%\n⚠️ 拆箱费 350 美元在正常范围内\n✅ 其他费用无异常。`;
-            const result = currentLang === 'es' ? mockResultEs : mockResultZh;
-            document.getElementById('aiResult').innerHTML = result.replace(/\n/g, '<br>');
+
+            // 确保基准数据已加载（如果尚未加载则等待）
+            if (Object.keys(benchmark).length === 0) {
+                await loadCostData();
+            }
+
+            const results = []; // 存储分析结果行
+            let foundAny = false;
+
+            // 遍历所有费用项，尝试从文本中提取金额
+            for (let [key, keywords] of Object.entries(keywordMap)) {
+                const amount = extractAmount(text, keywords);
+                if (amount !== null) {
+                    foundAny = true;
+                    const benchmarkValue = benchmark[key];
+                    if (benchmarkValue) {
+                        const diffPercent = ((amount - benchmarkValue) / benchmarkValue * 100).toFixed(0);
+                        if (amount > benchmarkValue) {
+                            if (currentLang === 'es') {
+                                results.push(`⚠️ ${key} $${amount} está un ${diffPercent}% por encima del promedio ($${benchmarkValue} USD).`);
+                            } else {
+                                results.push(`⚠️ ${costLabelMap[key] || key} ${amount} 美元 比均价 ${benchmarkValue} 美元 高出 ${diffPercent}%`);
+                            }
+                        } else {
+                            if (currentLang === 'es') {
+                                results.push(`✅ ${key} $${amount} está dentro del rango normal ($${benchmarkValue} USD).`);
+                            } else {
+                                results.push(`✅ ${costLabelMap[key] || key} ${amount} 美元在正常范围内`);
+                            }
+                        }
+                    } else {
+                        // 基准中没有该项
+                        if (currentLang === 'es') {
+                            results.push(`ℹ️ ${key} $${amount} no tiene referencia en la plataforma.`);
+                        } else {
+                            results.push(`ℹ️ ${costLabelMap[key] || key} ${amount} 美元 平台暂无参考基准。`);
+                        }
+                    }
+                }
+            }
+
+            if (!foundAny) {
+                // 没有识别到任何费用项
+                if (currentLang === 'es') {
+                    results.push(`⚠️ No se pudo identificar ningún costo en el texto. Asegúrate de incluir términos como "Visto Bueno", "Desconsolidación", etc.`);
+                } else {
+                    results.push(`⚠️ 未能从文本中识别出任何费用项，请确保包含如 "Visto Bueno"、"拆箱费" 等关键词。`);
+                }
+            }
+
+            document.getElementById('aiResult').innerHTML = results.join('<br>');
         }
 
-        // 页面加载
         window.addEventListener('load', () => {
             loadCostData();
-            // 确保语言按钮初始样式正确
             applyLang();
         });
     </script>
