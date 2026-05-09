@@ -1,0 +1,22 @@
+export default {
+  async fetch(request) {
+    if (request.method !== 'POST') return new Response('Method not allowed', { status: 405 });
+    const url = new URL(request.url);
+    let targetUrl = '';
+    if (url.pathname === '/chat') targetUrl = 'https://api.deepseek.com/v1/chat/completions';
+    else if (url.pathname === '/search') targetUrl = 'https://api.deepseek.com/v1/chat/completions?enable_search=true';
+    else return new Response('Not found', { status: 404 });
+    
+    // 请将下面的 'sk-...' 替换为您的真实 API Key
+    const DEEPSEEK_API_KEY = 'sk-这里写您的真实Key';
+    
+    const newRequest = new Request(targetUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
+      body: request.body
+    });
+    const response = await fetch(newRequest);
+    const data = await response.json();
+    return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+  }
+}
