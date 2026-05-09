@@ -1,6 +1,0 @@
-{
-  "Callao (Perú)": {"Visto Bueno":142,"Desconsolidación":83,"Handling":41,"TDI":18,"MACH":0,"THC":0,"Transporte Interior":0,"Almacén Temporal":310,"Aduana":0,"B/L":20},
-  "Buenaventura (Colombia)": {"Visto Bueno":140,"Desconsolidación":460,"Handling":105,"TDI":50,"MACH":200,"THC":520,"Transporte Interior":620,"Almacén Temporal":200,"Aduana":280,"B/L":80},
-  "Valparaíso (Chile)": {"Visto Bueno":110,"Desconsolidación":390,"Handling":85,"TDI":40,"MACH":160,"THC":450,"Transporte Interior":530,"Almacén Temporal":160,"Aduana":230,"B/L":65},
-  "Guayaquil (Ecuador)": {"Visto Bueno":115,"Desconsolidación":405,"Handling":90,"TDI":42,"MACH":170,"THC":470,"Transporte Interior":560,"Almacén Temporal":175,"Aduana":245,"B/L":68}
-}
