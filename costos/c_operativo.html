@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>物流费用对比 · 透明化物流平台</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto;padding-bottom:30px}
+        .topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1);z-index:100}
+        .logo{display:flex;align-items:baseline;gap:6px;cursor:pointer}
+        .logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px}.logo-es{font-weight:600;font-size:9px;color:#00C2A8}
+        .lang-toggle{display:flex;background:#122844;border-radius:20px;padding:3px;cursor:pointer}
+        .lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;background:rgba(245,166,35,0.2);color:#F5A623;white-space:nowrap}
+        .lang-opt.on{background:#00C2A8;color:#07111F}
+        .back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
+        .section{margin:20px 18px}
+        .card{background:#0D1E33;border-radius:16px;padding:18px;margin-bottom:12px}
+        .fg{margin-bottom:14px}
+        .fg label{display:block;font-size:12px;font-weight:600;color:#7A9AB8;margin-bottom:5px}
+        input, textarea{width:100%;background:#122844;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:white;padding:11px 14px;outline:none;resize:vertical}
+        input:focus, textarea:focus{border-color:#00C2A8}
+        .btn{background:#00C2A8;border:none;border-radius:12px;padding:13px;font-weight:700;color:#07111F;width:100%;cursor:pointer;margin-top:10px}
+        .btn:hover{background:#00d4b8}
+        .cost-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+        .cost-label{color:#7A9AB8}.cost-value{font-family:monospace;font-weight:700;color:#F5A623;font-size:16px}
+        .port-title{font-size:18px;font-weight:700;margin-bottom:12px;color:#00C2A8}
+        #aiResult { white-space: pre-wrap; background: rgba(0,194,168,0.1); padding: 10px; border-radius: 10px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo" onclick="window.location.href='../index.html'">
+            <span class="logo-mini">🌐</span>
+            <span class="logo-cn">透明化物流平台</span>
+            <span class="logo-es">Comparador de Costos</span>
+        </div>
+        <div class="lang-toggle" onclick="toggleLang()">
+            <div class="lang-opt on" id="lo-es">ES</div>
+            <div class="lang-opt" id="lo-zh">中文</div>
+        </div>
+    </div>
+    <div class="back-home" onclick="window.location.href='../index.html'">
+        <span id="back-home-text">← Volver al Inicio</span>
+    </div>
+
+    <!-- 货代报价表单 -->
+    <div class="section">
+        <h2 id="form-title">📝 Cargos en Destino (para agentes)</h2>
+        <div class="card">
+            <div class="fg"><label id="lbl-vb">Visto Bueno</label><input type="number" id="vb" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-dc">Desconsolidación</label><input type="number" id="dc" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-hd">Handling</label><input type="number" id="hd" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-tdi">TDI</label><input type="number" id="tdi" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-mach">MACH</label><input type="number" id="mach" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-thc">THC</label><input type="number" id="thc" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-transp">Transporte Interior</label><input type="number" id="transp" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-alm">Almacén Temporal</label><input type="number" id="alm" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-aduana">Aduana</label><input type="number" id="aduana" placeholder="0.00"></div>
+            <div class="fg"><label id="lbl-bl">B/L</label><input type="number" id="bl" placeholder="0.00"></div>
+            <button class="btn" onclick="submitOffer()" id="btn-submit">🔒 Enviar Oferta Bloqueada</button>
+        </div>
+    </div>
+
+    <!-- 买家费用对比 -->
+    <div class="section">
+        <h2 id="compare-title">⚓ Costos Logísticos por Puerto</h2>
+        <div id="cost-compare-container"></div>
+    </div>
+
+    <!-- AI 费用预警区域（模拟版） -->
+    <div class="section" style="margin-top: 30px;">
+        <h3 id="ai-title">🤖 AI Alerta de Costos</h3>
+        <div class="card">
+            <label id="ai-label">Pega aquí el texto de la cotización del agente / 粘贴货代报价文字</label>
+            <textarea id="quoteText" rows="5" placeholder="Ej: Visto Bueno: 150 USD, Desconsolidación: 500 USD, ..."></textarea>
+            <button class="btn" onclick="aiCheck()" id="ai-btn">🔍 Analizar con AI / AI 分析</button>
+            <div id="aiResult">⚡ Aquí aparecerá el resultado del análisis.<br>⚡ 分析结果将显示在这里。</div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 多语言数据 ====================
+        const langData = {
+            es: {
+                'back-home-text': '← Volver al Inicio',
+                'form-title': '📝 Cargos en Destino (para agentes)',
+                'compare-title': '⚓ Costos Logísticos por Puerto',
+                'lbl-vb': 'Visto Bueno', 'lbl-dc': 'Desconsolidación', 'lbl-hd': 'Handling',
+                'lbl-tdi': 'TDI', 'lbl-mach': 'MACH', 'lbl-thc': 'THC',
+                'lbl-transp': 'Transporte Interior', 'lbl-alm': 'Almacén Temporal',
+                'lbl-aduana': 'Aduana', 'lbl-bl': 'B/L',
+                'btn-submit': '🔒 Enviar Oferta Bloqueada',
+                'ai-title': '🤖 AI Alerta de Costos',
+                'ai-label': 'Pega aquí el texto de la cotización del agente',
+                'ai-btn': '🔍 Analizar con AI'
+            },
+            zh: {
+                'back-home-text': '← 返回首页',
+                'form-title': '📝 目的港费用（货代填写）',
+                'compare-title': '⚓ 港口物流费用参考',
+                'lbl-vb': '核放费', 'lbl-dc': '拆箱费', 'lbl-hd': '操作费',
+                'lbl-tdi': '数据传输费', 'lbl-mach': '吊箱费', 'lbl-thc': '码头费',
+                'lbl-transp': '内陆运输', 'lbl-alm': '临时仓储',
+                'lbl-aduana': '报关费', 'lbl-bl': '提单费',
+                'btn-submit': '🔒 提交锁定报价',
+                'ai-title': '🤖 AI 费用预警',
+                'ai-label': '粘贴货代报价文字',
+                'ai-btn': '🔍 AI 分析'
+            }
+        };
+
+        let currentLang = 'es';
+
+        // 费用基准数据（从 cost_data.json 加载）
+        let costData = {};
+
+        // 费用中文映射（用于费用对比表的项名称）
+        const costLabelMap = {
+            'Visto Bueno': '核放费', 'Desconsolidación': '拆箱费', 'Handling': '操作费',
+            'TDI': '数据传输费', 'MACH': '吊箱费', 'THC': '码头费',
+            'Transporte Interior': '内陆运输', 'Almacén Temporal': '临时仓储',
+            'Aduana': '报关费', 'B/L': '提单费'
+        };
+
+        // 加载费用基准数据
+        async function loadCostData() {
+            try {
+                const res = await fetch('cost_data.json');
+                costData = await res.json();
+                renderCompareTable();
+            } catch(e) {
+                console.error('加载费用数据失败', e);
+                // 如果文件加载失败，使用默认空对象，用户可以看到错误提示
+                document.getElementById('cost-compare-container').innerHTML = '<div class="card">Error al cargar datos de costos.</div>';
+            }
+        }
+
+        // 渲染费用对比表
+        function renderCompareTable() {
+            const container = document.getElementById('cost-compare-container');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let [port, fees] of Object.entries(costData)) {
+                let itemsHtml = '';
+                for (let [key, value] of Object.entries(fees)) {
+                    let label = key;
+                    if (currentLang === 'zh' && costLabelMap[key]) {
+                        label = costLabelMap[key];
+                    }
+                    itemsHtml += `<div class="cost-item"><span class="cost-label">${label}</span><span class="cost-value">$${value}</span></div>`;
+                }
+                container.innerHTML += `<div class="card cost-compare-card"><div class="port-title">⚓ ${port}</div>${itemsHtml}</div>`;
+            }
+        }
+
+        // 应用语言（更新所有文本）
+        function applyLang() {
+            const t = langData[currentLang];
+            for (let [id, val] of Object.entries(t)) {
+                const el = document.getElementById(id);
+                if (el) el.innerText = val;
+            }
+            // 更新返回按钮（因为它是单独span）
+            const backSpan = document.getElementById('back-home-text');
+            if (backSpan) backSpan.innerText = t['back-home-text'];
+            // 重新渲染费用对比表（因为标签需要中/西）
+            renderCompareTable();
+        }
+
+        // 语言切换
+        function toggleLang() {
+            currentLang = currentLang === 'es' ? 'zh' : 'es';
+            // 更新按钮样式
+            document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
+            document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
+            applyLang();
+        }
+
+        // 提交报价模拟
+        function submitOffer() {
+            alert(currentLang === 'es' ? 'Oferta enviada (simulada)' : '报价已提交（模拟）');
+        }
+
+        // AI 费用预警（模拟版，不调用任何 API）
+        function aiCheck() {
+            const text = document.getElementById('quoteText').value.trim();
+            if (!text) {
+                alert(currentLang === 'es' ? 'Por favor pega la cotización primero.' : '请先粘贴报价文字');
+                return;
+            }
+            // 模拟分析结果（根据实际文本可以简单解析，这里给一个固定示例）
+            const mockResultEs = `⚠️ Visto Bueno $340 está un 139% por encima del promedio ($142 USD).\n⚠️ Desconsolidación $350 dentro del rango normal.\n✅ Otros costos sin anomalías.`;
+            const mockResultZh = `⚠️ 核放费 340 美元 比均价 142 美元高出 139%\n⚠️ 拆箱费 350 美元在正常范围内\n✅ 其他费用无异常。`;
+            const result = currentLang === 'es' ? mockResultEs : mockResultZh;
+            document.getElementById('aiResult').innerHTML = result.replace(/\n/g, '<br>');
+        }
+
+        // 页面加载
+        window.addEventListener('load', () => {
+            loadCostData();
+            // 确保语言按钮初始样式正确
+            applyLang();
+        });
+    </script>
+</body>
+</html>
