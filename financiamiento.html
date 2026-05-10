@@ -34,6 +34,8 @@
         .pending{background:#F5A623;color:#07111F}
         .processed{background:#22C97A;color:#07111F}
         hr{margin:12px 0;border-color:rgba(255,255,255,0.1)}
+        .row2cols{display:flex;gap:12px}
+        .row2cols > div{flex:1}
     </style>
 </head>
 <body>
@@ -52,9 +54,31 @@
     </div>
     <div class="pg-title" id="page-title">📢 Financiamiento para Importadores</div>
 
-    <!-- 专业表单（去除利率字段） -->
+    <!-- 表单卡片 -->
     <div class="card">
-        <div style="font-weight:700; margin-bottom:12px; color:#00C2A8;" id="sec-company">🏢 Información de la empresa / 公司信息</div>
+        <!-- 国家选择（影响银行列表） -->
+        <div style="font-weight:700; margin-bottom:12px; color:#00C2A8;" id="sec-country">🌎 País / 国家</div>
+        <div class="fg">
+            <select id="country" class="fs" onchange="updateBankList()">
+                <option value="Peru">Perú / 秘鲁</option>
+                <option value="Chile">Chile / 智利</option>
+                <option value="Ecuador">Ecuador / 厄瓜多尔</option>
+                <option value="Colombia">Colombia / 哥伦比亚</option>
+            </select>
+        </div>
+
+        <!-- 银行/金融机构（下拉，动态根据国家变化） -->
+        <div class="fg">
+            <div class="fl"><span id="label-bank">Banco / Institución financiera / 银行/金融机构</span></div>
+            <select id="bank" class="fs"></select>
+        </div>
+        <!-- Swift / BIC -->
+        <div class="fg">
+            <div class="fl"><span id="label-swift">Código Swift / BIC</span></div>
+            <input type="text" id="swift" class="fi" placeholder="Ej: BCPLPEPL">
+        </div>
+
+        <div style="font-weight:700; margin:16px 0 12px; color:#00C2A8;" id="sec-company">🏢 Información de la empresa / 公司信息</div>
         <div class="fg">
             <div class="fl"><span id="label-company">Nombre de la empresa / 公司全称 *</span></div>
             <input type="text" id="company" class="fi" placeholder="Razón social completa">
@@ -63,26 +87,28 @@
             <div class="fl"><span id="label-tax">RUC / NIT / Tax ID *</span></div>
             <input type="text" id="tax" class="fi" placeholder="Número de identificación fiscal">
         </div>
-        <div class="fg">
-            <div class="fl"><span id="label-years">Años de operación / 运营年限</span></div>
-            <select id="years" class="fs">
-                <option value="<1">Menos de 1 año</option>
-                <option value="1-3">1-3 años</option>
-                <option value="3-5">3-5 años</option>
-                <option value="5-10">5-10 años</option>
-                <option value=">10">Más de 10 años</option>
-            </select>
-        </div>
-        <div class="fg">
-            <div class="fl"><span id="label-industry">Sector / 行业</span></div>
-            <select id="industry" class="fs">
-                <option value="Agricultura">Agricultura / 农业</option>
-                <option value="Manufactura">Manufactura / 制造业</option>
-                <option value="Comercio">Comercio / 贸易</option>
-                <option value="Servicios">Servicios / 服务业</option>
-                <option value="Construcción">Construcción / 建筑业</option>
-                <option value="Otro">Otro / 其他</option>
-            </select>
+        <div class="row2cols">
+            <div class="fg">
+                <div class="fl"><span id="label-years">Años de operación / 运营年限</span></div>
+                <select id="years" class="fs">
+                    <option value="<1">Menos de 1 año</option>
+                    <option value="1-3">1-3 años</option>
+                    <option value="3-5">3-5 años</option>
+                    <option value="5-10">5-10 años</option>
+                    <option value=">10">Más de 10 años</option>
+                </select>
+            </div>
+            <div class="fg">
+                <div class="fl"><span id="label-industry">Sector / 行业</span></div>
+                <select id="industry" class="fs">
+                    <option value="Agricultura">Agricultura / 农业</option>
+                    <option value="Manufactura">Manufactura / 制造业</option>
+                    <option value="Comercio">Comercio / 贸易</option>
+                    <option value="Servicios">Servicios / 服务业</option>
+                    <option value="Construcción">Construcción / 建筑业</option>
+                    <option value="Otro">Otro / 其他</option>
+                </select>
+            </div>
         </div>
 
         <div style="font-weight:700; margin:16px 0 12px; color:#00C2A8;" id="sec-purchase">📦 Detalles de la compra / 采购详情</div>
@@ -90,13 +116,15 @@
             <div class="fl"><span id="label-product">Producto / 产品名称 *</span></div>
             <textarea id="product" class="fta" rows="2" placeholder="Descripción detallada del producto / equipo"></textarea>
         </div>
-        <div class="fg">
-            <div class="fl"><span id="label-quantity">Cantidad / 数量</span></div>
-            <input type="number" id="quantity" class="fi" value="1" step="1">
-        </div>
-        <div class="fg">
-            <div class="fl"><span id="label-unitprice">Precio unitario (USD) / 单价（美元）</span></div>
-            <input type="number" id="unitprice" class="fi" placeholder="0.00">
+        <div class="row2cols">
+            <div class="fg">
+                <div class="fl"><span id="label-quantity">Cantidad / 数量</span></div>
+                <input type="number" id="quantity" class="fi" value="1" step="1">
+            </div>
+            <div class="fg">
+                <div class="fl"><span id="label-unitprice">Precio unitario (USD) / 单价（美元）</span></div>
+                <input type="number" id="unitprice" class="fi" placeholder="0.00">
+            </div>
         </div>
         <div class="fg">
             <div class="fl"><span id="label-total">Monto total (USD) / 总金额（美元） *</span></div>
@@ -107,19 +135,21 @@
         </div>
 
         <div style="font-weight:700; margin:16px 0 12px; color:#00C2A8;" id="sec-financing">💰 Financiamiento solicitado / 融资需求</div>
-        <div class="fg">
-            <div class="fl"><span id="label-paid">Porcentaje ya pagado (%) / 已支付比例 (%)</span></div>
-            <input type="number" id="paid" class="fi" placeholder="Ej: 50" step="5">
-        </div>
-        <div class="fg">
-            <div class="fl"><span id="label-ratio">Porcentaje de financiamiento (%) / 融资比例 (%)</span></div>
-            <select id="ratio" class="fs">
-                <option value="30">30%</option>
-                <option value="40">40%</option>
-                <option value="50" selected>50%</option>
-                <option value="60">60%</option>
-                <option value="70">70%</option>
-            </select>
+        <div class="row2cols">
+            <div class="fg">
+                <div class="fl"><span id="label-paid">Porcentaje ya pagado (%) / 已支付比例 (%)</span></div>
+                <input type="number" id="paid" class="fi" placeholder="Ej: 50" step="5">
+            </div>
+            <div class="fg">
+                <div class="fl"><span id="label-ratio">Porcentaje de financiamiento (%) / 融资比例 (%)</span></div>
+                <select id="ratio" class="fs">
+                    <option value="30">30%</option>
+                    <option value="40">40%</option>
+                    <option value="50" selected>50%</option>
+                    <option value="60">60%</option>
+                    <option value="70">70%</option>
+                </select>
+            </div>
         </div>
         <div class="fg">
             <div class="fl"><span id="label-amount-needed">Monto a financiar (USD) / 融资金额（美元）</span></div>
@@ -128,35 +158,39 @@
                 <input type="number" id="needed" class="fi" style="flex:1" readonly placeholder="se calcula automáticamente">
             </div>
         </div>
-        <div class="fg">
-            <div class="fl"><span id="label-term">Plazo solicitado (días) / 融资期限（天） *</span></div>
-            <select id="term" class="fs">
-                <option value="30">30 días</option>
-                <option value="60">60 días</option>
-                <option value="90" selected>90 días</option>
-                <option value="120">120 días</option>
-                <option value="180">180 días</option>
-            </select>
-        </div>
-        <div class="fg">
-            <div class="fl"><span id="label-purpose">Propósito del financiamiento / 融资用途</span></div>
-            <select id="purpose" class="fs">
-                <option value="Compra de inventario">Compra de inventario / 采购库存</option>
-                <option value="Expansión de negocio">Expansión de negocio / 业务扩张</option>
-                <option value="Capital de trabajo">Capital de trabajo / 运营资金</option>
-                <option value="Inversión en equipo">Inversión en equipo / 设备投资</option>
-                <option value="Otro">Otro / 其他</option>
-            </select>
+        <div class="row2cols">
+            <div class="fg">
+                <div class="fl"><span id="label-term">Plazo solicitado (días) / 融资期限（天） *</span></div>
+                <select id="term" class="fs">
+                    <option value="30">30 días</option>
+                    <option value="60">60 días</option>
+                    <option value="90" selected>90 días</option>
+                    <option value="120">120 días</option>
+                    <option value="180">180 días</option>
+                </select>
+            </div>
+            <div class="fg">
+                <div class="fl"><span id="label-purpose">Propósito / 融资用途</span></div>
+                <select id="purpose" class="fs">
+                    <option value="Compra de inventario">Compra de inventario / 采购库存</option>
+                    <option value="Expansión de negocio">Expansión de negocio / 业务扩张</option>
+                    <option value="Capital de trabajo">Capital de trabajo / 运营资金</option>
+                    <option value="Inversión en equipo">Inversión en equipo / 设备投资</option>
+                    <option value="Otro">Otro / 其他</option>
+                </select>
+            </div>
         </div>
 
         <div style="font-weight:700; margin:16px 0 12px; color:#00C2A8;" id="sec-contact">📞 Contacto / 联系方式</div>
-        <div class="fg">
-            <div class="fl"><span id="label-contact-person">Nombre del contacto / 联系人姓名</span></div>
-            <input type="text" id="contact_name" class="fi" placeholder="Ej: Carlos Gómez">
-        </div>
-        <div class="fg">
-            <div class="fl"><span id="label-wa">WhatsApp / 手机号 *</span></div>
-            <input type="tel" id="whatsapp" class="fi" placeholder="+51 999 123 456">
+        <div class="row2cols">
+            <div class="fg">
+                <div class="fl"><span id="label-contact-person">Nombre del contacto / 联系人姓名</span></div>
+                <input type="text" id="contact_name" class="fi" placeholder="Ej: Carlos Gómez">
+            </div>
+            <div class="fg">
+                <div class="fl"><span id="label-wa">WhatsApp / 手机号 *</span></div>
+                <input type="tel" id="whatsapp" class="fi" placeholder="+51 999 123 456">
+            </div>
         </div>
         <div class="fg">
             <div class="fl"><span id="label-email">Correo electrónico / 邮箱</span></div>
@@ -171,7 +205,7 @@
         <div class="note" id="note-text">Tu solicitud será guardada. El administrador la revisará y te contactará.</div>
     </div>
 
-    <!-- 管理面板（通过 ?admin=密码 访问） -->
+    <!-- 管理面板容器 -->
     <div id="admin-container" style="display:none;"></div>
 
     <script>
@@ -180,6 +214,9 @@
             es: {
                 'back-home-text': '← Volver al Inicio',
                 'page-title': '📢 Financiamiento para Importadores',
+                'sec-country': '🌎 País',
+                'label-bank': 'Banco / Institución financiera',
+                'label-swift': 'Código Swift / BIC',
                 'sec-company': '🏢 Información de la empresa',
                 'label-company': 'Nombre de la empresa *',
                 'label-tax': 'RUC / NIT / Tax ID *',
@@ -195,7 +232,7 @@
                 'label-ratio': 'Porcentaje de financiamiento (%)',
                 'label-amount-needed': 'Monto a financiar (USD)',
                 'label-term': 'Plazo solicitado (días) *',
-                'label-purpose': 'Propósito del financiamiento',
+                'label-purpose': 'Propósito',
                 'sec-contact': '📞 Contacto',
                 'label-contact-person': 'Nombre del contacto',
                 'label-wa': 'WhatsApp *',
@@ -214,6 +251,9 @@
             zh: {
                 'back-home-text': '← 返回首页',
                 'page-title': '📢 进口商融资需求',
+                'sec-country': '🌎 国家',
+                'label-bank': '银行/金融机构',
+                'label-swift': 'Swift / BIC 代码',
                 'sec-company': '🏢 公司信息',
                 'label-company': '公司全称 *',
                 'label-tax': '税务号 / RUC / NIT *',
@@ -247,18 +287,90 @@
             }
         };
 
+        // 银行列表数据（西文名称 + 中文名称）
+const bankData = {
+            Peru: [
+                { es: "Banco de Crédito del Perú (BCP)", zh: "秘鲁信贷银行 (BCP)" },
+                { es: "BBVA Perú", zh: "BBVA 秘鲁" },
+                { es: "Scotiabank Perú", zh: "加拿大丰业银行秘鲁" },
+                { es: "Interbank", zh: "Interbank" },
+                { es: "Banco Pichincha", zh: "皮钦查银行" }
+            ],
+            Chile: [
+                { es: "Banco Santander Chile", zh: "桑坦德银行智利" },
+                { es: "Banco de Chile", zh: "智利银行" },
+                { es: "Banco Estado", zh: "智利国家银行" },
+                { es: "BCI (Banco de Crédito e Inversiones)", zh: "BCI 银行" },
+                { es: "Banco Bice", zh: "Bice 银行" }
+            ],
+            Ecuador: [
+                { es: "Banco Pichincha", zh: "皮钦查银行" },
+                { es: "Banco del Pacífico", zh: "太平洋银行" },
+                { es: "Banco de Guayaquil", zh: "瓜亚基尔银行" },
+                { es: "Banco Bolivariano", zh: "玻利瓦尔银行" },
+                { es: "Produbanco", zh: "Produbanco" }
+            ],
+            Colombia: [
+                { es: "Bancolombia", zh: "哥伦比亚银行" },
+                { es: "Banco de Bogotá", zh: "波哥大银行" },
+                { es: "Banco Davivienda", zh: "Davivienda 银行" },
+                { es: "BBVA Colombia", zh: "BBVA 哥伦比亚" },
+                { es: "Banco Caja Social", zh: "社会银行" }
+            ]
+        };
+
         let currentLang = 'es';
         let requests = [];
 
+        // 更新银行下拉列表（根据当前国家）
+        function updateBankList() {
+            const country = document.getElementById('country').value;
+            const banks = bankData[country] || bankData.Peru;
+            const bankSelect = document.getElementById('bank');
+            bankSelect.innerHTML = '';
+            banks.forEach(bank => {
+                const option = document.createElement('option');
+                option.value = currentLang === 'es' ? bank.es : bank.zh;
+                option.textContent = currentLang === 'es' ? bank.es : bank.zh;
+                // 存储原始数据，用于导出
+                option.setAttribute('data-es', bank.es);
+                option.setAttribute('data-zh', bank.zh);
+                bankSelect.appendChild(option);
+            });
+        }
+
+        // 语言切换时刷新银行列表显示文字
+        function refreshBankText() {
+            const country = document.getElementById('country').value;
+            const banks = bankData[country] || bankData.Peru;
+            const bankSelect = document.getElementById('bank');
+            const selectedIndex = bankSelect.selectedIndex;
+            bankSelect.innerHTML = '';
+            banks.forEach(bank => {
+                const option = document.createElement('option');
+                const displayText = currentLang === 'es' ? bank.es : bank.zh;
+                option.value = displayText;
+                option.textContent = displayText;
+                option.setAttribute('data-es', bank.es);
+                option.setAttribute('data-zh', bank.zh);
+                bankSelect.appendChild(option);
+            });
+            if (selectedIndex >= 0 && selectedIndex < bankSelect.options.length) {
+                bankSelect.selectedIndex = selectedIndex;
+            } else {
+                bankSelect.selectedIndex = 0;
+            }
+        }
+
+        // 计算融资金额
         function updateFinancedAmount() {
             const total = parseFloat(document.getElementById('total').value) || 0;
             const ratio = parseInt(document.getElementById('ratio').value) || 0;
             const needed = (total * ratio / 100).toFixed(0);
             document.getElementById('needed').value = needed;
         }
-        document.getElementById('total').addEventListener('input', updateFinancedAmount);
-        document.getElementById('ratio').addEventListener('change', updateFinancedAmount);
 
+        // 加载本地存储
         function loadRequests() {
             const stored = localStorage.getItem('financing_requests');
             requests = stored ? JSON.parse(stored) : [];
@@ -270,6 +382,7 @@
             renderAdminPanel();
         }
 
+        // 提交新需求
         function submitRequest() {
             const company = document.getElementById('company').value.trim();
             const tax = document.getElementById('tax').value.trim();
@@ -281,6 +394,13 @@
                 alert(currentLang === 'es' ? 'Complete los campos obligatorios: empresa, RUC, producto, total, plazo y WhatsApp.' : '请填写必填项：公司名称、税务号、产品名称、总金额、融资期限和WhatsApp');
                 return;
             }
+
+            const country = document.getElementById('country').value;
+            const bankSelect = document.getElementById('bank');
+            const selectedBank = bankSelect.options[bankSelect.selectedIndex];
+            const bank_es = selectedBank.getAttribute('data-es');
+            const bank_zh = selectedBank.getAttribute('data-zh');
+            const swift = document.getElementById('swift').value.trim();
 
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
             const unitprice = parseFloat(document.getElementById('unitprice').value) || 0;
@@ -300,13 +420,14 @@
                 product, quantity, unitprice, total,
                 paid, ratio, needed, term, purpose,
                 contact_name, whatsapp, email, notes,
+                country, bank_es, bank_zh, swift,
                 date: new Date().toISOString(),
                 processed: false,
                 deleted: false
             });
             saveRequests();
 
-            // 清空表单
+            // 清空表单（保留国家和银行默认值）
             document.getElementById('company').value = '';
             document.getElementById('tax').value = '';
             document.getElementById('product').value = '';
@@ -321,43 +442,58 @@
             document.getElementById('contact_name').value = '';
             document.getElementById('email').value = '';
             document.getElementById('notes').value = '';
+            document.getElementById('swift').value = '';
             updateFinancedAmount();
 
             alert(currentLang === 'es' ? 'Solicitud publicada exitosamente.' : '需求发布成功。');
         }
 
-        // 生成 DeepSeek 提示词（完整文档内容）
+        // 生成 DeepSeek 提示词（包含银行、Swift）
         function generatePromptDocument() {
             const active = requests.filter(r => !r.deleted);
             if (active.length === 0) return "No hay solicitudes activas.";
-            let prompt = `Eres un asesor de financiamiento para importadores en América Latina. A continuación tienes una lista de solicitudes de financiamiento (formato JSON). Para cada solicitud, genera un resumen ejecutivo en español y chino que incluya: perfil de la empresa, detalles de la compra, monto financiero necesario, plazo y condiciones esperadas, y una recomendación de posibles fuentes de financiamiento (bancos, fondos de inversión, factoring, etc.). Luego, entrega una recomendación global para los oferentes de capital, priorizando las solicitudes más atractivas según el riesgo y rentabilidad.\n\n`;
-            prompt += `Datos:\n${JSON.stringify(active.map(r => ({
-                empresa: r.company,
-                ruc: r.tax,
-                años_operacion: r.years,
-                sector: r.industry,
-                producto: r.product,
-                cantidad: r.quantity,
-                precio_unitario_usd: r.unitprice,
-                monto_total_usd: r.total,
-                porcentaje_pagado: r.paid,
-                porcentaje_financiamiento: r.ratio,
-                monto_a_financiar_usd: r.needed,
-                plazo_dias: r.term,
-                proposito: r.purpose,
-                contacto_nombre: r.contact_name,
-                whatsapp: r.whatsapp,
-                email: r.email,
-                notas: r.notes
-            })), null, 2)}\n\n`;
-            prompt += `Por favor, entrega un análisis claro, ejecutivo y accionable para el administrador de la plataforma.`;
+            let prompt = `Eres un asesor de financiamiento para importadores en América Latina con amplio conocimiento del mercado financiero regional. A continuación tienes una lista de solicitudes de financiamiento (formato JSON). Para cada solicitud, realiza lo siguiente:
+
+1. **Análisis ejecutivo** (en español y chino): perfil de la empresa, detalles de la compra, monto a financiar, plazo.
+2. **Recomendaciones de fuentes de financiamiento concretas**: menciona al menos dos instituciones financieras (bancos, fondos, fintech) que operen en el país indicado. Si el importador ya especificó un banco preferido, comenta sobre su idoneidad. Incluye nombre de la institución, tipo de producto y breves requisitos.
+3. **Acciones a seguir**: qué documentos debe preparar el importador y cómo contactar a esas entidades.
+
+Luego, entrega una **recomendación global** para los oferentes de capital, priorizando las solicitudes según atractivo (riesgo/rentabilidad).
+
+Datos:
+${JSON.stringify(active.map(r => ({
+    pais: r.country,
+    empresa: r.company,
+    ruc: r.tax,
+    años_operacion: r.years,
+    sector: r.industry,
+    producto: r.product,
+    cantidad: r.quantity,
+    precio_unitario_usd: r.unitprice,
+    monto_total_usd: r.total,
+    porcentaje_pagado: r.paid,
+    porcentaje_financiamiento: r.ratio,
+    monto_a_financiar_usd: r.needed,
+    plazo_dias: r.term,
+    proposito: r.purpose,
+    banco_preferido: (r.bank_es || r.bank_zh),
+    swift_bic: r.swift,
+    contacto_nombre: r.contact_name,
+    whatsapp: r.whatsapp,
+    email: r.email,
+    notas: r.notes
+})), null, 2)}
+
+Por favor, entrega un análisis claro, ejecutivo y accionable, con nombres de instituciones reales y consejos prácticos.`;
             return prompt;
         }
 
- // 导出为文件
+        // 导出为 UTF-8 文件
         function exportDocument() {
             const content = generatePromptDocument();
-            const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
+            const encoder = new TextEncoder();
+            const data = encoder.encode(content);
+            const blob = new Blob([data], {type: 'text/plain;charset=utf-8'});
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.href = url;
@@ -366,7 +502,7 @@
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
-            alert(currentLang === 'es' ? 'Documento exportado. Puedes subirlo a DeepSeek.' : '文档已导出，可上传到 DeepSeek。');
+            alert(currentLang === 'es' ? 'Documento exportado (UTF-8). Puedes subirlo a DeepSeek.' : '文档已导出（UTF-8），可上传到 DeepSeek。');
         }
 
         function deleteRequest(idx) {
@@ -386,7 +522,7 @@
             if (!container) return;
             const urlParams = new URLSearchParams(window.location.search);
             const password = urlParams.get('admin');
-            const validPassword = 'latin2026'; // 可修改
+            const validPassword = 'latin2026';
             if (password !== validPassword) {
                 container.style.display = 'none';
                 return;
@@ -404,8 +540,10 @@
             } else {
                 active.forEach((r, idx) => {
                     const originalIdx = requests.findIndex(req => req.id === r.id);
+                    const bankName = currentLang === 'es' ? (r.bank_es || r.bank_zh) : (r.bank_zh || r.bank_es);
                     html += `<div class="request-item">
                         <div><strong>${r.company}</strong> (${r.tax}) - ${r.product}</div>
+                        <div>País: ${r.country} | Banco: ${bankName} | Swift: ${r.swift || '-'}</div>
                         <div>Monto total: $${r.total} | Financiamiento: ${r.ratio}% ($${r.needed}) | Plazo: ${r.term} días</div>
                         <div>Sector: ${r.industry} | Años: ${r.years} | Propósito: ${r.purpose}</div>
                         <div>Contacto: ${r.contact_name} | WhatsApp: ${r.whatsapp} | Email: ${r.email || '-'}</div>
@@ -428,6 +566,8 @@
                 const el = document.getElementById(id);
                 if (el) el.innerText = val;
             }
+            // 更新银行下拉列表的文字
+            refreshBankText();
             renderAdminPanel();
         }
 
@@ -438,7 +578,16 @@
             applyLang();
         }
 
+        // 事件绑定
+        document.getElementById('total').addEventListener('input', updateFinancedAmount);
+        document.getElementById('ratio').addEventListener('change', updateFinancedAmount);
+        document.getElementById('country').addEventListener('change', () => {
+            updateBankList();
+            refreshBankText();
+        });
+
         window.addEventListener('load', () => {
+            updateBankList();      // 初始化银行列表
             loadRequests();
             applyLang();
             updateFinancedAmount();
