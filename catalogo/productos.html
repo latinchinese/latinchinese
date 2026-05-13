@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Catálogo Industrial · 透明化物流平台</title>
     <style>
+        /* 样式与原版一致，略（为了节省篇幅，请使用之前已稳定的样式） */
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto;padding-bottom:30px}
         .topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1)}
@@ -31,8 +32,10 @@
         .product-origin{font-size:11px;color:#7A9AB8;margin-bottom:8px}
         .btn-inquiry{background:transparent;border:1px solid #00C2A8;border-radius:30px;padding:6px 0;width:100%;color:#00C2A8;font-size:12px;font-weight:600;cursor:pointer}
         .btn-inquiry:hover{background:#00C2A8;color:#07111F}
+        .btn-detail{background:transparent;border:1px solid #8B6FE8;border-radius:30px;padding:6px 0;width:100%;color:#8B6FE8;font-size:12px;font-weight:600;cursor:pointer;margin-top:6px}
+        .btn-detail:hover{background:#8B6FE8;color:#07111F}
         .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.8);align-items:center;justify-content:center}
-        .modal-content{background:#0D1E33;max-width:340px;width:90%;border-radius:28px;padding:24px;border:1px solid rgba(0,194,168,0.3);position:relative;max-height:85vh;overflow-y:auto}
+        .modal-content{background:#0D1E33;max-width:340px;width:90%;border-radius:28px;padding:24px;border:1px solid rgba(0,194,168,0.3);position:relative}
         .close{position:absolute;right:18px;top:12px;font-size:24px;cursor:pointer;color:#7A9AB8}
         .form-group{margin-bottom:16px}
         .form-group label{display:block;font-size:12px;font-weight:600;color:#7A9AB8;margin-bottom:5px}
@@ -49,7 +52,7 @@
         .similar-card{background:#122844;border-radius:12px;padding:8px;min-width:100px;cursor:pointer;border:1px solid rgba(255,255,255,0.07)}
         .similar-card:hover{border-color:#00C2A8}
         .similar-img{font-size:32px;text-align:center}
-        .similar-name{font-size:11px;font-weight:600;margin-top:4px;white-space:normal;word-break:break-word}
+        .similar-name{font-size:11px;font-weight:600;margin-top:4px}
         .similar-price{font-size:10px;color:#F5A623;margin-top:2px}
     </style>
 </head>
@@ -76,7 +79,7 @@
         <span id="footer-text">¿Eres fabricante? <a href="../upload_guide.html">Sube tus productos aquí</a></span>
     </div>
 
-    <!-- 询价模态框（内含相似产品推荐区域） -->
+    <!-- 询价模态框 -->
     <div id="inquiryModal" class="modal" onclick="if(event.target===this) closeModal()">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -90,16 +93,12 @@
                 <button type="submit" class="btn-submit">📧 Enviar consulta / 发送询价</button>
                 <button type="button" class="btn-cancel" onclick="closeModal()">✖️ Cancelar / 取消</button>
             </form>
-            <div id="similarSection" class="similar-section" style="display:none;">
-                <div class="similar-title" id="similar-title">Productos similares / 相似产品</div>
-                <div id="similarList" class="similar-scroll"></div>
-            </div>
             <p class="note">Al enviar se abrirá tu correo electrónico. Solo debes hacer clic en enviar.</p>
         </div>
     </div>
 
     <script>
-        // ==================== 内嵌产品数据 ====================
+        // ==================== 产品数据 ====================
         const allProducts = [
             { id: 1, name_es: "Motor Diesel 22HP", name_zh: "22马力柴油发动机", category: "motor", price: 420, origin: "Chongqing, China", image: "" },
             { id: 2, name_es: "Planta de tratamiento de aguas (5m³/h)", name_zh: "小型污水处理设备 5吨/小时", category: "agua", price: 6200, origin: "Shanghai, China", image: "" },
@@ -109,10 +108,12 @@
             { id: 6, name_es: "Inversor solar 3kW", name_zh: "3千瓦太阳能逆变器", category: "energia", price: 290, origin: "Guangdong, China", image: "" },
             { id: 7, name_es: "Desbrozadora 52cc", name_zh: "割草机 (52cc)", category: "herramientas", price: 85, origin: "Zhejiang, China", image: "" },
             { id: 8, name_es: "Cinta transportadora 4m", name_zh: "4米输送带", category: "industrial", price: 720, origin: "Shanghai, China", image: "" },
-            { id: 9, name_es: "Separador de sólidos para aguas", name_zh: "污水处理固液分离机", category: "agua", price: 2350, origin: "Jiangsu, China", image: "" }
+            { id: 9, name_es: "Separador de sólidos para aguas", name_zh: "污水处理固液分离机", category: "agua", price: 2350, origin: "Jiangsu, China", image: "" },
+            // 新产品 EVA 地垫，归类为 "hogar"，图片占位
+            { id: 10, name_es: "EVA Interlocking Floor Mat", name_zh: "EVA互锁地板垫", category: "hogar", price: 0.60, origin: "Shandong / Zhejiang, China", image: "img/eva-placeholder.jpg" }
         ];
 
-        // 分类列表
+        // 分类列表（增加 "hogar"）
         const categories = [
             { cat: "all", es: "Todos", zh: "全部" },
             { cat: "agricultura", es: "🚜 Agricultura", zh: "🚜 农业" },
@@ -120,17 +121,15 @@
             { cat: "motor", es: "⚙️ Motores", zh: "⚙️ 发动机" },
             { cat: "energia", es: "☀️ Energía solar", zh: "☀️ 太阳能" },
             { cat: "herramientas", es: "🔧 Herramientas", zh: "🔧 工具" },
-            { cat: "industrial", es: "🏭 Equipos industriales", zh: "🏭 工业设备" }
+            { cat: "industrial", es: "🏭 Equipos industriales", zh: "🏭 工业设备" },
+            { cat: "hogar", es: "🏠 Hogar", zh: "🏠 家居用品" }
         ];
 
         let currentLang = 'es';
         let currentCategory = 'all';
-        let currentProductForModal = null;  // 当前模态框显示的产品
 
-        // ==================== 分类按钮渲染 ====================
         function renderCategoryButtons() {
             const container = document.getElementById('categoryGrid');
-            if (!container) return;
             container.innerHTML = '';
             categories.forEach(cat => {
                 const btn = document.createElement('button');
@@ -148,7 +147,6 @@
             });
         }
 
-        // ==================== 产品过滤与渲染 ====================
         function filterProducts() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             let filtered = allProducts.filter(p => currentCategory === 'all' || p.category === currentCategory);
@@ -161,21 +159,29 @@
         function renderProducts(products) {
             const grid = document.getElementById('productGrid');
             if (!grid) return;
-            if (!products.length) {
+            if (products.length === 0) {
                 grid.innerHTML = '<div class="loading">No se encontraron productos / 没有找到产品</div>';
                 return;
             }
-            grid.innerHTML = products.map(p => `
-                <div class="product-card" data-id="${p.id}">
-                    <div class="product-img">${p.image ? `<img src="${p.image}" alt="${p.name_es}">` : '📦'}</div>
-                    <div class="product-info">
-                        <div class="product-name">${currentLang === 'es' ? p.name_es : p.name_zh}</div>
-                        <div class="product-price">$${p.price} USD</div>
-                        <div class="product-origin">📍 ${p.origin}</div>
-                        <button class="btn-inquiry" data-id="${p.id}">📩 ${currentLang === 'es' ? 'Consultar' : '询价'}</button>
+            grid.innerHTML = products.map(p => {
+                // 判断是否是新产品（id=10），增加“查看详情”按钮
+                const isNewEVA = (p.id === 10);
+                const buttons = `
+                    <button class="btn-inquiry" data-id="${p.id}">📩 ${currentLang === 'es' ? 'Consultar' : '询价'}</button>
+                    ${isNewEVA ? `<button class="btn-detail" onclick="window.location.href='producto_eva.html'">🔍 ${currentLang === 'es' ? 'Ver detalles' : '查看详情'}</button>` : ''}
+                `;
+                return `
+                    <div class="product-card" data-id="${p.id}">
+                        <div class="product-img">${p.image ? `<img src="${p.image}" alt="${p.name_es}">` : '📦'}</div>
+                        <div class="product-info">
+                            <div class="product-name">${currentLang === 'es' ? p.name_es : p.name_zh}</div>
+                            <div class="product-price">$${p.price} USD</div>
+                            <div class="product-origin">📍 ${p.origin}</div>
+                            ${buttons}
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
             // 绑定询价按钮事件
             document.querySelectorAll('.btn-inquiry').forEach(btn => {
                 btn.removeEventListener('click', inquiryHandler);
@@ -189,70 +195,16 @@
             if (product) openInquiryModal(product);
         }
 
-        // ==================== 询价模态框 + 相似产品推荐 ====================
         function openInquiryModal(product) {
-            currentProductForModal = product;
-            // 设置表单中的产品名称（隐藏字段）
             document.getElementById('productName').value = currentLang === 'es' ? product.name_es : product.name_zh;
-            // 显示模态框
             document.getElementById('inquiryModal').style.display = 'flex';
-            // 加载相似产品推荐
-            loadSimilarProducts(product);
-        }
-
-        function loadSimilarProducts(product) {
-            // 查找同类产品（相同 category，排除自己）
-            let similar = allProducts.filter(p => p.category === product.category && p.id !== product.id);
-            // 最多显示3个
-            similar = similar.slice(0, 3);
-            const section = document.getElementById('similarSection');
-            const container = document.getElementById('similarList');
-            if (similar.length === 0) {
-                section.style.display = 'none';
-                return;
-            }
-            section.style.display = 'block';
-            container.innerHTML = similar.map(p => `
-                <div class="similar-card" data-id="${p.id}" onclick="switchToProduct(${p.id})">
-                    <div class="similar-img">📦</div>
-                    <div class="similar-name">${currentLang === 'es' ? p.name_es : p.name_zh}</div>
-                    <div class="similar-price">$${p.price} USD</div>
-                </div>
-            `).join('');
-            // 更新推荐标题的语言（每次语言切换时也会更新，但这里再确保一下）
-            updateSimilarTitle();
-        }
-
-        function updateSimilarTitle() {
-            const titleEl = document.getElementById('similar-title');
-            if (titleEl) {
-                titleEl.innerText = currentLang === 'es' ? 'Productos similares' : '相似产品';
-            }
-        }
-
-        // 切换到另一个产品的询价模态框（无缝切换）
-        function switchToProduct(newProductId) {
-            const newProduct = allProducts.find(p => p.id === newProductId);
-            if (newProduct) {
-                // 更新当前产品
-                currentProductForModal = newProduct;
-                // 更新隐藏字段中的产品名称
-                document.getElementById('productName').value = currentLang === 'es' ? newProduct.name_es : newProduct.name_zh;
-                // 刷新相似产品列表
-                loadSimilarProducts(newProduct);
-                // 可选：清空表单中的旧数据（保留姓名/邮箱等？不清空更方便用户连续询价，但为了体验，这里不清空）
-                // 如果希望重置表单，可以取消下面注释
-                // document.getElementById('inquiryForm').reset();
-            }
         }
 
         function closeModal() {
             document.getElementById('inquiryModal').style.display = 'none';
             document.getElementById('inquiryForm').reset();
-            currentProductForModal = null;
         }
 
-        // 提交询价（mailto）
         document.getElementById('inquiryForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('userName').value.trim();
@@ -271,7 +223,6 @@
             alert(currentLang === 'es' ? '✅ Se abrió tu correo. Solo envía el mensaje.' : '✅ 已打开邮件客户端，请发送即可。');
         });
 
-        // ==================== 语言切换 ====================
         function toggleLang() {
             currentLang = currentLang === 'es' ? 'zh' : 'es';
             document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
@@ -291,22 +242,12 @@
                     ? '¿Eres fabricante? <a href="../upload_guide.html">Sube tus productos aquí</a>'
                     : '您是工厂吗？<a href="../upload_guide.html">免费上传您的产品</a>';
             }
-            // 更新相似产品推荐标题
-            updateSimilarTitle();
-            // 重新渲染分类按钮和产品列表
             renderCategoryButtons();
             filterProducts();
-            // 如果模态框当前打开，刷新其内容（产品名称和相似产品列表）
-            if (currentProductForModal) {
-                document.getElementById('productName').value = currentLang === 'es' ? currentProductForModal.name_es : currentProductForModal.name_zh;
-                loadSimilarProducts(currentProductForModal);
-            }
         }
 
-        // 搜索输入监听
         document.getElementById('searchInput').addEventListener('input', filterProducts);
 
-        // 初始化
         window.addEventListener('load', () => {
             renderCategoryButtons();
             applyLang();
