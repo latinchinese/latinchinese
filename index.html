@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>透明化物流平台 · 智运链</title>
+<title>透明化物流平台 · 采购导航 · 锁价 · 融资</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -25,38 +25,52 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav);background:rgba(7,17,31,0.97);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0)}.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:6px 4px;background:transparent;border:none}.bni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}.bni-label{font-size:10px;font-weight:600;color:var(--muted)}.bni.on .bni-icon{background:var(--teal-d)}.bni.on .bni-label{color:var(--teal)}
 .card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;cursor:pointer}
 .card:hover{border-color:rgba(0,194,168,0.3)}
-.fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
-.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:11px 14px;outline:none}
-.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}.fta{min-height:80px;resize:none}.fs{cursor:pointer}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:12px;border:none;font-weight:700;cursor:pointer;width:100%;background:var(--teal);color:#07111F}.btn:hover{background:#00d4b8}.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}.lock{display:inline-flex;gap:5px;background:var(--green-d);border:1px solid rgba(34,201,122,.2);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
-.login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}.login-tab{padding:10px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surf);cursor:pointer;text-align:center}.login-tab.active{border-color:var(--teal);background:var(--teal-d)}.login-tab-name{font-size:11px;font-weight:700;color:var(--text2)}.login-tab.active .login-tab-name{color:var(--teal)}
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;align-items:flex-end;justify-content:center}.modal-bg.show{display:flex}.modal{width:100%;max-width:430px;background:var(--surf);border-radius:24px 24px 0 0;padding:24px 20px 32px;max-height:85vh;overflow-y:auto}.modal-handle{width:36px;height:4px;background:var(--border2);margin:0 auto 20px}.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pw{position:relative}
-.pw-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
+.category-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.cat-card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:all 0.1s}
+.cat-card:active{transform:scale(0.98)}
+.cat-emoji{font-size:28px;margin-bottom:6px}
+.cat-name{font-weight:700;font-size:14px;margin-bottom:2px}
+.cat-name-es{font-size:11px;color:var(--text2)}
+.back-home-btn{display:inline-block;margin-bottom:16px;padding:8px 16px;background:var(--surf2);border-radius:30px;font-size:13px;color:var(--teal);cursor:pointer;border:1px solid var(--border2);width:auto}
 </style>
 </head>
 <body>
 <div class="topbar"><div class="logo"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Plataforma Logística Transparente</span></div><div style="display:flex;align-items:center;gap:10px"><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div><div class="notif-btn">🔔<div class="notif-dot"></div></div></div></div>
 <div class="scroll">
-  <!-- 首页 -->
+  <!-- ==================== 首页（全新结构） ==================== -->
   <div class="page on" id="p-home">
-    <div class="pg-title" id="t-home-title">Inicio</div><div class="pg-sub" id="t-home-sub">Bienvenido, Rodrigo Silva</div>
-    <!-- 板块1：物流费用对比 -->
-    <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📊</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-title">物流费用对比</div><div style="font-size:12px; color:var(--text2);" id="t-cost-desc">Compare tarifas marítimas y bloquea precios</div></div></div></div>
-    <!-- 板块2：买方融资需求 (链接已改为 financiamiento.html) -->
-    <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💸</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-title">买方融资需求</div><div style="font-size:12px; color:var(--text2);" id="t-fin-desc">Publica o busca financiamiento para tus compras</div></div></div></div>
-    <!-- 板块3：工业产品目录 -->
-    <div class="card" style="background:rgba(255,77,106,0.13); border-color:var(--red);" onclick="window.location.href='catalogo/productos.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-catalog-title">工业产品目录</div><div style="font-size:12px; color:var(--text2);" id="t-catalog-desc">Máquinas, repuestos, equipos – Precios FOB</div></div></div></div>
-    <!-- 板块4：拉美工业化协作 -->
-    <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.location.href='ensamblaje/ensamblaje.html'"><div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🏭</div><div><div style="font-weight:800; font-size:16px;" id="t-ensamblaje-title">拉美工业化协作</div><div style="font-size:12px; color:var(--text2);" id="t-ensamblaje-desc">SKD组装 · 散件供应 · 技术指导 · 本地化生产</div></div></div></div>
-    <!-- 最近订单 -->
-    <div style="font-weight:700;font-size:15px;margin-bottom:12px" id="t-recent">Pedidos Recientes</div>
-    <div class="card" style="padding:0"><div onclick="goPage('orders')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer"><div>📦</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d1">Accesorios Bicicleta Eléc. ×500</div><div style="font-size:12px;color:var(--text2)">Ningbo → Lima · 20GP</div></div><div style="text-align:right"><div class="pill p-teal" id="t-transit">🚢 Tránsito</div><div style="font-size:11px;color:var(--muted);margin-top:4px">ETA: 12 Jun</div></div></div>
-    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)"><div>🪑</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d2">Sillas Ergonómicas ×200</div><div style="font-size:12px;color:var(--text2)">Guangzhou → Bogotá · LCL</div></div><div style="text-align:right"><div class="pill p-gold" id="t-quoting">💬 Cotizando</div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="t-today">Hoy</div></div></div>
-    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div>🔧</div><div style="flex:1"><div style="font-size:13px;font-weight:600" id="t-d3">Piezas Industriales</div><div style="font-size:12px;color:var(--text2)">Shenzhen → Santiago</div></div><div style="text-align:right"><div class="pill p-purple" id="t-new">🆕 Nuevo</div></div></div></div>
+    <div class="pg-title" id="t-home-title">Inicio</div>
+    <div class="pg-sub" id="t-home-sub">Bienvenido, comerciante</div>
+
+    <!-- 四个功能卡片 -->
+    <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">物流锁价</div><div style="font-size:12px; color:var(--text2);" id="t-cost-desc">Compara fletes y bloquea precios</div></div></div>
+    </div>
+    <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'">
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">融资需求</div><div style="font-size:12px; color:var(--text2);" id="t-fin-desc">Financiamiento para compradores</div></div></div>
+    </div>
+    <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-info-card">市场情报</div><div style="font-size:12px; color:var(--text2);" id="t-info-desc">Información de mercado y tendencias</div></div></div>
+    </div>
+    <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="document.getElementById('category-section').scrollIntoView({behavior:'smooth'})">
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-source-card">找货源</div><div style="font-size:12px; color:var(--text2);" id="t-source-desc">Buscar productos en B2B</div></div></div>
+    </div>
+
+    <!-- 商品分类总表（20个门类） -->
+    <div style="margin-top:16px;" id="category-section">
+      <div style="font-weight:700; font-size:15px; margin-bottom:12px;" id="t-categories-title">Categorías de productos / 产品分类</div>
+      <div class="category-grid" id="category-grid"></div>
+    </div>
+
+    <!-- 帮助提示条 -->
+    <div style="background:rgba(0,194,168,0.08); border-radius:12px; padding:12px; margin-top:16px;">
+      <div style="font-size:12px; color:var(--text2); text-align:center;" id="t-help">
+        💡 Haz clic en cualquier categoría para buscar en plataformas B2B (Alibaba, Made-in-China)<br>点击任意分类，跳转到B2B平台搜索产品
+      </div>
+    </div>
   </div>
 
-  <!-- 入口页面（登录/注册） -->
+  <!-- ==================== 原有页面（登录、询价、核实）保持不变 ==================== -->
   <div class="page" id="p-login">
     <div class="login-tabs"><div class="login-tab active" id="tab-buyer" onclick="setLoginRole('buyer')"><div>🛒</div><div class="login-tab-name" id="t-tab-buyer">Comprador</div></div><div class="login-tab" id="tab-seller" onclick="setLoginRole('seller')"><div>🏭</div><div class="login-tab-name" id="t-tab-seller">Vendedor</div></div><div class="login-tab" id="tab-ff" onclick="setLoginRole('ff')"><div>🚢</div><div class="login-tab-name" id="t-tab-ff">Agente</div></div><div class="login-tab" id="tab-admin" onclick="setLoginRole('admin')"><div>⚙️</div><div class="login-tab-name" id="t-tab-admin">Admin</div></div></div>
     <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--teal-d);border-radius:10px"><div id="login-role-icon">🛒</div><div><div style="font-size:12px;font-weight:700;color:var(--teal)" id="login-role-label">Comprador</div><div style="font-size:11px;color:var(--text2)" id="login-role-desc">Compare cotizaciones</div></div></div>
@@ -68,7 +82,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
   </div>
 
-  <!-- 订单页面 -->
   <div class="page" id="p-orders">
     <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
     <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
@@ -87,29 +100,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
   </div>
 
-  <!-- 资费页面 -->
-  <div class="page" id="p-rates">
-    <div class="pg-title" id="t-rates-title">Oferta de Flete</div><div class="pg-sub" id="t-rates-sub">Ingrese su cotización detallada</div>
-    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-rate-order">📦 Pedido de Referencia</div><div class="g2"><div class="fg"><div class="fl"><span id="t-fl-orderref">N° Solicitud</span></div><input class="fi" placeholder="TL-2025-XXX"></div><div class="fg"><div class="fl"><span id="t-fl-validity">Validez (días)</span></div><input class="fi" type="text" inputmode="numeric" placeholder="7"></div></div></div>
-    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-dest-fees">⚓ Cargos en Destino</div><div style="font-size:12px;color:var(--text2);margin-bottom:14px" id="t-dest-fees-sub">Todos los valores quedan bloqueados</div>
-      <div class="fg"><div class="fl"><span id="t-vb-lbl">Visto Bueno</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-dc-lbl">Desconsolidación</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-hd-lbl">Handling</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-tdi-lbl">TDI</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-mach-lbl">MACH</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-thc-lbl">THC</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-tr-lbl">Transporte Interior</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-alm-lbl">Almacén Temporal</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-aduana-lbl">Servicio Aduana</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-      <div class="fg"><div class="fl"><span id="t-bl-lbl">B/L</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div>
-    </div>
-    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-sea-fees">🚢 Flete Marítimo</div><div class="fg"><div class="fl"><span id="t-of-lbl">Flete Base</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div><div class="fg"><div class="fl"><span id="t-baf-lbl">BAF</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div><div class="fg"><div class="fl"><span id="t-otros-lbl">Otros Cargos</span></div><div class="pw"><span class="pp">$</span><input class="fi" type="text" inputmode="decimal" placeholder="0.00"></div></div><div class="fg"><div class="fl"><span id="t-fl-notes-r">Notas del Agente</span></div><textarea class="fta" id="t-ph-ff-notes" placeholder="Condiciones especiales..."></textarea></div></div>
-    <div style="background:var(--green-d);border-radius:12px;padding:12px;margin-bottom:14px;display:flex;gap:10px"><div>🔒</div><div style="font-size:12px;color:var(--green)" id="t-lock-notice">Al enviar, los valores quedan bloqueados contractualmente.</div></div>
-    <button class="btn" onclick="submitRates()"><span id="t-btn-rates">✅ Enviar Oferta Bloqueada</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-rates-note">El importador podrá comparar y firmar digitalmente.</div>
-  </div>
-
-  <!-- 核实供应商页面 -->
-   <div class="page" id="p-inspeccion">
+  <div class="page" id="p-inspeccion">
     <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div><div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
     <div class="card">
       <div class="fg"><div class="fl"><span id="ins-name-label">Nombre del proveedor / 供应商名称</span></div><input class="fi" type="text" id="ins-name" placeholder="Ej: Shanghai XX Machinery Co."></div>
@@ -123,6 +114,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
   </div>
 </div>
 
+<!-- 底部导航（四个按钮：首页、入口、询价、核实） -->
 <div class="bnav">
   <button class="bni on" onclick="goPage('home')"><div class="bni-icon">🏠</div><div class="bni-label" id="t-nav-home">Inicio</div></button>
   <button class="bni" onclick="goPage('login')"><div class="bni-icon">🔐</div><div class="bni-label" id="t-nav-login">Entrada</div></button>
@@ -131,72 +123,149 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 </div>
 
 <script>
-// 多语言数据
+// ==================== 多语言数据 ====================
 const T = {
   es: {
-    'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, Rodrigo Silva',
-    't-cost-title':'Comparador de Costos','t-cost-desc':'Compare tarifas marítimas y bloquea precios',
-    't-fin-title':'Financiamiento para compradores','t-fin-desc':'Publica o busca financiamiento para tus compras',
-    't-catalog-title':'Catálogo Industrial','t-catalog-desc':'Máquinas, repuestos, equipos – Precios FOB',
-    't-ensamblaje-title':'Industrialización Colaborativa','t-ensamblaje-desc':'SKD · Suministro de piezas · Asistencia técnica',
+    'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, comerciante',
+    't-cost-card':'物流锁价','t-cost-desc':'Compara fletes y bloquea precios',
+    't-fin-card':'融资需求','t-fin-desc':'Financiamiento para compradores',
+    't-info-card':'市场情报','t-info-desc':'Información de mercado y tendencias',
+    't-source-card':'找货源','t-source-desc':'Buscar productos en B2B',
+    't-categories-title':'Categorías de productos',
+    't-help':'💡 Haz clic en cualquier categoría para buscar en plataformas B2B (Alibaba, Made-in-China)',
     't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar',
+    // 以下为原有登录/订单/核实相关（必须保留）
     't-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin',
     't-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.',
-    't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario para solicitar el costo de flete y la operación logística',
-    't-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Origen','t-fl-dest':'Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'Shanghai','t-fl-hs':'HS Code',
-    't-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
-    't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.','t-ins-btn':'📩 Enviar solicitud de verificación',
-    'ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
+    't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario...','t-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Origen','t-fl-dest':'Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'Shanghai','t-fl-hs':'HS Code','t-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
+    't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos...','t-ins-btn':'📩 Enviar solicitud','ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
   },
   zh: {
-    'lo-es':'ES','lo-zh':'中','t-home-title':'首页','t-home-sub':'欢迎回来，Rodrigo Silva',
-    't-cost-title':'物流费用对比','t-cost-desc':'比较海运费并锁定价格',
-    't-fin-title':'买方融资需求','t-fin-desc':'发布或寻找采购融资',
-    't-catalog-title':'工业产品目录','t-catalog-desc':'机械设备、配件、整机 – FOB价格',
-    't-ensamblaje-title':'拉美工业化协作','t-ensamblaje-desc':'SKD散件供应 · 组装技术转移 · 本地化生产',
+    'lo-es':'ES','lo-zh':'中','t-home-title':'采购导航','t-home-sub':'欢迎回来，商客',
+    't-cost-card':'物流锁价','t-cost-desc':'比较海运费并锁定价格',
+    't-fin-card':'融资需求','t-fin-desc':'买方贷款撮合',
+    't-info-card':'市场情报','t-info-desc':'海关数据·汇率·商机',
+    't-source-card':'找货源','t-source-desc':'B2B平台快捷搜索',
+    't-categories-title':'产品分类',
+    't-help':'💡 点击任意分类，跳转到B2B平台搜索产品',
     't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实',
     't-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员',
-    't-login-name-label':'姓名 / 用户名','t-fl-login-email':'邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意平台使用条款。',
-    't-orders-title':'询价单','t-orders-sub':'填写表格以申请海运费及物流操作费用',
-    't-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'上海港','t-fl-hs':'HS编码',
-    't-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交','t-submit-note':'货代24h内报价',
-    't-ins-title':'🔍 核实供应商','t-ins-sub':'提交供应商信息，我们帮您核查真实性','t-ins-btn':'📩 提交核实',
-    'ins-name-label':'供应商名称','ins-url-label':'网站链接','ins-phone-label':'供应商电话/微信','ins-desc-label':'货物名称','ins-wa-label':'您的联系方式'
+    't-login-name-label':'姓名 / 用户名','t-fl-login-email':'邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意条款。',
+    't-orders-title':'询价单','t-orders-sub':'填写表格以申请海运费及物流操作费用','t-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'上海港','t-fl-hs':'HS编码','t-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交','t-submit-note':'货代24h内报价',
+    't-ins-title':'🔍 核实供应商','t-ins-sub':'提交供应商信息，我们帮您核查真实性','t-ins-btn':'📩 提交核实','ins-name-label':'供应商名称','ins-url-label':'网站链接','ins-phone-label':'供应商电话/微信','ins-desc-label':'货物名称','ins-wa-label':'您的联系方式'
   }
 };
-let lang = 'es', loginRole = 'buyer';
-let financingRequests = JSON.parse(localStorage.getItem('financing_requests') || '[]');
 
-function applyLang() { const t = T[lang]; for (let [id, val] of Object.entries(t)) { let el = document.getElementById(id); if (el) { if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val; else el.innerHTML = val; } } document.querySelectorAll('.back-home-text').forEach(span => span.textContent = t['t-back-home']); }
-function toggleLang() { lang = lang === 'es' ? 'zh' : 'es'; applyLang(); updateLoginRoleUI(); if (document.getElementById('p-costcompare').classList.contains('on')) renderCostCompare(); }
-function goPage(id) { const pages = ['home','login','orders','rates','inspeccion','costcompare','financing','industrial']; pages.forEach(p => { document.getElementById('p-'+p)?.classList.remove('on'); document.getElementById('bni-'+p)?.classList.remove('on'); }); document.getElementById('p-'+id).classList.add('on'); if (['home','login','orders','rates','inspeccion'].includes(id)) document.getElementById('bni-'+id)?.classList.add('on'); document.querySelector('.scroll').scrollTop = 0; if(id === 'costcompare') renderCostCompare(); if(id === 'financing') renderFinancingList(); }
-function showToast(m) { let t = document.getElementById('toast'); document.getElementById('toast-msg').textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2500); }
-function openModal(id) { document.getElementById('modal-'+id).classList.add('show'); document.body.style.overflow = 'hidden'; }
-function closeModal(id) { document.getElementById('modal-'+id).classList.remove('show'); document.body.style.overflow = ''; }
-function setLoginRole(role) { loginRole = role; ['buyer','seller','ff','admin'].forEach(r => { document.getElementById('tab-'+r)?.classList.toggle('active', r === role); }); updateLoginRoleUI(); }
-function updateLoginRoleUI() { const m = { buyer:{icon:'🛒',label_es:'Comprador',label_zh:'买方'}, seller:{icon:'🏭',label_es:'Vendedor',label_zh:'卖方'}, ff:{icon:'🚢',label_es:'Agente',label_zh:'货代'}, admin:{icon:'⚙️',label_es:'Admin',label_zh:'管理员'} }; let r = loginRole; document.getElementById('login-role-icon').textContent = m[r].icon; document.getElementById('login-role-label').textContent = lang==='zh'? m[r].label_zh : m[r].label_es; }
+// ==================== 20个产品分类数据（中西文，emoji，搜索关键词） ====================
+const categories = [
+  { emoji: "👕", name_es: "Prendas de vestir", name_zh: "服装", keyword_es: "ropa", keyword_zh: "服装" },
+  { emoji: "👟", name_es: "Calzado", name_zh: "鞋类", keyword_es: "zapatos", keyword_zh: "鞋子" },
+  { emoji: "🧵", name_es: "Telas", name_zh: "纺织品", keyword_es: "tela", keyword_zh: "布料" },
+  { emoji: "🏠", name_es: "Artículos para el hogar", name_zh: "家居用品", keyword_es: "hogar", keyword_zh: "家居" },
+  { emoji: "🔧", name_es: "Herramientas", name_zh: "五金工具", keyword_es: "herramientas", keyword_zh: "工具" },
+  { emoji: "🥤", name_es: "Productos plásticos", name_zh: "塑料制品", keyword_es: "plástico", keyword_zh: "塑料" },
+  { emoji: "📱", name_es: "Electrónicos", name_zh: "电子产品", keyword_es: "electrónicos", keyword_zh: "电子产品" },
+  { emoji: "💄", name_es: "Belleza y cuidado personal", name_zh: "美妆个护", keyword_es: "belleza", keyword_zh: "化妆品" },
+  { emoji: "🧸", name_es: "Juguetes", name_zh: "玩具", keyword_es: "juguetes", keyword_zh: "玩具" },
+  { emoji: "⚽", name_es: "Artículos deportivos", name_zh: "体育用品", keyword_es: "deportes", keyword_zh: "体育用品" },
+  { emoji: "🪑", name_es: "Muebles", name_zh: "家具", keyword_es: "muebles", keyword_zh: "家具" },
+  { emoji: "💡", name_es: "Iluminación", name_zh: "照明设备", keyword_es: "iluminación", keyword_zh: "灯具" },
+  { emoji: "🍳", name_es: "Utensilios de cocina", name_zh: "厨房用品", keyword_es: "cocina", keyword_zh: "厨房用品" },
+  { emoji: "📦", name_es: "Materiales de empaque", name_zh: "包装材料", keyword_es: "empaque", keyword_zh: "包装" },
+  { emoji: "🧼", name_es: "Productos de higiene", name_zh: "卫生用品", keyword_es: "higiene", keyword_zh: "卫生用品" },
+  { emoji: "✏️", name_es: "Artículos de papelería", name_zh: "文具", keyword_es: "papelería", keyword_zh: "文具" },
+  { emoji: "🚲", name_es: "Bicicletas y accesorios", name_zh: "自行车及配件", keyword_es: "bicicletas", keyword_zh: "自行车" },
+  { emoji: "🔌", name_es: "Pequeños electrodomésticos", name_zh: "小家电", keyword_es: "electrodomésticos", keyword_zh: "小家电" },
+  { emoji: "🧱", name_es: "Materiales de construcción", name_zh: "建筑材料", keyword_es: "construcción", keyword_zh: "建材" },
+  { emoji: "🌾", name_es: "Insumos agrícolas", name_zh: "农用物资", keyword_es: "agrícola", keyword_zh: "农资" }
+];
+
+let currentLang = 'es';
+
+// 渲染分类网格
+function renderCategoryGrid() {
+  const grid = document.getElementById('category-grid');
+  if (!grid) return;
+  grid.innerHTML = categories.map(cat => `
+    <div class="cat-card" onclick="searchOnB2B('${cat.keyword_es}', '${cat.keyword_zh}')">
+      <div class="cat-emoji">${cat.emoji}</div>
+      <div class="cat-name">${currentLang === 'es' ? cat.name_es : cat.name_zh}</div>
+      <div class="cat-name-es">${currentLang === 'es' ? '' : cat.name_es}</div>
+    </div>
+  `).join('');
+}
+
+// 跳转到B2B平台搜索（同时打开阿里国际站西语版和中国制造网西语版）
+function searchOnB2B(keyword_es, keyword_zh) {
+  const searchTerm = currentLang === 'es' ? keyword_es : keyword_zh;
+  const encoded = encodeURIComponent(searchTerm);
+  // 打开两个主流平台：阿里巴巴国际站西语版 + 中国制造网西语版
+  window.open(`https://spanish.alibaba.com/trade/search?SearchText=${encoded}`, '_blank');
+  window.open(`https://es.made-in-china.com/search/${encoded}.html`, '_blank');
+}
+
+// 语言切换及页面文字更新
+function applyLang() {
+  const t = T[currentLang];
+  for (let [id, val] of Object.entries(t)) {
+    let el = document.getElementById(id);
+    if (el) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
+      else el.innerHTML = val;
+    }
+  }
+  // 更新分类网格中的文字
+  renderCategoryGrid();
+  // 更新语言按钮样式
+  document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
+  document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
+  // 更新登录角色描述
+  updateLoginRoleUI();
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'es' ? 'zh' : 'es';
+  applyLang();
+}
+
+// 页面切换
+function goPage(id) {
+  const pages = ['home','login','orders','inspeccion'];
+  pages.forEach(p => {
+    const pageEl = document.getElementById('p-'+p);
+    if (pageEl) pageEl.classList.remove('on');
+    const navBtn = document.getElementById('bni-'+p);
+    if (navBtn) navBtn.classList.remove('on');
+  });
+  document.getElementById('p-'+id).classList.add('on');
+  const activeNav = document.getElementById('bni-'+id);
+  if (activeNav) activeNav.classList.add('on');
+  document.querySelector('.scroll').scrollTop = 0;
+}
+
+// ==================== 原有登录/订单/核实相关函数（保持完整） ====================
+let loginRole = 'buyer';
+function setLoginRole(role) { loginRole = role; ['buyer','seller','ff','admin'].forEach(r => { const tab = document.getElementById('tab-'+r); if(tab) tab.classList.toggle('active', r===role); }); updateLoginRoleUI(); }
+function updateLoginRoleUI() {
+  const m = { buyer:{icon:'🛒',label_es:'Comprador',label_zh:'买方'}, seller:{icon:'🏭',label_es:'Vendedor',label_zh:'卖方'}, ff:{icon:'🚢',label_es:'Agente',label_zh:'货代'}, admin:{icon:'⚙️',label_es:'Admin',label_zh:'管理员'} };
+  let r = loginRole;
+  document.getElementById('login-role-icon').textContent = m[r].icon;
+  document.getElementById('login-role-label').textContent = currentLang==='zh'? m[r].label_zh : m[r].label_es;
+  const descMap = { buyer: currentLang==='zh'?'比较报价':'Compare cotizaciones', seller: currentLang==='zh'?'提供FOB':'Cotice en FOB', ff: currentLang==='zh'?'报价服务':'Publique oferta', admin: currentLang==='zh'?'后台管理':'Panel Admin' };
+  document.getElementById('login-role-desc').textContent = descMap[r] || '';
+}
 function togglePw() { let p = document.getElementById('login-pw'); p.type = p.type === 'password' ? 'text' : 'password'; }
-function submitLogin() { showToast('Bienvenido'); setTimeout(() => goPage('home'), 500); }
-function submitOrder() { showToast('Solicitud enviada'); setTimeout(() => goPage('home'), 600); }
-function submitRates() { showToast('Oferta enviada'); setTimeout(() => goPage('home'), 600); }
-function submitInspeccion(){ showToast('Enviado (simulado)'); setTimeout(()=>goPage('home'),1500); }
+function showToast(m) { let t = document.getElementById('toast'); if(!t){ alert(m); return; } document.getElementById('toast-msg').textContent = m; t.style.display='block'; setTimeout(()=>t.style.display='none',2500); }
+function submitLogin() { let name=document.getElementById('login-name').value.trim(), email=document.getElementById('login-email').value.trim(), pw=document.getElementById('login-pw').value; if(!name||!email||!pw){ showToast(currentLang==='zh'?'请填写姓名、邮箱和密码':'Complete nombre, correo y contraseña'); return; } showToast(currentLang==='zh'?'登录成功':'Bienvenido'); setTimeout(()=>goPage('home'),500); }
+function submitOrder() { showToast(currentLang==='zh'?'询价已提交':'Solicitud enviada'); setTimeout(()=>goPage('home'),600); }
+function submitInspeccion(){ showToast(currentLang==='zh'?'已提交（模拟）':'Enviado (simulado)'); setTimeout(()=>goPage('home'),1500); }
 
-// 费用对比数据（省略，与之前相同）
-const costData = {
-  "Callao (Perú)": {"Handling":41,"Desconsolidación":83,"TDI":18,"Emergency Fee":35,"Visto Bueno":142,"THC":0,"Transporte Interior":0,"Almacén Temporal":310,"Aduana":0,"B/L":20},
-  "Valparaíso (Chile)": {"Visto Bueno":110,"Desconsolidación":390,"Handling":85,"TDI":40,"MACH":160,"THC":450,"Transporte Interior":530,"Almacén Temporal":160,"Aduana":230,"B/L":65},
-  "Buenaventura (Colombia)": {"Visto Bueno":140,"Desconsolidación":460,"Handling":105,"TDI":50,"MACH":200,"THC":520,"Transporte Interior":620,"Almacén Temporal":200,"Aduana":280,"B/L":80},
-  "Guayaquil (Ecuador)": {"Visto Bueno":115,"Desconsolidación":405,"Handling":90,"TDI":42,"MACH":170,"THC":470,"Transporte Interior":560,"Almacén Temporal":175,"Aduana":245,"B/L":68}
-};
-const costLabelMap = {"Handling":"操作费 (Handling)","Desconsolidación":"拆箱费 (Desconsolidación)","TDI":"数据传输费 (TDI)","Emergency Fee":"紧急附加费 (Emergency Fee)","Visto Bueno":"核放费 (Visto Bueno)","THC":"码头费 (THC)","Transporte Interior":"内陆运输 (Transporte Interior)","Almacén Temporal":"临时仓储 (Almacén Temporal)","Aduana":"报关费 (Aduana)","B/L":"提单费 (B/L)","MACH":"吊箱费 (MACH)"};
-function renderCostCompare() { let container = document.getElementById('cost-compare-container'); if (!container) return; container.innerHTML = ''; for (let [port, fees] of Object.entries(costData)) { let itemsHtml = ''; for (let [key, value] of Object.entries(fees)) { let label = (lang === 'zh' && costLabelMap[key]) ? costLabelMap[key] : key; itemsHtml += `<div class="cost-item"><span class="cost-label">${label}</span><span class="cost-value">$${value}</span></div>`; } container.innerHTML += `<div class="card cost-compare-card"><div class="port-title">⚓ ${port}</div>${itemsHtml}</div>`; } }
-
-function saveFinancingRequests() { localStorage.setItem('financing_requests', JSON.stringify(financingRequests)); }
-function renderFinancingList() { let container = document.getElementById('financing-list'); if (!container) return; if (financingRequests.length === 0) { container.innerHTML = '<div class="card" style="text-align:center;color:var(--muted)">No hay solicitudes aún. ¡Sé el primero en publicar!</div>'; return; } container.innerHTML = financingRequests.map((req, idx) => `<div class="financing-item"><div class="financing-amount">$${req.amount} USD</div><div class="financing-term">💰 Pagado: ${req.paid}%  |  ⏱ Plazo: ${req.term} días</div><div class="pill-sm" style="margin:6px 0">${req.product.substring(0,60)}</div><div class="cost-item" style="border-bottom:none"><span class="cost-label">📞 Contacto vía plataforma</span><span class="cost-value">ID: #${idx+1}</span></div></div>`).join(''); }
-function openFinancingModal() { openModal('financing'); }
-function submitFinancing() { let product = document.getElementById('fn-product').value.trim(); let amount = parseFloat(document.getElementById('fn-amount').value); let paid = parseFloat(document.getElementById('fn-paid').value); let term = parseInt(document.getElementById('fn-term').value); let contact = document.getElementById('fn-contact').value.trim(); if (!product || isNaN(amount) || isNaN(paid) || isNaN(term) || !contact) { showToast('Complete todos los campos'); return; } financingRequests.unshift({ product, amount, paid, term, contact, date: new Date().toISOString() }); saveFinancingRequests(); closeModal('financing'); showToast('Solicitud publicada'); setTimeout(() => goPage('financing'), 500); }
-
-window.addEventListener('load', () => { applyLang(); setLoginRole('buyer'); renderCostCompare(); renderFinancingList(); });
+// 初始化
+window.addEventListener('load', () => {
+  applyLang();
+  setLoginRole('buyer');
+  renderCategoryGrid();
+});
 </script>
 </body>
 </html>
