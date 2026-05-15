@@ -31,6 +31,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .cat-emoji{font-size:28px;margin-bottom:6px}
 .cat-name{font-weight:700;font-size:14px;margin-bottom:2px}
 .cat-name-es{font-size:11px;color:var(--text2)}
+.platform-scroll{display:flex;overflow-x:auto;gap:12px;padding-bottom:8px;margin-top:8px}
+.platform-scroll::-webkit-scrollbar{height:3px}
+.platform-card{flex:0 0 110px;background:var(--surf2);border:1px solid var(--border);border-radius:16px;padding:10px 6px;text-align:center;cursor:pointer}
+.platform-card:active{transform:scale(0.96)}
+.platform-emoji{font-size:28px;margin-bottom:6px}
+.platform-name{font-size:13px;font-weight:700}
+.platform-desc{font-size:9px;color:var(--text2);margin-top:2px}
 .back-home-btn{display:inline-block;margin-bottom:16px;padding:8px 16px;background:var(--surf2);border-radius:30px;font-size:13px;color:var(--teal);cursor:pointer;border:1px solid var(--border2);width:auto}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
 .fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
@@ -46,30 +53,48 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div class="pg-title" id="t-home-title">Inicio</div>
     <div class="pg-sub" id="t-home-sub">Bienvenido, comerciante</div>
     
-    <!-- 卡片1：物流锁价 -->
     <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">物流锁价</div><div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara fletes y bloquea precios</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">Bloqueo de fletes</div><div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara y asegura tarifas</div></div></div>
     </div>
     
-    <!-- 卡片2：融资需求 -->
     <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">融资需求</div><div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Financiamiento para compradores</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">Financiamiento</div><div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Para compradores</div></div></div>
     </div>
     
-    <!-- 卡片3：找货源 - Made-in-China.com -->
     <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">找货源</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
     </div>
     
-    <!-- 卡片4：找货源 - Alibaba.com 西语版 -->
-    <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://www.alibaba.com/?lang=es','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">找货源</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
+    <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://spanish.alibaba.com/','_blank')">
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
     </div>
 
-    <div style="margin-top:16px;" id="category-section">
+    <div style="margin-top:16px;">
       <div style="font-weight:700; font-size:15px; margin-bottom:12px;" id="t-categories-title">Categorías de productos / 产品分类</div>
       <div class="category-grid" id="category-grid"></div>
     </div>
+
+    <div style="margin-top: 20px;">
+      <div style="font-weight:700; font-size:14px; margin-bottom:8px;" id="t-more-platforms">Más plataformas B2B / 更多B2B平台</div>
+      <div class="platform-scroll">
+        <div class="platform-card" onclick="window.open('https://www.latincomercio.com/','_blank')">
+          <div class="platform-emoji">🌎</div>
+          <div class="platform-name">拉美贸易网</div>
+          <div class="platform-desc">Latam B2B</div>
+        </div>
+        <div class="platform-card" onclick="window.open('https://es.dhgate.com/','_blank')">
+          <div class="platform-emoji">📦</div>
+          <div class="platform-name">敦煌网</div>
+          <div class="platform-desc">DHgate</div>
+        </div>
+        <div class="platform-card" onclick="window.open('https://www.globalsources.com/spanish/','_blank')">
+          <div class="platform-emoji">🌍</div>
+          <div class="platform-name">环球资源</div>
+          <div class="platform-desc">Global Sources</div>
+        </div>
+      </div>
+    </div>
+
     <div style="background:rgba(0,194,168,0.08); border-radius:12px; padding:12px; margin-top:16px;">
       <div style="font-size:12px; color:var(--text2); text-align:center;" id="t-help">💡 Haz clic en cualquier categoría para buscar en Alibaba (versión en español)<br>点击任意分类，跳转到阿里巴巴西语站搜索产品</div>
     </div>
@@ -87,7 +112,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
   </div>
 
-  <!-- 询价页面（港口中文已修复） -->
+  <!-- 询价页面 -->
   <div class="page" id="p-orders">
     <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
     <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
@@ -101,10 +126,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
           <option value="Shanghai" data-es="Shanghai" data-zh="上海港">Shanghai</option>
         </select></div>
         <div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino / 目的港</span></div><select class="fs" id="t-sel-dest">
-          <option value="Callao" data-es="Callao (Lima)" data-zh="卡亚俄港（利马）">Callao (Lima)</option>
-          <option value="Bogota" data-es="Bogotá" data-zh="波哥大港">Bogotá</option>
-          <option value="Valparaiso" data-es="Valparaíso" data-zh="瓦尔帕莱索港">Valparaíso</option>
-          <option value="Guayaquil" data-es="Guayaquil" data-zh="瓜亚基尔港">Guayaquil</option>
+          <option value="Callao" data-es="Puerto Callao (Perú)" data-zh="卡亚俄港（秘鲁）">Puerto Callao (Perú)</option>
+          <option value="Buenaventura" data-es="Puerto Buenaventura (Colombia)" data-zh="布埃纳文图拉港（哥伦比亚）">Puerto Buenaventura (Colombia)</option>
+          <option value="Valparaiso" data-es="Puerto Valparaíso (Chile)" data-zh="瓦尔帕莱索港（智利）">Puerto Valparaíso (Chile)</option>
+          <option value="Guayaquil" data-es="Puerto Guayaquil (Ecuador)" data-zh="瓜亚基尔港（厄瓜多尔）">Puerto Guayaquil (Ecuador)</option>
         </select></div>
       </div>
       <div class="fg"><div class="fl"><span id="t-fl-mode">Modo de Envío</span></div><select class="fs"><option id="t-opt-lcl">LCL Consolidado</option><option id="t-opt-20">FCL 20GP</option><option id="t-opt-40">FCL 40HQ</option></select></div>
@@ -144,15 +169,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
-// 多语言数据
+// ==================== 多语言数据 ====================
 const T = {
   es: {
     'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, comerciante',
-    't-cost-card':'物流锁价','t-cost-desc':'Compara fletes y bloquea precios',
-    't-fin-card':'融资需求','t-fin-desc':'Financiamiento para compradores',
-    't-mic-card':'找货源','t-mic-desc':'Made-in-China.com',
-    't-ali-card':'找货源','t-ali-desc':'Alibaba.com',
+    't-cost-card':'Bloqueo de fletes','t-cost-desc':'Compara y asegura tarifas',
+    't-fin-card':'Financiamiento','t-fin-desc':'Para compradores',
+    't-mic-card':'Encontrar productos','t-mic-desc':'Made-in-China.com',
+    't-ali-card':'Encontrar productos','t-ali-desc':'Alibaba.com',
     't-categories-title':'Categorías de productos',
+    't-more-platforms':'Más plataformas B2B',
     't-help':'💡 Haz clic en cualquier categoría para buscar en Alibaba (versión en español)',
     't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar',
     't-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin',
@@ -167,6 +193,7 @@ const T = {
     't-mic-card':'找货源','t-mic-desc':'中国制造网',
     't-ali-card':'找货源','t-ali-desc':'阿里巴巴国际站',
     't-categories-title':'产品分类',
+    't-more-platforms':'更多B2B平台',
     't-help':'💡 点击任意分类，跳转到阿里巴巴西语站搜索产品',
     't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实',
     't-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员',
@@ -176,7 +203,7 @@ const T = {
   }
 };
 
-// 20个产品分类（关键词用于阿里搜索）
+// 20个产品分类
 const categories = [
   { emoji: "👕", name_es: "Prendas de vestir", name_zh: "服装", keyword: "ropa" },
   { emoji: "👟", name_es: "Calzado", name_zh: "鞋类", keyword: "zapatos" },
@@ -275,6 +302,7 @@ function goPage(id) {
   document.querySelector('.scroll').scrollTop = 0;
 }
 
+// 登录/订单/核实辅助函数
 let loginRole = 'buyer';
 function setLoginRole(role) { loginRole = role; ['buyer','seller','ff','admin'].forEach(r => { const tab = document.getElementById('tab-'+r); if(tab) tab.classList.toggle('active', r===role); }); updateLoginRoleUI(); }
 function updateLoginRoleUI() {
