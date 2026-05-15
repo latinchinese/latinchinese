@@ -31,12 +31,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .cat-emoji{font-size:28px;margin-bottom:6px}
 .cat-name{font-weight:700;font-size:14px;margin-bottom:2px}
 .cat-name-es{font-size:11px;color:var(--text2)}
-/* 三个平台卡片网格（固定三列，位于分类上方，带金色顶边） */
+/* 三列平台卡片网格（带金色顶边） */
 .platform-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
 .platform-card{background:var(--surf2);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:14px;padding:12px 6px;text-align:center;cursor:pointer;transition:all 0.1s}
 .platform-card:active{transform:scale(0.96)}
-.platform-name{font-size:14px;font-weight:800;margin-bottom:4px}
-.platform-desc{font-size:10px;color:var(--text2)}
+.platform-name{font-size:13px;font-weight:800;margin-bottom:4px}
+.platform-desc{font-size:9px;color:var(--text2)}
 .back-home-btn{display:inline-block;margin-bottom:16px;padding:8px 16px;background:var(--surf2);border-radius:30px;font-size:13px;color:var(--teal);cursor:pointer;border:1px solid var(--border2);width:auto}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
 .fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
@@ -71,7 +71,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
       <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
     </div>
 
-    <!-- 更多B2B平台（三列固定网格，位于产品分类上方） -->
+    <!-- 更多B2B平台（三列布局，位于产品分类上方） -->
     <div style="margin-top: 8px;">
       <div style="font-weight:700; font-size:14px; margin-bottom:8px;" id="t-more-platforms">Más plataformas B2B / 更多B2B平台</div>
       <div class="platform-grid" id="platform-grid"></div>
@@ -88,7 +88,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     </div>
   </div>
 
-  <!-- ========== 登录页面（完整保留） ========== -->
+  <!-- ========== 登录页面 ========== -->
   <div class="page" id="p-login">
     <div class="login-tabs"><div class="login-tab active" id="tab-buyer" onclick="setLoginRole('buyer')"><div>🛒</div><div class="login-tab-name" id="t-tab-buyer">Comprador</div></div><div class="login-tab" id="tab-seller" onclick="setLoginRole('seller')"><div>🏭</div><div class="login-tab-name" id="t-tab-seller">Vendedor</div></div><div class="login-tab" id="tab-ff" onclick="setLoginRole('ff')"><div>🚢</div><div class="login-tab-name" id="t-tab-ff">Agente</div></div><div class="login-tab" id="tab-admin" onclick="setLoginRole('admin')"><div>⚙️</div><div class="login-tab-name" id="t-tab-admin">Admin</div></div></div>
     <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--teal-d);border-radius:10px"><div id="login-role-icon">🛒</div><div><div style="font-size:12px;font-weight:700;color:var(--teal)" id="login-role-label">Comprador</div><div style="font-size:11px;color:var(--text2)" id="login-role-desc">Compare cotizaciones</div></div></div>
@@ -100,7 +100,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
   </div>
 
-  <!-- ========== 询价页面（港口已修正） ========== -->
+  <!-- ========== 询价页面 ========== -->
   <div class="page" id="p-orders">
     <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
     <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
@@ -215,11 +215,11 @@ const categories = [
   { emoji: "🌾", name_es: "Insumos agrícolas", name_zh: "农用物资", keyword: "agrícola" }
 ];
 
-// 更多B2B平台（全部来自中国，有西语支持或稳定链接）
+// 更多B2B平台（敦煌网、环球资源、义乌购英文站）
 const morePlatforms = [
   { name_es: "DHgate", name_zh: "敦煌网", url: "https://es.dhgate.com/" },
   { name_es: "Global Sources", name_zh: "环球资源", url: "https://www.globalsources.com" },
-  { name_es: "Yiwugo", name_zh: "义乌购", url: "https://www.yiwugo.com/spanish/" }
+  { name_es: "Yiwugo", name_zh: "义乌购", url: "https://g.yiwugo.com/" }
 ];
 
 let currentLang = 'es';
