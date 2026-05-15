@@ -31,11 +31,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .cat-emoji{font-size:28px;margin-bottom:6px}
 .cat-name{font-weight:700;font-size:14px;margin-bottom:2px}
 .cat-name-es{font-size:11px;color:var(--text2)}
-.platform-scroll{display:flex;overflow-x:auto;gap:12px;padding-bottom:8px;margin-top:8px}
-.platform-scroll::-webkit-scrollbar{height:3px}
-.platform-card{flex:0 0 110px;background:var(--surf2);border:1px solid var(--border);border-radius:16px;padding:10px 6px;text-align:center;cursor:pointer}
+.platform-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+.platform-card{background:var(--surf2);border:1px solid var(--border);border-radius:14px;padding:10px 6px;text-align:center;cursor:pointer;transition:all 0.1s}
 .platform-card:active{transform:scale(0.96)}
-.platform-emoji{font-size:28px;margin-bottom:6px}
+.platform-logo{width:48px;height:48px;object-fit:contain;margin:0 auto 6px;display:block}
 .platform-name{font-size:13px;font-weight:700}
 .platform-desc{font-size:9px;color:var(--text2);margin-top:2px}
 .back-home-btn{display:inline-block;margin-bottom:16px;padding:8px 16px;background:var(--surf2);border-radius:30px;font-size:13px;color:var(--teal);cursor:pointer;border:1px solid var(--border2);width:auto}
@@ -53,46 +52,36 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div class="pg-title" id="t-home-title">Inicio</div>
     <div class="pg-sub" id="t-home-sub">Bienvenido, comerciante</div>
     
+    <!-- 卡片1：物流锁价 -->
     <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
       <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">Bloqueo de fletes</div><div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara y asegura tarifas</div></div></div>
     </div>
     
+    <!-- 卡片2：融资需求 -->
     <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'">
       <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">Financiamiento</div><div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Para compradores</div></div></div>
     </div>
     
+    <!-- 卡片3：找货源 - Made-in-China.com -->
     <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🏭</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
     </div>
     
+    <!-- 卡片4：找货源 - Alibaba.com -->
     <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://spanish.alibaba.com/','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
     </div>
 
+    <!-- 产品分类网格 -->
     <div style="margin-top:16px;">
       <div style="font-weight:700; font-size:15px; margin-bottom:12px;" id="t-categories-title">Categorías de productos / 产品分类</div>
       <div class="category-grid" id="category-grid"></div>
     </div>
 
-    <div style="margin-top: 20px;">
+    <!-- 更多B2B平台（三列固定网格，logo替换为官方图片） -->
+    <div style="margin-top: 8px;">
       <div style="font-weight:700; font-size:14px; margin-bottom:8px;" id="t-more-platforms">Más plataformas B2B / 更多B2B平台</div>
-      <div class="platform-scroll">
-        <div class="platform-card" onclick="window.open('https://www.latincomercio.com/','_blank')">
-          <div class="platform-emoji">🌎</div>
-          <div class="platform-name">拉美贸易网</div>
-          <div class="platform-desc">Latam B2B</div>
-        </div>
-        <div class="platform-card" onclick="window.open('https://es.dhgate.com/','_blank')">
-          <div class="platform-emoji">📦</div>
-          <div class="platform-name">敦煌网</div>
-          <div class="platform-desc">DHgate</div>
-        </div>
-        <div class="platform-card" onclick="window.open('https://www.globalsources.com/spanish/','_blank')">
-          <div class="platform-emoji">🌍</div>
-          <div class="platform-name">环球资源</div>
-          <div class="platform-desc">Global Sources</div>
-        </div>
-      </div>
+      <div class="platform-grid" id="platform-grid"></div>
     </div>
 
     <div style="background:rgba(0,194,168,0.08); border-radius:12px; padding:12px; margin-top:16px;">
@@ -112,7 +101,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
   </div>
 
-  <!-- 询价页面 -->
+  <!-- 询价页面（港口已修正） -->
   <div class="page" id="p-orders">
     <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
     <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
@@ -143,6 +132,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     </div>
     <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
   </div>
+
+  <!-- 核实供应商页面 -->
 
   <!-- 核实供应商页面 -->
   <div class="page" id="p-inspeccion">
@@ -227,6 +218,31 @@ const categories = [
   { emoji: "🌾", name_es: "Insumos agrícolas", name_zh: "农用物资", keyword: "agrícola" }
 ];
 
+// 更多B2B平台数据（使用官方logo图片）
+const morePlatforms = [
+  { 
+    logo: "https://www.latincomercio.com/favicon.ico", 
+    fallbackLogo: "https://www.google.com/s2/favicons?domain=latincomercio.com", 
+    name_es: "Comercio Latino", 
+    name_zh: "拉美贸易网", 
+    url: "https://www.latincomercio.com/" 
+  },
+  { 
+    logo: "https://www.dhgate.com/favicon.ico", 
+    fallbackLogo: "https://www.google.com/s2/favicons?domain=dhgate.com", 
+    name_es: "DHgate", 
+    name_zh: "敦煌网", 
+    url: "https://es.dhgate.com/" 
+  },
+  { 
+    logo: "https://www.globalsources.com/favicon.ico", 
+    fallbackLogo: "https://www.google.com/s2/favicons?domain=globalsources.com", 
+    name_es: "Global Sources", 
+    name_zh: "环球资源", 
+    url: "https://www.globalsources.com/spanish/" 
+  }
+];
+
 let currentLang = 'es';
 
 function renderCategoryGrid() {
@@ -237,6 +253,19 @@ function renderCategoryGrid() {
       <div class="cat-emoji">${cat.emoji}</div>
       <div class="cat-name">${currentLang === 'es' ? cat.name_es : cat.name_zh}</div>
       <div class="cat-name-es">${currentLang === 'es' ? '' : cat.name_es}</div>
+    </div>
+  `).join('');
+}
+
+function renderPlatformGrid() {
+  const grid = document.getElementById('platform-grid');
+  if (!grid) return;
+  grid.innerHTML = morePlatforms.map(p => `
+    <div class="platform-card" onclick="window.open('${p.url}','_blank')">
+      <img class="platform-logo" src="${p.logo}" alt="${currentLang === 'es' ? p.name_es : p.name_zh}" 
+           onerror="this.onerror=null; this.src='${p.fallbackLogo}';">
+      <div class="platform-name">${currentLang === 'es' ? p.name_es : p.name_zh}</div>
+      <div class="platform-desc">${currentLang === 'es' ? 'B2B Platform' : 'B2B平台'}</div>
     </div>
   `).join('');
 }
@@ -277,6 +306,7 @@ function applyLang() {
     }
   }
   renderCategoryGrid();
+  renderPlatformGrid();
   updateOriginDestOptions();
   document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
   document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
@@ -322,6 +352,7 @@ window.addEventListener('load', () => {
   applyLang();
   setLoginRole('buyer');
   renderCategoryGrid();
+  renderPlatformGrid();
 });
 </script>
 </body>
