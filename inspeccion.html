@@ -25,18 +25,28 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 <div class="topbar"><div class="logo" onclick="window.location.href='index.html'"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Verificar Proveedor</span></div><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div></div>
 <div class="back-home" onclick="window.location.href='index.html'"><span id="back-home-text">← Volver al Inicio</span></div>
 
-<div class="card">
-  <div class="fg"><div class="fl"><span id="ins-name-label">Nombre del proveedor / 供应商名称</span></div><input class="fi" type="text" id="ins-name" placeholder="Ej: Shanghai XX Machinery Co."></div>
-  <div class="fg"><div class="fl"><span id="ins-url-label">Sitio web / 网站链接</span></div><input class="fi" type="url" id="ins-url" placeholder="https://..."></div>
-  <div class="fg"><div class="fl"><span id="ins-phone-label">Teléfono / WeChat del vendedor / 供应商电话/微信</span></div><input class="fi" type="text" id="ins-phone" placeholder="WeChat: xxx"></div>
-  <div class="fg"><div class="fl"><span id="ins-desc-label">Descripción del producto / 货物名称</span></div><textarea class="fta" id="ins-desc" rows="2" placeholder="Ej: excavadora pequeña"></textarea></div>
-  <div class="fg"><div class="fl"><span id="ins-wa-label">Tu WhatsApp / correo (para respuesta) / 您的联系方式</span></div><input class="fi" type="tel" id="ins-wa" placeholder="+51 999 123 456"></div>
-  <button class="btn" onclick="submitInspeccion()" id="t-ins-btn">📩 Enviar solicitud de verificación</button>
-  <div style="font-size:12px;color:#7A9AB8;text-align:center;margin-top:12px">Te responderemos en < 48h</div>
-</div>
+<!-- 使用标准表单提交，避免 fetch 跨域问题 -->
+<form id="verifyForm" action="https://formsubmit.co/latinavance.latinavance@gmail.com" method="POST">
+  <!-- 隐藏字段：_subject 设置邮件主题，_captcha 关闭验证码，_next 提交后跳转（会通过JS拦截） -->
+  <input type="hidden" name="_subject" value="Nueva solicitud de verificación de proveedor">
+  <input type="hidden" name="_captcha" value="false">
+  <!-- 不用 _next，我们手动控制返回 -->
+
+  <div class="card">
+    <div class="fg"><div class="fl"><span id="ins-name-label">Nombre del proveedor / 供应商名称</span></div><input class="fi" type="text" id="ins-name" name="name" required placeholder="Ej: Shanghai XX Machinery Co."></div>
+    <div class="fg"><div class="fl"><span id="ins-url-label">Sitio web / 网站链接</span></div><input class="fi" type="url" id="ins-url" name="website" required placeholder="https://..."></div>
+    <div class="fg"><div class="fl"><span id="ins-phone-label">Teléfono / WeChat del vendedor / 供应商电话/微信</span></div><input class="fi" type="text" id="ins-phone" name="phone" placeholder="WeChat: xxx"></div>
+    <div class="fg"><div class="fl"><span id="ins-desc-label">Descripción del producto / 货物名称</span></div><textarea class="fta" id="ins-desc" name="product_desc" rows="2" placeholder="Ej: excavadora pequeña"></textarea></div>
+    <div class="fg"><div class="fl"><span id="ins-wa-label">Tu WhatsApp / correo (para respuesta) / 您的联系方式</span></div><input class="fi" type="tel" id="ins-wa" name="contact" required placeholder="+51 999 123 456"></div>
+    <button type="submit" class="btn" id="t-ins-btn">📩 Enviar solicitud de verificación</button>
+    <div style="font-size:12px;color:#7A9AB8;text-align:center;margin-top:12px">Te responderemos en < 48h</div>
+  </div>
+</form>
+
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
+// 多语言数据
 const T = {
   es: { 
     'back-home-text':'← Volver al Inicio',
@@ -57,6 +67,7 @@ const T = {
     't-ins-btn':'📩 提交核实'
   }
 };
+
 let currentLang = 'es';
 
 function applyLang() {
@@ -81,48 +92,44 @@ function showToast(msg) {
   setTimeout(() => { t.style.display = 'none'; }, 2500);
 }
 
-function submitInspeccion() {
+// 拦截表单提交，先做前端验证，然后允许提交，并显示提示，提交后延迟返回首页
+document.getElementById('verifyForm').addEventListener('submit', function(e) {
   const name = document.getElementById('ins-name').value.trim();
   const url = document.getElementById('ins-url').value.trim();
-  const phone = document.getElementById('ins-phone').value.trim();
-  const desc = document.getElementById('ins-desc').value.trim();
   const wa = document.getElementById('ins-wa').value.trim();
 
   if (!name || !url || !wa) {
+    e.preventDefault();
     showToast(currentLang === 'zh' ? '请至少填写供应商名称、网址和您的联系方式' : 'Complete nombre, sitio web y su contacto');
     return;
   }
 
-  fetch('https://formsubmit.co/ajax/latinavance.latinavance@gmail.com', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify({
-      name: name,
-      website: url,
-      phone: phone,
-      product_desc: desc,
-      contact: wa,
-      _subject: 'Nueva solicitud de verificación de proveedor'
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      showToast(currentLang === 'zh' ? '✅ 已提交，我们将在48小时内核实并回复' : '✅ Solicitud enviada, revisaremos en 48h');
-      setTimeout(() => window.location.href = 'index.html', 2000);
-    } else {
-      showToast(currentLang === 'zh' ? '提交失败，请稍后重试' : 'Error, intente de nuevo');
-      console.error('FormSubmit error:', data);
-    }
-  })
-  .catch(error => {
-    console.error('Fetch error:', error);
-    showToast(currentLang === 'zh' ? '网络错误，请检查连接' : 'Error de red');
-  });
-}
+  // 显示提交中提示
+  showToast(currentLang === 'zh' ? '正在提交...' : 'Enviando...');
+
+  // 不阻止表单提交，让它正常 POST 到 FormSubmit
+  // 但是表单提交后会跳转到 FormSubmit 的默认感谢页，我们不希望用户看到那个页面，而是回到首页。
+  // 因此我们动态创建一个隐藏的 iframe 来接收响应，避免页面跳转。
+  e.preventDefault();  // 阻止默认跳转
+
+  // 创建临时 iframe 接收 FormSubmit 响应（不跳转页面）
+  const iframe = document.createElement('iframe');
+  iframe.name = 'hiddenFrame';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  this.target = 'hiddenFrame';
+
+  // 设置表单提交完成后的回调（通过监听 iframe load 事件）
+  iframe.onload = () => {
+    showToast(currentLang === 'zh' ? '✅ 已提交，我们将在48小时内核实并回复' : '✅ Solicitud enviada, revisaremos en 48h');
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 2000);
+    document.body.removeChild(iframe);
+  };
+
+  this.submit();
+});
 
 window.addEventListener('load', () => {
   applyLang();
