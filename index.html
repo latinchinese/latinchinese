@@ -71,40 +71,31 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div class="pg-title" id="t-home-title">Inicio</div>
     <div class="pg-sub" id="t-home-sub">Bienvenido, comerciante</div>
     
-    <!-- 卡片1：物流锁价 -->
     <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
       <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">Bloqueo de fletes</div><div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara y asegura tarifas</div></div></div>
     </div>
     
-    <!-- 卡片2：融资需求 -->
     <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'">
       <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">Financiamiento</div><div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Para compradores</div></div></div>
     </div>
     
-    <!-- 卡片3：找货源 - Made-in-China.com -->
     <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
       <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🏭</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
     </div>
     
-    <!-- 卡片4：找货源 - Alibaba.com -->
     <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://spanish.alibaba.com/','_blank')">
       <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
     </div>
 
-    <!-- 服务卡片（文字由语言切换控制） -->
-
-    <!-- 服务卡片（文字由语言切换控制） -->
     <div class="service-card">
       <p><span class="icon">🛡️</span> <span id="service-text">Cargando...</span></p>
     </div>
 
-    <!-- 更多B2B平台 -->
     <div style="margin-top: 8px;">
       <div style="font-weight:700; font-size:14px; margin-bottom:8px;" id="t-more-platforms">Más plataformas B2B / 更多B2B平台</div>
       <div class="platform-grid" id="platform-grid"></div>
     </div>
 
-    <!-- 产品分类 -->
     <div style="margin-top:8px;">
       <div style="font-weight:700; font-size:15px; margin-bottom:12px;" id="t-categories-title">Categorías de productos / 产品分类</div>
       <div class="category-grid" id="category-grid"></div>
@@ -159,9 +150,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
   </div>
 
-  <!-- 核实供应商页面 -->
+  <!-- 核实供应商页面（已修复 FormSubmit） -->
+<!-- 核实供应商页面（已修复 FormSubmit） -->
   <div class="page" id="p-inspeccion">
-    <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div><div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
+    <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div>
+    <div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
     <div class="card">
       <div class="fg"><div class="fl"><span id="ins-name-label">Nombre del proveedor / 供应商名称</span></div><input class="fi" type="text" id="ins-name" placeholder="Ej: Shanghai XX Machinery Co."></div>
       <div class="fg"><div class="fl"><span id="ins-url-label">Sitio web / 网站链接</span></div><input class="fi" type="url" id="ins-url" placeholder="https://..."></div>
@@ -200,7 +193,7 @@ const T = {
     't-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin',
     't-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.',
     't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario...','t-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Puerto Origen','t-fl-dest':'Puerto Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS Code','t-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
-    't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos...','t-ins-btn':'📩 Enviar solicitud','ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
+    't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad...','t-ins-btn':'📩 Enviar solicitud','ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
   },
   zh: {
     'lo-es':'ES','lo-zh':'中','t-home-title':'采购导航','t-home-sub':'欢迎回来，商客',
@@ -311,7 +304,6 @@ function applyLang() {
       else el.innerHTML = val;
     }
   }
-  // 显式更新服务卡片文字（因为上面循环中已经包含了 service-text，但为了确保，再单独设置一次）
   const serviceSpan = document.getElementById('service-text');
   if (serviceSpan) serviceSpan.innerHTML = t['service-text'];
   renderCategoryGrid();
@@ -354,7 +346,50 @@ function updateLoginRoleUI() {
 function togglePw() { let p = document.getElementById('login-pw'); p.type = p.type === 'password' ? 'text' : 'password'; }
 function submitLogin() { let name=document.getElementById('login-name').value.trim(), email=document.getElementById('login-email').value.trim(), pw=document.getElementById('login-pw').value; if(!name||!email||!pw){ showToast(currentLang==='zh'?'请填写姓名、邮箱和密码':'Complete nombre, correo y contraseña'); return; } showToast(currentLang==='zh'?'登录成功':'Bienvenido'); setTimeout(()=>goPage('home'),500); }
 function submitOrder() { showToast(currentLang==='zh'?'询价已提交':'Solicitud enviada'); setTimeout(()=>goPage('home'),600); }
-function submitInspeccion(){ showToast(currentLang==='zh'?'已提交（模拟）':'Enviado (simulado)'); setTimeout(()=>goPage('home'),1500); }
+
+// ========== 核实供应商提交函数（使用 FormSubmit） ==========
+function submitInspeccion() {
+    const name = document.getElementById('ins-name').value.trim();
+    const url = document.getElementById('ins-url').value.trim();
+    const phone = document.getElementById('ins-phone').value.trim();
+    const desc = document.getElementById('ins-desc').value.trim();
+    const wa = document.getElementById('ins-wa').value.trim();
+
+    if (!name || !url || !wa) {
+        showToast(lang === 'zh' ? '请至少填写供应商名称、网址和您的联系方式' : 'Complete nombre, sitio web y su contacto');
+        return;
+    }
+
+    fetch('https://formsubmit.co/ajax/latinavance.latinavance@gmail.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            website: url,
+            phone: phone,
+            product_desc: desc,
+            contact: wa,
+            _subject: 'Nueva solicitud de verificación de proveedor'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast(lang === 'zh' ? '✅ 已提交，我们将在48小时内核实并回复' : '✅ Solicitud enviada, revisaremos en 48h');
+            setTimeout(() => goPage('home'), 2000);
+        } else {
+            showToast(lang === 'zh' ? '提交失败，请稍后重试' : 'Error, intente de nuevo');
+            console.error('FormSubmit error:', data);
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        showToast(lang === 'zh' ? '网络错误，请检查连接' : 'Error de red');
+    });
+}
 
 window.addEventListener('load', () => {
   applyLang();
