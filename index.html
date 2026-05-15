@@ -41,31 +41,31 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 <body>
 <div class="topbar"><div class="logo"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Plataforma Logística Transparente</span></div><div style="display:flex;align-items:center;gap:10px"><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div><div class="notif-btn">🔔<div class="notif-dot"></div></div></div></div>
 <div class="scroll">
+  <!-- 首页 -->
   <div class="page on" id="p-home">
     <div class="pg-title" id="t-home-title">Inicio</div>
     <div class="pg-sub" id="t-home-sub">Bienvenido, comerciante</div>
     
     <!-- 卡片1：物流锁价 -->
     <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">物流锁价</div><div style="font-size:12px; color:var(--text2);" id="t-cost-desc">Compara fletes y bloquea precios</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">物流锁价</div><div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara fletes y bloquea precios</div></div></div>
     </div>
     
     <!-- 卡片2：融资需求 -->
     <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">融资需求</div><div style="font-size:12px; color:var(--text2);" id="t-fin-desc">Financiamiento para compradores</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">融资需求</div><div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Financiamiento para compradores</div></div></div>
     </div>
     
     <!-- 卡片3：找货源 - Made-in-China.com -->
     <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">找货源</div><div style="font-size:11px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">找货源</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
     </div>
     
-    <!-- 卡片4：找货源 - Alibaba.com -->
-    <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://spanish.alibaba.com/','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">找货源</div><div style="font-size:11px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
+    <!-- 卡片4：找货源 - Alibaba.com 西语版 -->
+    <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://www.alibaba.com/?lang=es','_blank')">
+      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🛒</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">找货源</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
     </div>
 
-    <!-- 商品分类总表（20个门类） -->
     <div style="margin-top:16px;" id="category-section">
       <div style="font-weight:700; font-size:15px; margin-bottom:12px;" id="t-categories-title">Categorías de productos / 产品分类</div>
       <div class="category-grid" id="category-grid"></div>
@@ -75,7 +75,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     </div>
   </div>
 
-  <!-- ========== 登录页面（不变） ========== -->
+  <!-- 登录页面 -->
   <div class="page" id="p-login">
     <div class="login-tabs"><div class="login-tab active" id="tab-buyer" onclick="setLoginRole('buyer')"><div>🛒</div><div class="login-tab-name" id="t-tab-buyer">Comprador</div></div><div class="login-tab" id="tab-seller" onclick="setLoginRole('seller')"><div>🏭</div><div class="login-tab-name" id="t-tab-seller">Vendedor</div></div><div class="login-tab" id="tab-ff" onclick="setLoginRole('ff')"><div>🚢</div><div class="login-tab-name" id="t-tab-ff">Agente</div></div><div class="login-tab" id="tab-admin" onclick="setLoginRole('admin')"><div>⚙️</div><div class="login-tab-name" id="t-tab-admin">Admin</div></div></div>
     <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--teal-d);border-radius:10px"><div id="login-role-icon">🛒</div><div><div style="font-size:12px;font-weight:700;color:var(--teal)" id="login-role-label">Comprador</div><div style="font-size:11px;color:var(--text2)" id="login-role-desc">Compare cotizaciones</div></div></div>
@@ -87,13 +87,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
   </div>
 
-  <!-- ========== 询价页面（不变） ========== -->
+  <!-- 询价页面（港口中文已修复） -->
   <div class="page" id="p-orders">
     <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
     <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
       <div class="fg"><div class="fl"><span id="t-fl-desc">Descripción</span></div><textarea class="fta" id="t-ph-desc" placeholder="Ej: Sillas ergonómicas..."></textarea></div>
       <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-weight">Peso Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-weight" placeholder="2400 kg"></div><div class="fg"><div class="fl"><span id="t-fl-vol">Volumen Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-vol" placeholder="18.5 m³"></div></div>
-      <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen</span></div><select class="fs" id="t-sel-origin"><option id="t-opt-nb">Ningbo</option><option id="t-opt-gz">Guangzhou</option><option id="t-opt-sz">Shenzhen</option><option id="t-opt-sh">Shanghai</option></select></div><div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino</span></div><select class="fs" id="t-sel-dest"><option>Callao (Lima)</option><option>Bogotá</option><option>Valparaíso</option><option>Guayaquil</option></select></div></div>
+      <div class="g2">
+        <div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen / 出发港</span></div><select class="fs" id="t-sel-origin">
+          <option value="Ningbo" data-es="Ningbo" data-zh="宁波港">Ningbo</option>
+          <option value="Guangzhou" data-es="Guangzhou" data-zh="广州港">Guangzhou</option>
+          <option value="Shenzhen" data-es="Shenzhen" data-zh="深圳港">Shenzhen</option>
+          <option value="Shanghai" data-es="Shanghai" data-zh="上海港">Shanghai</option>
+        </select></div>
+        <div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino / 目的港</span></div><select class="fs" id="t-sel-dest">
+          <option value="Callao" data-es="Callao (Lima)" data-zh="卡亚俄港（利马）">Callao (Lima)</option>
+          <option value="Bogota" data-es="Bogotá" data-zh="波哥大港">Bogotá</option>
+          <option value="Valparaiso" data-es="Valparaíso" data-zh="瓦尔帕莱索港">Valparaíso</option>
+          <option value="Guayaquil" data-es="Guayaquil" data-zh="瓜亚基尔港">Guayaquil</option>
+        </select></div>
+      </div>
       <div class="fg"><div class="fl"><span id="t-fl-mode">Modo de Envío</span></div><select class="fs"><option id="t-opt-lcl">LCL Consolidado</option><option id="t-opt-20">FCL 20GP</option><option id="t-opt-40">FCL 40HQ</option></select></div>
       <div class="fg"><div class="fl"><span id="t-fl-hs">Código HS</span></div><input class="fi" id="t-ph-hs" placeholder="Ej: 9401.30"></div>
     </div>
@@ -106,7 +119,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
   </div>
 
-  <!-- ========== 核实供应商页面（不变） ========== -->
+  <!-- 核实供应商页面 -->
   <div class="page" id="p-inspeccion">
     <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div><div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
     <div class="card">
@@ -131,7 +144,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
-// ==================== 多语言数据 ====================
+// 多语言数据
 const T = {
   es: {
     'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, comerciante',
@@ -144,7 +157,7 @@ const T = {
     't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar',
     't-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin',
     't-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.',
-    't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario...','t-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Origen','t-fl-dest':'Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'Shanghai','t-fl-hs':'HS Code','t-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
+    't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario...','t-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Puerto Origen','t-fl-dest':'Puerto Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS Code','t-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
     't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos...','t-ins-btn':'📩 Enviar solicitud','ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
   },
   zh: {
@@ -158,12 +171,12 @@ const T = {
     't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实',
     't-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员',
     't-login-name-label':'姓名 / 用户名','t-fl-login-email':'邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意条款。',
-    't-orders-title':'询价单','t-orders-sub':'填写表格以申请海运费及物流操作费用','t-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-opt-sh':'上海港','t-fl-hs':'HS编码','t-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交','t-submit-note':'货代24h内报价',
+    't-orders-title':'询价单','t-orders-sub':'填写表格以申请海运费及物流操作费用','t-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS编码','t-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交','t-submit-note':'货代24h内报价',
     't-ins-title':'🔍 核实供应商','t-ins-sub':'提交供应商信息，我们帮您核查真实性','t-ins-btn':'📩 提交核实','ins-name-label':'供应商名称','ins-url-label':'网站链接','ins-phone-label':'供应商电话/微信','ins-desc-label':'货物名称','ins-wa-label':'您的联系方式'
   }
 };
 
-// ==================== 20个产品分类（关键词用于阿里西语站搜索） ====================
+// 20个产品分类（关键词用于阿里搜索）
 const categories = [
   { emoji: "👕", name_es: "Prendas de vestir", name_zh: "服装", keyword: "ropa" },
   { emoji: "👟", name_es: "Calzado", name_zh: "鞋类", keyword: "zapatos" },
@@ -203,9 +216,21 @@ function renderCategoryGrid() {
 
 function searchOnAliExpress(keyword) {
   const searchTerm = encodeURIComponent(keyword);
-  const url = `https://spanish.alibaba.com/trade/search?SearchText=${searchTerm}`;
+  const url = `https://www.alibaba.com/trade/search?SearchText=${searchTerm}&lang=es`;
   showToast(currentLang === 'es' ? 'Abriendo Alibaba...' : '正在打开阿里巴巴...');
   window.open(url, '_blank');
+}
+
+function updateOriginDestOptions() {
+  const originSelect = document.getElementById('t-sel-origin');
+  const destSelect = document.getElementById('t-sel-dest');
+  if (!originSelect || !destSelect) return;
+  for (let opt of originSelect.options) {
+    opt.text = currentLang === 'es' ? opt.getAttribute('data-es') : opt.getAttribute('data-zh');
+  }
+  for (let opt of destSelect.options) {
+    opt.text = currentLang === 'es' ? opt.getAttribute('data-es') : opt.getAttribute('data-zh');
+  }
 }
 
 function showToast(msg) {
@@ -225,6 +250,7 @@ function applyLang() {
     }
   }
   renderCategoryGrid();
+  updateOriginDestOptions();
   document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
   document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
   updateLoginRoleUI();
@@ -249,7 +275,6 @@ function goPage(id) {
   document.querySelector('.scroll').scrollTop = 0;
 }
 
-// ==================== 原有登录/订单/核实相关函数 ====================
 let loginRole = 'buyer';
 function setLoginRole(role) { loginRole = role; ['buyer','seller','ff','admin'].forEach(r => { const tab = document.getElementById('tab-'+r); if(tab) tab.classList.toggle('active', r===role); }); updateLoginRoleUI(); }
 function updateLoginRoleUI() {
