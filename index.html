@@ -72,21 +72,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     </div>
 
 
-<!-- 服务说明卡片（新版紧凑双语） -->
-    <div class="service-note-compact">
-      <div class="service-col">
-        <p><span class="highlight">🛡️ ¿Cómo usar?</span><br>
-        Los enlaces externos → sitios independientes. Solicita cotización y datos de embalaje (volumen/peso) al proveedor.<br>
-        <strong>Nuestros servicios:</strong> fletes, verificación, precios, asesoría de pago, rutas logísticas.<br>
-        <span style="color:var(--teal);">👉 Envíanos la info del proveedor y te ayudamos a verificarlo.</span></p>
-      </div>
-      <div class="service-divider"></div>
-      <div class="service-col">
-        <p><span class="highlight">🛡️ 使用指南</span><br>
-        外部链接 → 独立平台。直接向供应商询价并索取包装信息（体积/重量）。<br>
-        <strong>我们的服务：</strong>运费报价、供应商核实、价格评估、付款建议、物流路线选择，避免目的港乱收费。<br>
-        <span style="color:var(--teal);">👉 将供应商信息发给我们，我们将协助您核实。</span></p>
-      </div>
+    <!-- 服务说明卡片（单语，由语言切换控制） -->
+    <div class="service-card" id="service-card">
+      <p><span class="icon">🛡️</span> <span id="service-text">Cargando...</span></p>
     </div>
 
 
