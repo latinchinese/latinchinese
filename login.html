@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>入口 · 透明化物流平台</title>
+<style>
+/* 复制主样式中的必要部分，为了精简，直接引用相同样式（可拷贝自 index 的 <style> 块） */
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto;padding-bottom:30px}
+.topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.logo{display:flex;align-items:baseline;gap:6px;cursor:pointer}
+.logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px}.logo-es{font-weight:600;font-size:9px;color:#00C2A8}
+.lang-toggle{display:flex;background:#122844;border-radius:20px;padding:3px;cursor:pointer}
+.lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;background:rgba(245,166,35,0.2);color:#F5A623;white-space:nowrap}
+.lang-opt.on{background:#00C2A8;color:#07111F}
+.back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
+.card{background:#0D1E33;border-radius:16px;padding:18px;margin:18px}
+.fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#7A9AB8;margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
+.fi{width:100%;background:#122844;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:white;padding:11px 14px;outline:none}
+.btn{background:#00C2A8;border:none;border-radius:12px;padding:13px;font-weight:700;color:#07111F;width:100%;cursor:pointer;margin-top:10px}
+.login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}.login-tab{padding:10px 8px;border-radius:11px;border:1px solid rgba(255,255,255,0.1);background:#0D1E33;cursor:pointer;text-align:center}.login-tab.active{border-color:#00C2A8;background:rgba(0,194,168,0.13)}.login-tab-name{font-size:11px;font-weight:700;color:#7A9AB8}.login-tab.active .login-tab-name{color:#00C2A8}.pw{position:relative}.pw-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:#7A9AB8;cursor:pointer}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#22C97A;color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo" onclick="window.location.href='index.html'"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Entrada</span></div>
+  <div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div>
+</div>
+<div class="back-home" onclick="window.location.href='index.html'"><span id="back-home-text">← Volver al Inicio</span></div>
+
+<div class="login-tabs"><div class="login-tab active" id="tab-buyer" onclick="setLoginRole('buyer')"><div>🛒</div><div class="login-tab-name" id="t-tab-buyer">Comprador</div></div><div class="login-tab" id="tab-seller" onclick="setLoginRole('seller')"><div>🏭</div><div class="login-tab-name" id="t-tab-seller">Vendedor</div></div><div class="login-tab" id="tab-ff" onclick="setLoginRole('ff')"><div>🚢</div><div class="login-tab-name" id="t-tab-ff">Agente</div></div><div class="login-tab" id="tab-admin" onclick="setLoginRole('admin')"><div>⚙️</div><div class="login-tab-name" id="t-tab-admin">Admin</div></div></div>
+<div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:rgba(0,194,168,0.13);border-radius:10px"><div id="login-role-icon">🛒</div><div><div style="font-size:12px;font-weight:700;color:#00C2A8" id="login-role-label">Comprador</div><div style="font-size:11px;color:#7A9AB8" id="login-role-desc">Compare cotizaciones</div></div></div>
+  <div class="fg"><div class="fl"><span id="t-login-name-label">Nombre / Usuario</span></div><input class="fi" type="text" id="login-name" placeholder="Tu nombre"></div>
+  <div class="fg"><div class="fl"><span id="t-fl-login-email">Correo Electrónico</span></div><input class="fi" type="email" id="login-email" placeholder="nombre@empresa.com"></div>
+  <div class="fg"><div class="fl"><span id="t-fl-login-pw">Contraseña</span></div><div class="pw"><input class="fi" type="password" id="login-pw" placeholder="••••••••"><span class="pw-eye" onclick="togglePw()">👁</span></div></div>
+  <button class="btn" onclick="submitLogin()"><span id="t-login-btn">🔐 Entrada</span></button>
+</div>
+<div style="text-align:center;font-size:12px;color:#7A9AB8;margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
+
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+<script>
+const T = {
+  es: { 'back-home-text':'← Volver al Inicio','t-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin','t-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.' },
+  zh: { 'back-home-text':'← 返回首页','t-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员','t-login-name-label':'姓名 / 用户名','t-fl-login-email':'邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意平台使用条款。' }
+};
+let currentLang = 'es', loginRole = 'buyer';
+function applyLang(){const t=T[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerText=val;}updateLoginRoleUI();}
+function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
+function setLoginRole(role){loginRole=role;['buyer','seller','ff','admin'].forEach(r=>{document.getElementById('tab-'+r)?.classList.toggle('active',r===role);});updateLoginRoleUI();}
+function updateLoginRoleUI(){const m={buyer:{icon:'🛒',label_es:'Comprador',label_zh:'买方'},seller:{icon:'🏭',label_es:'Vendedor',label_zh:'卖方'},ff:{icon:'🚢',label_es:'Agente',label_zh:'货代'},admin:{icon:'⚙️',label_es:'Admin',label_zh:'管理员'}};let r=loginRole;document.getElementById('login-role-icon').textContent=m[r].icon;document.getElementById('login-role-label').textContent=currentLang==='zh'?m[r].label_zh:m[r].label_es;const descMap={buyer:currentLang==='zh'?'比较报价':'Compare cotizaciones',seller:currentLang==='zh'?'提供FOB':'Cotice en FOB',ff:currentLang==='zh'?'报价服务':'Publique oferta',admin:currentLang==='zh'?'后台管理':'Panel Admin'};document.getElementById('login-role-desc').textContent=descMap[r]||'';}
+function togglePw(){let p=document.getElementById('login-pw');p.type=p.type==='password'?'text':'password';}
+function showToast(m){let t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+function submitLogin(){let name=document.getElementById('login-name').value.trim(),email=document.getElementById('login-email').value.trim(),pw=document.getElementById('login-pw').value;if(!name||!email||!pw){showToast(currentLang==='zh'?'请填写姓名、邮箱和密码':'Complete nombre, correo y contraseña');return;}showToast(currentLang==='zh'?'登录成功':'Bienvenido');setTimeout(()=>window.location.href='index.html',500);}
+window.addEventListener('load',()=>{applyLang();setLoginRole('buyer');});
+</script>
+</body>
+</html>

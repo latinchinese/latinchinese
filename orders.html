@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>询价单 · 透明化物流平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto;padding-bottom:30px}
+.topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.logo{display:flex;align-items:baseline;gap:6px;cursor:pointer}
+.logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px}.logo-es{font-weight:600;font-size:9px;color:#00C2A8}
+.lang-toggle{display:flex;background:#122844;border-radius:20px;padding:3px;cursor:pointer}
+.lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;background:rgba(245,166,35,0.2);color:#F5A623;white-space:nowrap}
+.lang-opt.on{background:#00C2A8;color:#07111F}
+.back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
+.card{background:#0D1E33;border-radius:16px;padding:18px;margin:18px}
+.fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#7A9AB8;margin-bottom:6px}
+.fi,.fs,.fta{width:100%;background:#122844;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:white;padding:11px 14px;outline:none}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{background:#00C2A8;border:none;border-radius:12px;padding:13px;font-weight:700;color:#07111F;width:100%;cursor:pointer;margin-top:10px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#22C97A;color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="logo" onclick="window.location.href='index.html'"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Cotización</span></div><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div></div>
+<div class="back-home" onclick="window.location.href='index.html'"><span id="back-home-text">← Volver al Inicio</span></div>
+
+<div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
+  <div class="fg"><div class="fl"><span id="t-fl-desc">Descripción</span></div><textarea class="fta" id="t-ph-desc" rows="2" placeholder="Ej: Sillas ergonómicas..."></textarea></div>
+  <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-weight">Peso Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-weight" placeholder="2400 kg"></div><div class="fg"><div class="fl"><span id="t-fl-vol">Volumen Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-vol" placeholder="18.5 m³"></div></div>
+  <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen / 出发港</span></div><select class="fs" id="t-sel-origin"><option value="Ningbo" data-es="Ningbo" data-zh="宁波港">Ningbo</option><option value="Guangzhou" data-es="Guangzhou" data-zh="广州港">Guangzhou</option><option value="Shenzhen" data-es="Shenzhen" data-zh="深圳港">Shenzhen</option><option value="Shanghai" data-es="Shanghai" data-zh="上海港">Shanghai</option></select></div>
+    <div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino / 目的港</span></div><select class="fs" id="t-sel-dest"><option value="Callao" data-es="Puerto Callao (Perú)" data-zh="卡亚俄港（秘鲁）">Puerto Callao (Perú)</option><option value="Buenaventura" data-es="Puerto Buenaventura (Colombia)" data-zh="布埃纳文图拉港（哥伦比亚）">Puerto Buenaventura (Colombia)</option><option value="Valparaiso" data-es="Puerto Valparaíso (Chile)" data-zh="瓦尔帕莱索港（智利）">Puerto Valparaíso (Chile)</option><option value="Guayaquil" data-es="Puerto Guayaquil (Ecuador)" data-zh="瓜亚基尔港（厄瓜多尔）">Puerto Guayaquil (Ecuador)</option></select></div>
+  </div>
+  <div class="fg"><div class="fl"><span id="t-fl-mode">Modo de Envío</span></div><select class="fs"><option id="t-opt-lcl">LCL Consolidado</option><option id="t-opt-20">FCL 20GP</option><option id="t-opt-40">FCL 40HQ</option></select></div>
+  <div class="fg"><div class="fl"><span id="t-fl-hs">Código HS</span></div><input class="fi" id="t-ph-hs" placeholder="Ej: 9401.30"></div>
+</div>
+<div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-contact-info">📱 Datos de Contacto</div>
+  <div class="fg"><div class="fl"><span>WhatsApp</span></div><div style="display:flex;gap:8px"><select class="fs" style="width:110px"><option>🇵🇪 +51</option><option>🇨🇴 +57</option></select><input class="fi" type="tel" id="t-ph-wa" placeholder="999 123 456"></div></div>
+  <div class="fg"><div class="fl"><span id="t-fl-email">Correo</span></div><input class="fi" type="email" id="t-ph-email" placeholder="nombre@empresa.com"></div>
+  <div class="fg"><div class="fl"><span id="t-fl-company">Empresa</span></div><input class="fi" id="t-ph-company" placeholder="Importadora Silva EIRL"></div>
+  <div class="fg"><div class="fl"><span id="t-fl-notes">Notas</span></div><textarea class="fta" id="t-ph-notes" rows="2" placeholder="Requisitos especiales..."></textarea></div>
+</div>
+<button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button>
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+<script>
+const T = {
+  es: { 'back-home-text':'← Volver al Inicio','t-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Puerto Origen','t-fl-dest':'Puerto Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS Code','t-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud' },
+  zh: { 'back-home-text':'← 返回首页','t-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS编码','t-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交' }
+};
+let currentLang = 'es';
+function updateOriginDestOptions(){const o=document.getElementById('t-sel-origin'),d=document.getElementById('t-sel-dest');if(!o||!d)return;for(let opt of o.options)opt.text=currentLang==='es'?opt.getAttribute('data-es'):opt.getAttribute('data-zh');for(let opt of d.options)opt.text=currentLang==='es'?opt.getAttribute('data-es'):opt.getAttribute('data-zh');}
+function applyLang(){const t=T[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerHTML=val;}updateOriginDestOptions();}
+function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
+function showToast(m){let t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+function submitOrder(){
+  const desc=document.getElementById('t-ph-desc').value.trim();
+  const weight=document.getElementById('t-ph-weight').value.trim();
+  const vol=document.getElementById('t-ph-vol').value.trim();
+  const origin=document.getElementById('t-sel-origin').options[document.getElementById('t-sel-origin').selectedIndex].text;
+  const dest=document.getElementById('t-sel-dest').options[document.getElementById('t-sel-dest').selectedIndex].text;
+  const mode=document.getElementById('t-fl-mode').options[document.getElementById('t-fl-mode').selectedIndex].text;
+  const hs=document.getElementById('t-ph-hs').value.trim();
+  const wa=document.getElementById('t-ph-wa').value.trim();
+  const email=document.getElementById('t-ph-email').value.trim();
+  const company=document.getElementById('t-ph-company').value.trim();
+  const notes=document.getElementById('t-ph-notes').value.trim();
+
+  if(!desc||!weight||!vol||!wa||!email||!company){
+    showToast(currentLang==='zh'?'请填写所有必填项（货物描述、重量、体积、WhatsApp、邮箱、公司）':'Complete todos los campos obligatorios');
+    return;
+  }
+
+  fetch('https://formsubmit.co/ajax/latinavance.latinavance@gmail.com',{
+    method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({
+      descripcion:desc,
+      peso:weight,
+      volumen:vol,
+      puerto_origen:origin,
+      puerto_destino:dest,
+      modo_envio:mode,
+      hs_code:hs,
+      whatsapp:wa,
+      email:email,
+      empresa:company,
+      notas:notes,
+      _subject:'Nueva solicitud de cotización de flete'
+    })
+  }).then(r=>r.json()).then(data=>{
+    if(data.success){
+      showToast(currentLang==='zh'?'✅ 询价已提交，我们将在24小时内联系您':'✅ Solicitud enviada, le contactaremos en 24h');
+      setTimeout(()=>window.location.href='index.html',2000);
+    }else{
+      showToast(currentLang==='zh'?'提交失败，请稍后重试':'Error, intente de nuevo');
+    }
+  }).catch(e=>{showToast(currentLang==='zh'?'网络错误，请检查连接':'Error de red');});
+}
+window.addEventListener('load',()=>{applyLang();});
+</script>
+</body>
+</html>

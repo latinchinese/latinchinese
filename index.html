@@ -18,8 +18,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .notif-btn{width:34px;height:34px;border-radius:50%;background:var(--surf2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative}.notif-dot{position:absolute;top:7px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
 .scroll{position:fixed;top:var(--top);left:50%;transform:translateX(-50%);width:100%;max-width:430px;bottom:var(--nav);overflow-y:auto;overflow-x:hidden;z-index:1}
 .scroll::-webkit-scrollbar{display:none}
-.page{display:none;padding:22px 18px 20px;min-height:100%}
-.page.on{display:block;animation:fadeUp .2s}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.page{display:block;padding:22px 18px 20px;min-height:100%}
 .pg-title{font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:4px;background:linear-gradient(135deg,#E2EDF8 0%,#00C2A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .pg-sub{font-weight:600;font-size:14px;color:var(--text2);margin-bottom:20px;letter-spacing:-0.2px}
 .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav);background:rgba(7,17,31,0.97);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0)}.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:6px 4px;background:transparent;border:none}.bni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}.bni-label{font-size:10px;font-weight:600;color:var(--muted)}.bni.on .bni-icon{background:var(--teal-d)}.bni.on .bni-label{color:var(--teal)}
@@ -36,148 +35,56 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .platform-card:active{transform:scale(0.96)}
 .platform-name{font-size:13px;font-weight:800;margin-bottom:4px}
 .platform-desc{font-size:9px;color:var(--text2)}
-.service-card {
-  background: rgba(0,194,168,0.08);
-  border-radius: 16px;
-  padding: 14px 16px;
-  margin: 16px 0;
-  border-left: 4px solid var(--gold);
-}
-.service-card p {
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--text2);
-  margin: 0;
-}
-.service-card strong {
-  color: var(--teal);
-}
-.service-card .icon {
-  font-size: 20px;
-  margin-right: 6px;
-  color: var(--gold);
-}
+.service-card{background:rgba(0,194,168,0.08);border-radius:16px;padding:14px 16px;margin:16px 0;border-left:4px solid var(--gold)}
+.service-card p{font-size:12px;line-height:1.45;color:var(--text2);margin:0}
+.service-card strong{color:var(--teal)}
+.service-card .icon{font-size:20px;margin-right:6px;color:var(--gold)}
 .back-home-btn{display:inline-block;margin-bottom:16px;padding:8px 16px;background:var(--surf2);border-radius:30px;font-size:13px;color:var(--teal);cursor:pointer;border:1px solid var(--border2);width:auto}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
 .fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
-.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:11px 14px;outline:none}.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}.fta{min-height:80px;resize:none}.fs{cursor:pointer}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:12px;border:none;font-weight:700;cursor:pointer;width:100%;background:var(--teal);color:#07111F}.btn:hover{background:#00d4b8}.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}.login-tab{padding:10px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surf);cursor:pointer;text-align:center}.login-tab.active{border-color:var(--teal);background:var(--teal-d)}.login-tab-name{font-size:11px;font-weight:700;color:var(--text2)}.pw{position:relative}.pw-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
+.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:11px 14px;outline:none}.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}.fta{min-height:80px;resize:none}.fs{cursor:pointer}.btn{background:var(--teal);border:none;border-radius:12px;padding:13px;font-weight:700;color:#07111F;width:100%;cursor:pointer;margin-top:10px}.btn:hover{background:#00d4b8}.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 </style>
 </head>
 <body>
 <div class="topbar"><div class="logo"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Plataforma Logística Transparente</span></div><div style="display:flex;align-items:center;gap:10px"><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div><div class="notif-btn">🔔<div class="notif-dot"></div></div></div></div>
 <div class="scroll">
-  <div class="page on" id="p-home">
+  <div class="page">
     <div class="pg-title" id="t-home-title">Inicio</div>
     <div class="pg-sub" id="t-home-sub">Bienvenido, comerciante</div>
     
     <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">Bloqueo de fletes</div><div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara y asegura tarifas</div></div></div>
+      <div><div style="font-size:28px;">📦</div><div><div style="font-weight:800; font-size:16px;" id="t-cost-card">Bloqueo de fletes</div><div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara y asegura tarifas</div></div></div>
     </div>
-    
     <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">Financiamiento</div><div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Para compradores</div></div></div>
+      <div><div style="font-size:28px;">💰</div><div><div style="font-weight:800; font-size:16px;" id="t-fin-card">Financiamiento</div><div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Para compradores</div></div></div>
     </div>
-    
     <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🏭</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
+      <div><div style="font-size:28px;">🏭</div><div><div style="font-weight:800; font-size:16px;" id="t-mic-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div></div></div>
     </div>
-    
     <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://spanish.alibaba.com/','_blank')">
-      <div style="display:flex; align-items:center; gap:12px;"><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
+      <div><div style="font-size:28px;">🌐</div><div><div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div><div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div></div></div>
     </div>
 
     <div class="service-card">
       <p><span class="icon">🛡️</span> <span id="service-text">Cargando...</span></p>
     </div>
 
-    <div style="margin-top: 8px;">
-      <div style="font-weight:700; font-size:14px; margin-bottom:8px;" id="t-more-platforms">Más plataformas B2B / 更多B2B平台</div>
-      <div class="platform-grid" id="platform-grid"></div>
-    </div>
-
-    <div style="margin-top:8px;">
-      <div style="font-weight:700; font-size:15px; margin-bottom:12px;" id="t-categories-title">Categorías de productos / 产品分类</div>
-      <div class="category-grid" id="category-grid"></div>
-    </div>
-
-    <div style="background:rgba(0,194,168,0.08); border-radius:12px; padding:12px; margin-top:16px;">
-      <div style="font-size:12px; color:var(--text2); text-align:center;" id="t-help">💡 Haz clic en cualquier categoría para buscar en Alibaba (versión en español)<br>点击任意分类，跳转到阿里巴巴西语站搜索产品</div>
-    </div>
-  </div>
-
-  <!-- 登录页面 -->
-  <div class="page" id="p-login">
-    <div class="login-tabs"><div class="login-tab active" id="tab-buyer" onclick="setLoginRole('buyer')"><div>🛒</div><div class="login-tab-name" id="t-tab-buyer">Comprador</div></div><div class="login-tab" id="tab-seller" onclick="setLoginRole('seller')"><div>🏭</div><div class="login-tab-name" id="t-tab-seller">Vendedor</div></div><div class="login-tab" id="tab-ff" onclick="setLoginRole('ff')"><div>🚢</div><div class="login-tab-name" id="t-tab-ff">Agente</div></div><div class="login-tab" id="tab-admin" onclick="setLoginRole('admin')"><div>⚙️</div><div class="login-tab-name" id="t-tab-admin">Admin</div></div></div>
-    <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--teal-d);border-radius:10px"><div id="login-role-icon">🛒</div><div><div style="font-size:12px;font-weight:700;color:var(--teal)" id="login-role-label">Comprador</div><div style="font-size:11px;color:var(--text2)" id="login-role-desc">Compare cotizaciones</div></div></div>
-      <div class="fg"><div class="fl"><span id="t-login-name-label">Nombre / Usuario</span></div><input class="fi" type="text" id="login-name" placeholder="Tu nombre"></div>
-      <div class="fg"><div class="fl"><span id="t-fl-login-email">Correo Electrónico</span></div><input class="fi" type="email" id="login-email" placeholder="nombre@empresa.com"></div>
-      <div class="fg"><div class="fl"><span id="t-fl-login-pw">Contraseña</span></div><div class="pw"><input class="fi" type="password" id="login-pw" placeholder="••••••••"><span class="pw-eye" onclick="togglePw()">👁</span></div></div>
-      <button class="btn" onclick="submitLogin()"><span id="t-login-btn">🔐 Entrada</span></button>
-    </div>
-    <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px" id="t-login-note">Al acceder, acepta los Términos de Uso.</div>
-  </div>
-
-  <!-- 询价页面 -->
-  <div class="page" id="p-orders">
-    <div class="pg-title" id="t-orders-title">Solicita Cotización</div><div class="pg-sub" id="t-orders-sub">Complete el formulario para solicitar el costo de flete y la operación logística</div>
-    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-cargo-info">📋 Información de la Carga</div>
-      <div class="fg"><div class="fl"><span id="t-fl-desc">Descripción</span></div><textarea class="fta" id="t-ph-desc" placeholder="Ej: Sillas ergonómicas..."></textarea></div>
-      <div class="g2"><div class="fg"><div class="fl"><span id="t-fl-weight">Peso Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-weight" placeholder="2400 kg"></div><div class="fg"><div class="fl"><span id="t-fl-vol">Volumen Total</span></div><input class="fi" type="text" inputmode="numeric" id="t-ph-vol" placeholder="18.5 m³"></div></div>
-      <div class="g2">
-        <div class="fg"><div class="fl"><span id="t-fl-origin">Puerto Origen / 出发港</span></div><select class="fs" id="t-sel-origin">
-          <option value="Ningbo" data-es="Ningbo" data-zh="宁波港">Ningbo</option>
-          <option value="Guangzhou" data-es="Guangzhou" data-zh="广州港">Guangzhou</option>
-          <option value="Shenzhen" data-es="Shenzhen" data-zh="深圳港">Shenzhen</option>
-          <option value="Shanghai" data-es="Shanghai" data-zh="上海港">Shanghai</option>
-        </select></div>
-        <div class="fg"><div class="fl"><span id="t-fl-dest">Puerto Destino / 目的港</span></div><select class="fs" id="t-sel-dest">
-          <option value="Callao" data-es="Puerto Callao (Perú)" data-zh="卡亚俄港（秘鲁）">Puerto Callao (Perú)</option>
-          <option value="Buenaventura" data-es="Puerto Buenaventura (Colombia)" data-zh="布埃纳文图拉港（哥伦比亚）">Puerto Buenaventura (Colombia)</option>
-          <option value="Valparaiso" data-es="Puerto Valparaíso (Chile)" data-zh="瓦尔帕莱索港（智利）">Puerto Valparaíso (Chile)</option>
-          <option value="Guayaquil" data-es="Puerto Guayaquil (Ecuador)" data-zh="瓜亚基尔港（厄瓜多尔）">Puerto Guayaquil (Ecuador)</option>
-        </select></div>
-      </div>
-      <div class="fg"><div class="fl"><span id="t-fl-mode">Modo de Envío</span></div><select class="fs"><option id="t-opt-lcl">LCL Consolidado</option><option id="t-opt-20">FCL 20GP</option><option id="t-opt-40">FCL 40HQ</option></select></div>
-      <div class="fg"><div class="fl"><span id="t-fl-hs">Código HS</span></div><input class="fi" id="t-ph-hs" placeholder="Ej: 9401.30"></div>
-    </div>
-    <div class="card"><div style="font-weight:700;margin-bottom:14px" id="t-contact-info">📱 Datos de Contacto</div>
-      <div class="fg"><div class="fl"><span>WhatsApp</span></div><div style="display:flex;gap:8px"><select class="fs" style="width:110px"><option>🇵🇪 +51</option><option>🇨🇴 +57</option></select><input class="fi" type="tel" id="t-ph-wa" placeholder="999 123 456"></div></div>
-      <div class="fg"><div class="fl"><span id="t-fl-email">Correo</span></div><input class="fi" type="email" id="t-ph-email" placeholder="nombre@empresa.com"></div>
-      <div class="fg"><div class="fl"><span id="t-fl-company">Empresa</span></div><input class="fi" id="t-ph-company" placeholder="Importadora Silva EIRL"></div>
-      <div class="fg"><div class="fl"><span id="t-fl-notes">Notas</span></div><textarea class="fta" id="t-ph-notes" placeholder="Requisitos especiales..."></textarea></div>
-    </div>
-    <button class="btn" onclick="submitOrder()"><span id="t-btn-submit">🚀 Enviar Solicitud</span></button><div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="t-submit-note">Los agentes recibirán su solicitud en 24h</div>
-  </div>
-
-  <!-- 核实供应商页面（已修复 FormSubmit） -->
-<!-- 核实供应商页面（已修复 FormSubmit） -->
-  <div class="page" id="p-inspeccion">
-    <div class="pg-title" id="t-ins-title">🔍 Verificar Proveedor</div>
-    <div class="pg-sub" id="t-ins-sub">Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad y ofrecerte logística independiente.</div>
-    <div class="card">
-      <div class="fg"><div class="fl"><span id="ins-name-label">Nombre del proveedor / 供应商名称</span></div><input class="fi" type="text" id="ins-name" placeholder="Ej: Shanghai XX Machinery Co."></div>
-      <div class="fg"><div class="fl"><span id="ins-url-label">Sitio web / 网站链接</span></div><input class="fi" type="url" id="ins-url" placeholder="https://..."></div>
-      <div class="fg"><div class="fl"><span id="ins-phone-label">Teléfono / WeChat del vendedor / 供应商电话/微信</span></div><input class="fi" type="text" id="ins-phone" placeholder="WeChat: xxx"></div>
-      <div class="fg"><div class="fl"><span id="ins-desc-label">Descripción del producto / 货物名称</span></div><textarea class="fta" id="ins-desc" placeholder="Ej: excavadora pequeña" rows="2"></textarea></div>
-      <div class="fg"><div class="fl"><span id="ins-wa-label">Tu WhatsApp / correo (para respuesta) / 您的联系方式</span></div><input class="fi" type="tel" id="ins-wa" placeholder="+51 999 123 456"></div>
-      <button class="btn" onclick="submitInspeccion()" id="t-ins-btn">📩 Enviar solicitud de verificación</button>
-      <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px">Te responderemos en < 48h</div>
-    </div>
+    <div><div style="font-weight:700; font-size:14px; margin-bottom:8px;" id="t-more-platforms">Más plataformas B2B / 更多B2B平台</div><div class="platform-grid" id="platform-grid"></div></div>
+    <div><div style="font-weight:700; font-size:15px; margin-bottom:12px;" id="t-categories-title">Categorías de productos / 产品分类</div><div class="category-grid" id="category-grid"></div></div>
+    <div style="background:rgba(0,194,168,0.08); border-radius:12px; padding:12px; margin-top:16px;"><div style="font-size:12px; color:var(--text2); text-align:center;" id="t-help">💡 Haz clic en cualquier categoría para buscar en Alibaba (versión en español)<br>点击任意分类，跳转到阿里巴巴西语站搜索产品</div></div>
   </div>
 </div>
 
 <div class="bnav">
-  <button class="bni on" onclick="goPage('home')"><div class="bni-icon">🏠</div><div class="bni-label" id="t-nav-home">Inicio</div></button>
-  <button class="bni" onclick="goPage('login')"><div class="bni-icon">🔐</div><div class="bni-label" id="t-nav-login">Entrada</div></button>
-  <button class="bni" onclick="goPage('orders')"><div class="bni-icon">📋</div><div class="bni-label" id="t-nav-orders">Cotizar</div></button>
-  <button class="bni" onclick="goPage('inspeccion')"><div class="bni-icon">🔍</div><div class="bni-label" id="t-nav-verify">Verificar</div></button>
+  <button class="bni on" onclick="window.location.href='index.html'"><div class="bni-icon">🏠</div><div class="bni-label" id="t-nav-home">Inicio</div></button>
+  <button class="bni" onclick="window.location.href='login.html'"><div class="bni-icon">🔐</div><div class="bni-label" id="t-nav-login">Entrada</div></button>
+  <button class="bni" onclick="window.location.href='orders.html'"><div class="bni-icon">📋</div><div class="bni-label" id="t-nav-orders">Cotizar</div></button>
+  <button class="bni" onclick="window.location.href='inspeccion.html'"><div class="bni-icon">🔍</div><div class="bni-label" id="t-nav-verify">Verificar</div></button>
 </div>
 
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
-// ==================== 多语言数据 ====================
 const T = {
   es: {
     'lo-es':'ES','lo-zh':'中','t-home-title':'Inicio','t-home-sub':'Bienvenido, comerciante',
@@ -187,13 +94,9 @@ const T = {
     't-ali-card':'Encontrar productos','t-ali-desc':'Alibaba.com',
     't-categories-title':'Categorías de productos',
     't-more-platforms':'Más plataformas B2B',
-    'service-text': 'Los enlaces externos te llevan a sitios de compra independientes. Puedes buscar productos y solicitar cotizaciones y datos de embalaje (volumen/peso) directamente a los proveedores. Nuestros servicios: cotización de fletes, verificación de proveedores, evaluación de precios, asesoría de métodos de pago, y selección de rutas logísticas para evitar sobrecostos en el puerto de destino. 👉 Envíanos la información del proveedor y te ayudamos a verificarlo.',
+    'service-text':'Los enlaces externos te llevan a sitios de compra independientes. Puedes buscar productos y solicitar cotizaciones y datos de embalaje (volumen/peso) directamente a los proveedores. Nuestros servicios: cotización de fletes, verificación de proveedores, evaluación de precios, asesoría de métodos de pago, y selección de rutas logísticas para evitar sobrecostos en el puerto de destino. 👉 Envíanos la información del proveedor y te ayudamos a verificarlo.',
     't-help':'💡 Haz clic en cualquier categoría para buscar en Alibaba (versión en español)',
-    't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar',
-    't-tab-buyer':'Comprador','t-tab-seller':'Vendedor','t-tab-ff':'Agente','t-tab-admin':'Admin',
-    't-login-name-label':'Nombre / Usuario','t-fl-login-email':'Correo Electrónico','t-fl-login-pw':'Contraseña','t-login-btn':'🔐 Entrada','t-login-note':'Al acceder, acepta los Términos de Uso.',
-    't-orders-title':'Solicita Cotización','t-orders-sub':'Complete el formulario...','t-cargo-info':'📋 Información de la Carga','t-fl-desc':'Descripción','t-fl-weight':'Peso','t-fl-vol':'Volumen','t-fl-origin':'Puerto Origen','t-fl-dest':'Puerto Destino','t-fl-mode':'Modo Envío','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS Code','t-contact-info':'📱 Datos de Contacto','t-fl-email':'Correo','t-fl-company':'Empresa','t-fl-notes':'Notas','t-btn-submit':'🚀 Enviar Solicitud','t-submit-note':'Los agentes recibirán su solicitud en 24h',
-    't-ins-title':'🔍 Verificar Proveedor','t-ins-sub':'Sube los datos de tu proveedor chino, te ayudamos a revisar su fiabilidad...','t-ins-btn':'📩 Enviar solicitud','ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo'
+    't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar'
   },
   zh: {
     'lo-es':'ES','lo-zh':'中','t-home-title':'采购导航','t-home-sub':'欢迎回来，商客',
@@ -203,200 +106,46 @@ const T = {
     't-ali-card':'找货源','t-ali-desc':'阿里巴巴国际站',
     't-categories-title':'产品分类',
     't-more-platforms':'更多B2B平台',
-    'service-text': '外部链接将带您前往独立的购物平台。您可以直接向供应商搜索产品并索要报价及包装信息（体积/重量）。我们的服务：运费报价、供应商核实、价格评估、付款方式建议、以及物流路线选择，帮助您避免目的港的不合理收费。👉 将供应商信息发给我们，我们将协助您核实。',
+    'service-text':'外部链接将带您前往独立的购物平台。您可以直接向供应商搜索产品并索要报价及包装信息（体积/重量）。我们的服务：运费报价、供应商核实、价格评估、付款方式建议、以及物流路线选择，帮助您避免目的港的不合理收费。👉 将供应商信息发给我们，我们将协助您核实。',
     't-help':'💡 点击任意分类，跳转到阿里巴巴西语站搜索产品',
-    't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实',
-    't-tab-buyer':'买方','t-tab-seller':'卖方','t-tab-ff':'货代','t-tab-admin':'管理员',
-    't-login-name-label':'姓名 / 用户名','t-fl-login-email':'邮箱','t-fl-login-pw':'密码','t-login-btn':'🔐 登录','t-login-note':'登录即同意条款。',
-    't-orders-title':'询价单','t-orders-sub':'填写表格以申请海运费及物流操作费用','t-cargo-info':'📋 货物信息','t-fl-desc':'描述','t-fl-weight':'重量','t-fl-vol':'体积','t-fl-origin':'出发港','t-fl-dest':'目的港','t-fl-mode':'运输方式','t-opt-lcl':'LCL','t-opt-20':'20GP','t-opt-40':'40HQ','t-fl-hs':'HS编码','t-contact-info':'📱 联系方式','t-fl-email':'邮箱','t-fl-company':'公司','t-fl-notes':'备注','t-btn-submit':'🚀 提交','t-submit-note':'货代24h内报价',
-    't-ins-title':'🔍 核实供应商','t-ins-sub':'提交供应商信息，我们帮您核查真实性','t-ins-btn':'📩 提交核实','ins-name-label':'供应商名称','ins-url-label':'网站链接','ins-phone-label':'供应商电话/微信','ins-desc-label':'货物名称','ins-wa-label':'您的联系方式'
+    't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实'
   }
 };
-
-// 20个产品分类
 const categories = [
-  { emoji: "👕", name_es: "Prendas de vestir", name_zh: "服装", keyword: "ropa" },
-  { emoji: "👟", name_es: "Calzado", name_zh: "鞋类", keyword: "zapatos" },
-  { emoji: "🧵", name_es: "Telas", name_zh: "纺织品", keyword: "tela" },
-  { emoji: "🏠", name_es: "Artículos para el hogar", name_zh: "家居用品", keyword: "hogar" },
-  { emoji: "🔧", name_es: "Herramientas", name_zh: "五金工具", keyword: "herramientas" },
-  { emoji: "🥤", name_es: "Productos plásticos", name_zh: "塑料制品", keyword: "plástico" },
-  { emoji: "📱", name_es: "Electrónicos", name_zh: "电子产品", keyword: "electrónicos" },
-  { emoji: "💄", name_es: "Belleza y cuidado personal", name_zh: "美妆个护", keyword: "belleza" },
-  { emoji: "🧸", name_es: "Juguetes", name_zh: "玩具", keyword: "juguetes" },
-  { emoji: "⚽", name_es: "Artículos deportivos", name_zh: "体育用品", keyword: "deportes" },
-  { emoji: "🪑", name_es: "Muebles", name_zh: "家具", keyword: "muebles" },
-  { emoji: "💡", name_es: "Iluminación", name_zh: "照明设备", keyword: "iluminación" },
-  { emoji: "🍳", name_es: "Utensilios de cocina", name_zh: "厨房用品", keyword: "cocina" },
-  { emoji: "📦", name_es: "Materiales de empaque", name_zh: "包装材料", keyword: "empaque" },
-  { emoji: "🧼", name_es: "Productos de higiene", name_zh: "卫生用品", keyword: "higiene" },
-  { emoji: "✏️", name_es: "Artículos de papelería", name_zh: "文具", keyword: "papelería" },
-  { emoji: "🚲", name_es: "Bicicletas y accesorios", name_zh: "自行车及配件", keyword: "bicicletas" },
-  { emoji: "🔌", name_es: "Pequeños electrodomésticos", name_zh: "小家电", keyword: "electrodomésticos" },
-  { emoji: "🧱", name_es: "Materiales de construcción", name_zh: "建筑材料", keyword: "construcción" },
-  { emoji: "🌾", name_es: "Insumos agrícolas", name_zh: "农用物资", keyword: "agrícola" }
+  { emoji:"👕",name_es:"Prendas de vestir",name_zh:"服装",keyword:"ropa" },
+  { emoji:"👟",name_es:"Calzado",name_zh:"鞋类",keyword:"zapatos" },
+  { emoji:"🧵",name_es:"Telas",name_zh:"纺织品",keyword:"tela" },
+  { emoji:"🏠",name_es:"Artículos para el hogar",name_zh:"家居用品",keyword:"hogar" },
+  { emoji:"🔧",name_es:"Herramientas",name_zh:"五金工具",keyword:"herramientas" },
+  { emoji:"🥤",name_es:"Productos plásticos",name_zh:"塑料制品",keyword:"plástico" },
+  { emoji:"📱",name_es:"Electrónicos",name_zh:"电子产品",keyword:"electrónicos" },
+  { emoji:"💄",name_es:"Belleza y cuidado personal",name_zh:"美妆个护",keyword:"belleza" },
+  { emoji:"🧸",name_es:"Juguetes",name_zh:"玩具",keyword:"juguetes" },
+  { emoji:"⚽",name_es:"Artículos deportivos",name_zh:"体育用品",keyword:"deportes" },
+  { emoji:"🪑",name_es:"Muebles",name_zh:"家具",keyword:"muebles" },
+  { emoji:"💡",name_es:"Iluminación",name_zh:"照明设备",keyword:"iluminación" },
+  { emoji:"🍳",name_es:"Utensilios de cocina",name_zh:"厨房用品",keyword:"cocina" },
+  { emoji:"📦",name_es:"Materiales de empaque",name_zh:"包装材料",keyword:"empaque" },
+  { emoji:"🧼",name_es:"Productos de higiene",name_zh:"卫生用品",keyword:"higiene" },
+  { emoji:"✏️",name_es:"Artículos de papelería",name_zh:"文具",keyword:"papelería" },
+  { emoji:"🚲",name_es:"Bicicletas y accesorios",name_zh:"自行车及配件",keyword:"bicicletas" },
+  { emoji:"🔌",name_es:"Pequeños electrodomésticos",name_zh:"小家电",keyword:"electrodomésticos" },
+  { emoji:"🧱",name_es:"Materiales de construcción",name_zh:"建筑材料",keyword:"construcción" },
+  { emoji:"🌾",name_es:"Insumos agrícolas",name_zh:"农用物资",keyword:"agrícola" }
 ];
-
-// 更多B2B平台
 const morePlatforms = [
-  { name_es: "DHgate", name_zh: "敦煌网", url: "https://es.dhgate.com/" },
-  { name_es: "Global Sources", name_zh: "环球资源", url: "https://www.globalsources.com" },
-  { name_es: "Yiwugo", name_zh: "义乌购", url: "https://g.yiwugo.com/" }
+  { name_es:"DHgate",name_zh:"敦煌网",url:"https://es.dhgate.com/" },
+  { name_es:"Global Sources",name_zh:"环球资源",url:"https://www.globalsources.com" },
+  { name_es:"Yiwugo",name_zh:"义乌购",url:"https://g.yiwugo.com/" }
 ];
-
 let currentLang = 'es';
-
-function renderCategoryGrid() {
-  const grid = document.getElementById('category-grid');
-  if (!grid) return;
-  grid.innerHTML = categories.map(cat => `
-    <div class="cat-card" onclick="searchOnAliExpress('${cat.keyword}')">
-      <div class="cat-emoji">${cat.emoji}</div>
-      <div class="cat-name">${currentLang === 'es' ? cat.name_es : cat.name_zh}</div>
-      <div class="cat-name-es">${currentLang === 'es' ? '' : cat.name_es}</div>
-    </div>
-  `).join('');
-}
-
-function renderPlatformGrid() {
-  const grid = document.getElementById('platform-grid');
-  if (!grid) return;
-  grid.innerHTML = morePlatforms.map(p => `
-    <div class="platform-card" onclick="window.open('${p.url}','_blank')">
-      <div class="platform-name">${currentLang === 'es' ? p.name_es : p.name_zh}</div>
-      <div class="platform-desc">B2B Platform</div>
-    </div>
-  `).join('');
-}
-
-function searchOnAliExpress(keyword) {
-  const searchTerm = encodeURIComponent(keyword);
-  const url = `https://www.alibaba.com/trade/search?SearchText=${searchTerm}&lang=es`;
-  showToast(currentLang === 'es' ? 'Abriendo Alibaba...' : '正在打开阿里巴巴...');
-  window.open(url, '_blank');
-}
-
-function updateOriginDestOptions() {
-  const originSelect = document.getElementById('t-sel-origin');
-  const destSelect = document.getElementById('t-sel-dest');
-  if (!originSelect || !destSelect) return;
-  for (let opt of originSelect.options) {
-    opt.text = currentLang === 'es' ? opt.getAttribute('data-es') : opt.getAttribute('data-zh');
-  }
-  for (let opt of destSelect.options) {
-    opt.text = currentLang === 'es' ? opt.getAttribute('data-es') : opt.getAttribute('data-zh');
-  }
-}
-
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  toast.style.display = 'block';
-  setTimeout(() => { toast.style.display = 'none'; }, 2000);
-}
-
-function applyLang() {
-  const t = T[currentLang];
-  for (let [id, val] of Object.entries(t)) {
-    let el = document.getElementById(id);
-    if (el) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
-      else el.innerHTML = val;
-    }
-  }
-  const serviceSpan = document.getElementById('service-text');
-  if (serviceSpan) serviceSpan.innerHTML = t['service-text'];
-  renderCategoryGrid();
-  renderPlatformGrid();
-  updateOriginDestOptions();
-  document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
-  document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
-  updateLoginRoleUI();
-}
-
-function toggleLang() {
-  currentLang = currentLang === 'es' ? 'zh' : 'es';
-  applyLang();
-}
-
-function goPage(id) {
-  const pages = ['home','login','orders','inspeccion'];
-  pages.forEach(p => {
-    const pageEl = document.getElementById('p-'+p);
-    if (pageEl) pageEl.classList.remove('on');
-    const navBtn = document.getElementById('bni-'+p);
-    if (navBtn) navBtn.classList.remove('on');
-  });
-  document.getElementById('p-'+id).classList.add('on');
-  const activeNav = document.getElementById('bni-'+id);
-  if (activeNav) activeNav.classList.add('on');
-  document.querySelector('.scroll').scrollTop = 0;
-}
-
-let loginRole = 'buyer';
-function setLoginRole(role) { loginRole = role; ['buyer','seller','ff','admin'].forEach(r => { const tab = document.getElementById('tab-'+r); if(tab) tab.classList.toggle('active', r===role); }); updateLoginRoleUI(); }
-function updateLoginRoleUI() {
-  const m = { buyer:{icon:'🛒',label_es:'Comprador',label_zh:'买方'}, seller:{icon:'🏭',label_es:'Vendedor',label_zh:'卖方'}, ff:{icon:'🚢',label_es:'Agente',label_zh:'货代'}, admin:{icon:'⚙️',label_es:'Admin',label_zh:'管理员'} };
-  let r = loginRole;
-  document.getElementById('login-role-icon').textContent = m[r].icon;
-  document.getElementById('login-role-label').textContent = currentLang==='zh'? m[r].label_zh : m[r].label_es;
-  const descMap = { buyer: currentLang==='zh'?'比较报价':'Compare cotizaciones', seller: currentLang==='zh'?'提供FOB':'Cotice en FOB', ff: currentLang==='zh'?'报价服务':'Publique oferta', admin: currentLang==='zh'?'后台管理':'Panel Admin' };
-  document.getElementById('login-role-desc').textContent = descMap[r] || '';
-}
-function togglePw() { let p = document.getElementById('login-pw'); p.type = p.type === 'password' ? 'text' : 'password'; }
-function submitLogin() { let name=document.getElementById('login-name').value.trim(), email=document.getElementById('login-email').value.trim(), pw=document.getElementById('login-pw').value; if(!name||!email||!pw){ showToast(currentLang==='zh'?'请填写姓名、邮箱和密码':'Complete nombre, correo y contraseña'); return; } showToast(currentLang==='zh'?'登录成功':'Bienvenido'); setTimeout(()=>goPage('home'),500); }
-function submitOrder() { showToast(currentLang==='zh'?'询价已提交':'Solicitud enviada'); setTimeout(()=>goPage('home'),600); }
-
-// ========== 核实供应商提交函数（使用 FormSubmit） ==========
-function submitInspeccion() {
-    const name = document.getElementById('ins-name').value.trim();
-    const url = document.getElementById('ins-url').value.trim();
-    const phone = document.getElementById('ins-phone').value.trim();
-    const desc = document.getElementById('ins-desc').value.trim();
-    const wa = document.getElementById('ins-wa').value.trim();
-
-    if (!name || !url || !wa) {
-        showToast(lang === 'zh' ? '请至少填写供应商名称、网址和您的联系方式' : 'Complete nombre, sitio web y su contacto');
-        return;
-    }
-
-    fetch('https://formsubmit.co/ajax/latinavance.latinavance@gmail.com', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            name: name,
-            website: url,
-            phone: phone,
-            product_desc: desc,
-            contact: wa,
-            _subject: 'Nueva solicitud de verificación de proveedor'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showToast(lang === 'zh' ? '✅ 已提交，我们将在48小时内核实并回复' : '✅ Solicitud enviada, revisaremos en 48h');
-            setTimeout(() => goPage('home'), 2000);
-        } else {
-            showToast(lang === 'zh' ? '提交失败，请稍后重试' : 'Error, intente de nuevo');
-            console.error('FormSubmit error:', data);
-        }
-    })
-    .catch(error => {
-        console.error('Fetch error:', error);
-        showToast(lang === 'zh' ? '网络错误，请检查连接' : 'Error de red');
-    });
-}
-
-window.addEventListener('load', () => {
-  applyLang();
-  setLoginRole('buyer');
-  renderCategoryGrid();
-  renderPlatformGrid();
-});
+function renderCategoryGrid(){const g=document.getElementById('category-grid');if(!g)return;g.innerHTML=categories.map(c=>`<div class="cat-card" onclick="searchOnAliExpress('${c.keyword}')"><div class="cat-emoji">${c.emoji}</div><div class="cat-name">${currentLang==='es'?c.name_es:c.name_zh}</div><div class="cat-name-es">${currentLang==='es'?'':c.name_es}</div></div>`).join('');}
+function renderPlatformGrid(){const g=document.getElementById('platform-grid');if(!g)return;g.innerHTML=morePlatforms.map(p=>`<div class="platform-card" onclick="window.open('${p.url}','_blank')"><div class="platform-name">${currentLang==='es'?p.name_es:p.name_zh}</div><div class="platform-desc">B2B Platform</div></div>`).join('');}
+function searchOnAliExpress(k){const url=`https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(k)}&lang=es`;showToast(currentLang==='es'?'Abriendo Alibaba...':'正在打开阿里巴巴...');window.open(url,'_blank');}
+function showToast(m){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2000);}
+function applyLang(){const t=T[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerHTML=val;}const sv=document.getElementById('service-text');if(sv)sv.innerHTML=t['service-text'];renderCategoryGrid();renderPlatformGrid();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
+function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();}
+window.addEventListener('load',()=>{applyLang();renderCategoryGrid();renderPlatformGrid();});
 </script>
 </body>
 </html>
