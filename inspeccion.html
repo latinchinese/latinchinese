@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>核实供应商 · 透明化物流平台</title>
 <style>
-/* 复用 orders 样式 */
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto;padding-bottom:30px}
 .topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1)}
@@ -36,31 +35,98 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
   <div style="font-size:12px;color:#7A9AB8;text-align:center;margin-top:12px">Te responderemos en < 48h</div>
 </div>
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
+
 <script>
 const T = {
-  es: { 'back-home-text':'← Volver al Inicio','ins-name-label':'Nombre del proveedor','ins-url-label':'Sitio web','ins-phone-label':'Teléfono / WeChat','ins-desc-label':'Descripción del producto','ins-wa-label':'Tu WhatsApp / correo','t-ins-btn':'📩 Enviar solicitud de verificación' },
-  zh: { 'back-home-text':'← 返回首页','ins-name-label':'供应商名称','ins-url-label':'网站链接','ins-phone-label':'供应商电话/微信','ins-desc-label':'货物名称','ins-wa-label':'您的联系方式','t-ins-btn':'📩 提交核实' }
+  es: { 
+    'back-home-text':'← Volver al Inicio',
+    'ins-name-label':'Nombre del proveedor',
+    'ins-url-label':'Sitio web',
+    'ins-phone-label':'Teléfono / WeChat',
+    'ins-desc-label':'Descripción del producto',
+    'ins-wa-label':'Tu WhatsApp / correo',
+    't-ins-btn':'📩 Enviar solicitud de verificación'
+  },
+  zh: { 
+    'back-home-text':'← 返回首页',
+    'ins-name-label':'供应商名称',
+    'ins-url-label':'网站链接',
+    'ins-phone-label':'供应商电话/微信',
+    'ins-desc-label':'货物名称',
+    'ins-wa-label':'您的联系方式',
+    't-ins-btn':'📩 提交核实'
+  }
 };
 let currentLang = 'es';
-function applyLang(){const t=T[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerText=val;}}
-function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
-function showToast(m){let t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
-function submitInspeccion(){
-  const name=document.getElementById('ins-name').value.trim();
-  const url=document.getElementById('ins-url').value.trim();
-  const phone=document.getElementById('ins-phone').value.trim();
-  const desc=document.getElementById('ins-desc').value.trim();
-  const wa=document.getElementById('ins-wa').value.trim();
-  if(!name||!url||!wa){showToast(currentLang==='zh'?'请至少填写供应商名称、网址和您的联系方式':'Complete nombre, sitio web y su contacto');return;}
-  fetch('https://formsubmit.co/ajax/latinavance.latinavance@gmail.com',{
-    method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({name:name,website:url,phone:phone,product_desc:desc,contact:wa,_subject:'Nueva solicitud de verificación de proveedor'})
-  }).then(r=>r.json()).then(data=>{
-    if(data.success){showToast(currentLang==='zh'?'✅ 已提交，我们将在48小时内核实并回复':'✅ Solicitud enviada, revisaremos en 48h');setTimeout(()=>window.location.href='index.html',2000);}
-    else{showToast(currentLang==='zh'?'提交失败，请稍后重试':'Error, intente de nuevo');}
-  }).catch(e=>{showToast(currentLang==='zh'?'网络错误，请检查连接':'Error de red');});
+
+function applyLang() {
+  const t = T[currentLang];
+  for (let [id, val] of Object.entries(t)) {
+    let el = document.getElementById(id);
+    if (el) el.innerText = val;
+  }
 }
-window.addEventListener('load',()=>{applyLang();});
+
+function toggleLang() {
+  currentLang = currentLang === 'es' ? 'zh' : 'es';
+  applyLang();
+  document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
+  document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+
+function submitInspeccion() {
+  const name = document.getElementById('ins-name').value.trim();
+  const url = document.getElementById('ins-url').value.trim();
+  const phone = document.getElementById('ins-phone').value.trim();
+  const desc = document.getElementById('ins-desc').value.trim();
+  const wa = document.getElementById('ins-wa').value.trim();
+
+  if (!name || !url || !wa) {
+    showToast(currentLang === 'zh' ? '请至少填写供应商名称、网址和您的联系方式' : 'Complete nombre, sitio web y su contacto');
+    return;
+  }
+
+  fetch('https://formsubmit.co/ajax/latinavance.latinavance@gmail.com', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      name: name,
+      website: url,
+      phone: phone,
+      product_desc: desc,
+      contact: wa,
+      _subject: 'Nueva solicitud de verificación de proveedor'
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast(currentLang === 'zh' ? '✅ 已提交，我们将在48小时内核实并回复' : '✅ Solicitud enviada, revisaremos en 48h');
+      setTimeout(() => window.location.href = 'index.html', 2000);
+    } else {
+      showToast(currentLang === 'zh' ? '提交失败，请稍后重试' : 'Error, intente de nuevo');
+      console.error('FormSubmit error:', data);
+    }
+  })
+  .catch(error => {
+    console.error('Fetch error:', error);
+    showToast(currentLang === 'zh' ? '网络错误，请检查连接' : 'Error de red');
+  });
+}
+
+window.addEventListener('load', () => {
+  applyLang();
+});
 </script>
 </body>
 </html>
