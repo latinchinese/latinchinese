@@ -16,11 +16,11 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 .back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
 .pg-title{font-weight:800;font-size:24px;margin:12px 18px}
 .financing-item{background:#0D1E33;border-radius:16px;padding:16px;margin:12px 18px;border-left:4px solid #F5A623}
-.financing-amount{font-size:20px;font-weight:700;color:#F5A623;margin-bottom:4px}
-.financing-term{font-size:12px;color:#7A9AB8;margin-bottom:12px}
+.financing-amount{font-size:18px;font-weight:700;color:#F5A623;margin-bottom:4px}
+.financing-term{font-size:13px;color:#7A9AB8;margin-bottom:12px}
 .detail-row{display:flex;margin-bottom:8px;align-items:flex-start}
-.detail-icon{width:32px;font-size:18px;color:#00C2A8}
-.detail-label{width:100px;font-weight:600;color:#7A9AB8;font-size:13px}
+.detail-icon{width:28px;font-size:18px;color:#00C2A8;text-align:center;flex-shrink:0}
+.detail-label{width:85px;font-weight:600;color:#7A9AB8;font-size:13px;flex-shrink:0}
 .detail-value{flex:1;color:#E2EDF8;font-size:13px;line-height:1.4}
 .purpose-text{color:#E2EDF8;font-size:13px;margin-top:2px}
 .purpose-line{color:#F5A623;font-size:12px;margin-bottom:2px}
@@ -73,55 +73,61 @@ const langData = {
 
 let currentLang = 'es';
 
-// 脱敏函数：保留公司类型后缀（如 SAC, EIRL）
-function maskCompany(company){
+// 公司名称缩写（取每个单词首字母，保留原顺序）
+function abbreviateCompany(company){
   if(!company) return '';
-  // 匹配常见的公司类型后缀
-  const suffixMatch = company.match(/(\s+(SAC|EIRL|S\.A\.|C\.A\.|Ltda\.|SRL|S\.R\.L\.|Cía\.|Limitada|Asociación|Corporación|Group|Co\.|Ltd\.?))$/i);
-  let suffix = suffixMatch ? suffixMatch[1] : '';
-  let base = suffix ? company.slice(0, -suffix.length) : company;
-  if(base.length <= 3) return base + '***' + suffix;
-  let masked = base.slice(0, base.length - 2) + '**';
-  return masked + suffix;
+  // 分割单词（按空格或连字符）
+  let words = company.split(/\s+|-/);
+  let abbreviation = '';
+  for(let w of words){
+    if(w.length > 0 && /[A-Za-z]/i.test(w[0])){
+      abbreviation += w[0].toUpperCase();
+    }
+  }
+  return abbreviation || company.slice(0,4).toUpperCase();
 }
+
 function maskPhone(phone){
   if(!phone) return '';
-  let cleaned=phone.replace(/\D/g,'');
-  if(cleaned.length<=6) return phone.slice(0,2)+'***'+phone.slice(-2);
-  return phone.slice(0,3)+'***'+phone.slice(-3);
+  let cleaned = phone.replace(/\D/g,'');
+  if(cleaned.length <= 6) return phone.slice(0,2) + '****' + phone.slice(-2);
+  return phone.slice(0,3) + '****' + phone.slice(-3);
 }
 function maskEmail(email){
   if(!email) return '';
-  let parts=email.split('@');
-  if(parts.length<2) return email;
-  let local=parts[0];
-  if(local.length<=2) return local+'***@'+parts[1];
-  return local.slice(0,2)+'***@'+parts[1];
+  let parts = email.split('@');
+  if(parts.length < 2) return email;
+  let local = parts[0];
+  if(local.length <= 2) return local + '****@' + parts[1];
+  return local.slice(0,2) + '****@' + parts[1];
 }
 
 function renderBoard(){
-  const container=document.getElementById('board-container');
+  const container = document.getElementById('board-container');
   if(!container) return;
-  const requests=JSON.parse(localStorage.getItem('financing_requests')||'[]');
+  const requests = JSON.parse(localStorage.getItem('financing_requests')||'[]');
   const t = langData[currentLang];
-  if(requests.length===0){
-    container.innerHTML=`<div class="empty">${t['empty']}</div>`;
+  if(requests.length === 0){
+    container.innerHTML = `<div class="empty">${t['empty']}</div>`;
     return;
   }
-  container.innerHTML=requests.map(req=>{
-    const financed=(req.total*req.ratio/100).toFixed(0);
-    const maskedCompany=maskCompany(req.company);
-    const maskedWhatsapp=maskPhone(req.whatsapp);
-    const maskedEmail=maskEmail(req.email);
-    // 融资方式显示转换
+  container.innerHTML = requests.map(req => {
+    const financed = (req.total * req.ratio / 100).toFixed(0);
+    // 金额显示格式：$12500 (相当于 $25000 的 50%)
+    const amountDisplay = `${t['amount']}: $${financed} (equivalente a $${req.total} al ${req.ratio}%)`;
+    const termDisplay = `${t['term']}: ${req.term} ${t['days']}`;
+    const maskedCompany = abbreviateCompany(req.company);
+    const maskedWhatsapp = maskPhone(req.whatsapp);
+    const maskedEmail = maskEmail(req.email);
+    
     let methodDisplay = req.method;
     if(req.method === 'Carta de crédito diferida') methodDisplay = (currentLang === 'es') ? 'Carta de crédito diferida' : '远期信用证';
     else if(req.method === 'Pago directo a proveedor') methodDisplay = (currentLang === 'es') ? 'Pago directo a proveedor' : '直接支付给供应商';
     
     return `
       <div class="financing-item">
-        <div class="financing-amount">${t['amount']}: ${req.total} USD (${req.ratio}% = ${financed} USD)</div>
-        <div class="financing-term">${t['term']}: ${req.term} ${t['days']}</div>
+        <div class="financing-amount">${amountDisplay}</div>
+        <div class="financing-term">${termDisplay}</div>
         
         <div class="detail-row">
           <div class="detail-icon">🏢</div>
@@ -172,7 +178,7 @@ function toggleLang(){
   currentLang = currentLang === 'es' ? 'zh' : 'es';
   applyLang();
 }
-window.addEventListener('load',()=>{
+window.addEventListener('load', ()=>{
   applyLang();
 });
 </script>
