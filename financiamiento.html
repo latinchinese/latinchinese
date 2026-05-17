@@ -29,6 +29,7 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 <div class="pg-title" id="page-title">📢 Publicar necesidad de financiamiento</div>
 
 <div class="card">
+  <div class="fg"><div class="fl"><span id="label-country">País / 国家 *</span></div><select id="country" class="fs"><option value="Perú">Perú / 秘鲁</option><option value="Chile">Chile / 智利</option><option value="Colombia">Colombia / 哥伦比亚</option><option value="Ecuador">Ecuador / 厄瓜多尔</option></select></div>
   <div class="fg"><div class="fl"><span id="label-company">Nombre de la empresa / 公司全称 *</span></div><input class="fi" type="text" id="company" placeholder="Ej: Importadora Silva EIRL"></div>
   <div class="fg"><div class="fl"><span id="label-tax">RUC / NIT / Tax ID *</span></div><input class="fi" type="text" id="tax" placeholder="20614798301"></div>
   <div class="fg"><div class="fl"><span id="label-contact">Nombre del contacto / 联系人姓名 *</span></div><input class="fi" type="text" id="contact" placeholder="Carlos Gómez"></div>
@@ -47,14 +48,15 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 
 <script>
 const langData = {
-  es: { 'back-home-text':'← Volver al Inicio','page-title':'📢 Publicar necesidad de financiamiento','label-company':'Nombre de la empresa *','label-tax':'RUC / NIT / Tax ID *','label-contact':'Nombre del contacto *','label-wa':'WhatsApp *','label-email':'Correo electrónico *','label-product':'Producto *','label-total':'Monto total (USD) *','label-paid':'% ya pagado *','label-ratio':'% de financiamiento solicitado','label-term':'Plazo (días) *','label-method':'Método de financiamiento','label-notes':'Notas adicionales','submit-btn':'📌 Publicar necesidad' },
-  zh: { 'back-home-text':'← 返回首页','page-title':'📢 发布融资需求','label-company':'公司全称 *','label-tax':'税务号 *','label-contact':'联系人姓名 *','label-wa':'WhatsApp *','label-email':'邮箱 *','label-product':'产品名称 *','label-total':'总金额 (美元) *','label-paid':'已支付比例 (%) *','label-ratio':'融资比例 (%)','label-term':'融资期限 (天) *','label-method':'融资方式','label-notes':'备注','submit-btn':'📌 发布需求' }
+  es: { 'back-home-text':'← Volver al Inicio','page-title':'📢 Publicar necesidad de financiamiento','label-country':'País *','label-company':'Nombre de la empresa *','label-tax':'RUC / NIT *','label-contact':'Nombre del contacto *','label-wa':'WhatsApp *','label-email':'Correo electrónico *','label-product':'Producto *','label-total':'Monto total (USD) *','label-paid':'% ya pagado *','label-ratio':'% de financiamiento','label-term':'Plazo (días) *','label-method':'Método de financiamiento','label-notes':'Notas adicionales','submit-btn':'📌 Publicar necesidad' },
+  zh: { 'back-home-text':'← 返回首页','page-title':'📢 发布融资需求','label-country':'国家 *','label-company':'公司全称 *','label-tax':'税务号 *','label-contact':'联系人姓名 *','label-wa':'WhatsApp *','label-email':'邮箱 *','label-product':'产品名称 *','label-total':'总金额 (美元) *','label-paid':'已支付比例 (%) *','label-ratio':'融资比例 (%)','label-term':'融资期限 (天) *','label-method':'融资方式','label-notes':'备注','submit-btn':'📌 发布需求' }
 };
 let currentLang = 'es';
 function applyLang(){const t=langData[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerText=val;}}
 function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
 function showToast(m){let t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
 function submitFinancing(){
+  const country=document.getElementById('country').value;
   const company=document.getElementById('company').value.trim();
   const tax=document.getElementById('tax').value.trim();
   const contact=document.getElementById('contact').value.trim();
@@ -67,9 +69,9 @@ function submitFinancing(){
   const term=parseInt(document.getElementById('term').value);
   const method=document.getElementById('method').value;
   const notes=document.getElementById('notes').value.trim();
-  if(!company||!tax||!contact||!whatsapp||!email||!product||isNaN(total)||isNaN(paid)){showToast(currentLang==='zh'?'请填写所有必填项':'Complete todos los campos');return;}
+  if(!country||!company||!tax||!contact||!whatsapp||!email||!product||isNaN(total)||isNaN(paid)){showToast(currentLang==='zh'?'请填写所有必填项':'Complete todos los campos');return;}
   const needed=(total*ratio/100).toFixed(0);
-  const newRequest={id:Date.now(),company,tax,contact,whatsapp,email,product,total,paid,ratio,needed,term,method,notes,date:new Date().toISOString()};
+  const newRequest={id:Date.now(),country,company,tax,contact,whatsapp,email,product,total,paid,ratio,needed,term,method,notes,date:new Date().toISOString()};
   let requests=JSON.parse(localStorage.getItem('financing_requests')||'[]');
   requests.unshift(newRequest);
   localStorage.setItem('financing_requests',JSON.stringify(requests));

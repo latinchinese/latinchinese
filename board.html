@@ -18,9 +18,12 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 .financing-item{background:#0D1E33;border-radius:16px;padding:16px;margin:12px 18px;border-left:4px solid #F5A623}
 .financing-amount{font-size:20px;font-weight:700;color:#F5A623}
 .financing-term{font-size:12px;color:#7A9AB8;margin:4px 0}
-.pill-sm{display:inline-block;background:rgba(0,194,168,0.13);color:#00C2A8;padding:2px 10px;border-radius:20px;font-size:11px}
-.contact-note{font-size:12px;color:#7A9AB8;margin-top:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px}
+.row{display:flex;flex-wrap:wrap;margin:6px 0}
+.label{width:110px;font-weight:600;color:#7A9AB8;font-size:13px}
+.value{flex:1;color:#E2EDF8;font-size:13px}
+.contact-note{margin-top:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px;font-size:12px;color:#7A9AB8}
 .contact-note a{color:#00C2A8;text-decoration:none}
+.empty{text-align:center;padding:40px;color:#7A9AB8}
 </style>
 </head>
 <body>
@@ -28,66 +31,83 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 <div class="back-home" onclick="window.location.href='index.html'"><span id="back-home-text">← Volver al Inicio</span></div>
 <div class="pg-title" id="page-title">📢 Solicitudes de financiamiento</div>
 <div id="board-container"></div>
-<div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
-const langData = {
-  es: { 
-    'back-home-text':'← Volver al Inicio',
-    'page-title':'📢 Solicitudes de financiamiento',
-    'empty':'No hay solicitudes publicadas. ¡Sé el primero!',
-    'contact-message':'📧 Para más detalles, contacta a la plataforma:',
-    'email':'info@latinchinese.com'
-  },
-  zh: { 
-    'back-home-text':'← 返回首页',
-    'page-title':'📢 融资需求列表',
-    'empty':'暂无融资需求。快来发布第一条吧！',
-    'contact-message':'📧 有关融资细节，请直接发邮件与平台联系：',
-    'email':'info@latinchinese.com'
-  }
-};
-let currentLang = 'es';
-
-function maskString(str, visibleStart=2, visibleEnd=1){
-  if(!str) return ''; if(str.length<=visibleStart+visibleEnd) return str[0]+'***'; return str.slice(0,visibleStart)+'***'+str.slice(-visibleEnd);
+// 静态双语内容（无需语言切换，直接显示中西文）
+function maskCompany(company){
+  if(!company) return '';
+  if(company.length <= 4) return company[0]+'***';
+  return company.slice(0, company.length-2) + '**';
 }
 function maskPhone(phone){
-  if(!phone) return ''; let cleaned=phone.replace(/\D/g,''); if(cleaned.length<=6) return phone.slice(0,2)+'***'+phone.slice(-2); return phone.slice(0,3)+'***'+phone.slice(-3);
+  if(!phone) return '';
+  let cleaned=phone.replace(/\D/g,'');
+  if(cleaned.length<=6) return phone.slice(0,2)+'***'+phone.slice(-2);
+  return phone.slice(0,3)+'***'+phone.slice(-3);
 }
 function maskEmail(email){
-  if(!email) return ''; let parts=email.split('@'); if(parts.length<2) return email; let local=parts[0]; if(local.length<=2) return local+'***@'+parts[1]; return local.slice(0,2)+'***@'+parts[1];
+  if(!email) return '';
+  let parts=email.split('@');
+  if(parts.length<2) return email;
+  let local=parts[0];
+  if(local.length<=2) return local+'***@'+parts[1];
+  return local.slice(0,2)+'***@'+parts[1];
 }
+
 function renderBoard(){
   const container=document.getElementById('board-container');
   if(!container) return;
   const requests=JSON.parse(localStorage.getItem('financing_requests')||'[]');
   if(requests.length===0){
-    container.innerHTML=`<div class="financing-item" style="text-align:center">${langData[currentLang]['empty']}</div>`;
+    container.innerHTML=`<div class="empty">暂无融资需求。快来发布第一条吧！<br>No hay solicitudes publicadas. ¡Sé el primero!</div>`;
     return;
   }
-  const t = langData[currentLang];
   container.innerHTML=requests.map(req=>{
     const financed=(req.total*req.ratio/100).toFixed(0);
-    const maskedCompany=maskString(req.company,3,2);
+    const maskedCompany=maskCompany(req.company);
     const maskedWhatsapp=maskPhone(req.whatsapp);
     const maskedEmail=maskEmail(req.email);
-    const product=req.product.length>40?req.product.slice(0,40)+'…':req.product;
+    const countryName = req.country || 'Perú';
+    // 融资方式翻译
+    let methodDisplay = req.method;
+    if(req.method === 'Carta de crédito diferida') methodDisplay = '远期信用证 / Carta de crédito diferida';
+    else if(req.method === 'Pago directo a proveedor') methodDisplay = '直接支付给供应商 / Pago directo a proveedor';
+    else methodDisplay = req.method;
     return `
       <div class="financing-item">
-        <div class="financing-amount">💰 ${req.total} USD</div>
-        <div class="financing-term">📊 ${req.ratio}% (${financed} USD) | ⏱ ${req.term} días</div>
-        <div><span class="pill-sm">🏢 ${maskedCompany}</span></div>
-        <div>📦 ${product}</div>
-        <div>📞 ${maskedWhatsapp} | ✉️ ${maskedEmail}</div>
-        <div class="contact-note">${t['contact-message']} <a href="mailto:${t['email']}">${t['email']}</a></div>
+        <div class="financing-amount">💰 ${req.total} USD  <span style="font-size:12px; color:#7A9AB8;">(${req.ratio}% financiamiento = ${financed} USD)</span></div>
+        <div class="financing-term">⏱ ${req.term} días / 天</div>
+        
+        <div class="row"><div class="label">🌍 País / 国家:</div><div class="value">${countryName}</div></div>
+        <div class="row"><div class="label">🏢 Empresa / 公司:</div><div class="value">${maskedCompany}</div></div>
+        <div class="row"><div class="label">📦 Producto / 产品:</div><div class="value">${req.product}</div></div>
+        <div class="row"><div class="label">💳 Método / 支付方式:</div><div class="value">${methodDisplay}</div></div>
+        <div class="row"><div class="label">📞 Contacto / 联系方式:</div><div class="value">${maskedWhatsapp} | ${maskedEmail}</div></div>
+        
+        <div class="contact-note">
+          📧 有关融资细节，请直接发邮件与平台联系：<a href="mailto:info@latinchinese.com">info@latinchinese.com</a><br>
+          📧 Para más detalles, contacta a la plataforma: <a href="mailto:info@latinchinese.com">info@latinchinese.com</a>
+        </div>
       </div>
     `;
   }).join('');
 }
-function applyLang(){const t=langData[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerText=val;}renderBoard();}
-function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
-window.addEventListener('load',()=>{applyLang();});
+
+function toggleLang(){
+  // 此页面不需要语言切换，因为已经是双语显示，但为了保留顶部按钮的视觉效果，仍做简单处理
+  const esBtn=document.getElementById('lo-es');
+  const zhBtn=document.getElementById('lo-zh');
+  const isEs=esBtn.classList.contains('on');
+  if(isEs){
+    esBtn.classList.remove('on');
+    zhBtn.classList.add('on');
+  } else {
+    esBtn.classList.add('on');
+    zhBtn.classList.remove('on');
+  }
+  // 页面内容已经是双语，所以不需要重新渲染
+}
+window.addEventListener('load',()=>{renderBoard();});
 </script>
 </body>
 </html>
