@@ -16,12 +16,10 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 .back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
 .pg-title{font-weight:800;font-size:24px;margin:12px 18px}
 .financing-item{background:#0D1E33;border-radius:16px;padding:16px;margin:12px 18px;border-left:4px solid #F5A623}
-.financing-amount{font-size:18px;font-weight:700;color:#F5A623;margin-bottom:4px}
-.financing-term{font-size:13px;color:#7A9AB8;margin-bottom:12px}
-.detail-row{display:flex;margin-bottom:8px;align-items:flex-start}
-.detail-icon{width:28px;font-size:18px;color:#00C2A8;text-align:center;flex-shrink:0}
-.detail-label{width:85px;font-weight:600;color:#7A9AB8;font-size:13px;flex-shrink:0}
-.detail-value{flex:1;color:#E2EDF8;font-size:13px;line-height:1.4}
+.detail-grid{display:grid;grid-template-columns:30px auto 1fr;align-items:start;gap:6px 0;margin-bottom:8px}
+.detail-icon{font-size:18px;color:#00C2A8;text-align:center;padding-top:2px}
+.detail-label{font-weight:600;color:#7A9AB8;font-size:13px;text-align:right;padding-right:12px;white-space:nowrap}
+.detail-value{color:#E2EDF8;font-size:13px;line-height:1.4}
 .purpose-text{color:#E2EDF8;font-size:13px;margin-top:2px}
 .purpose-line{color:#F5A623;font-size:12px;margin-bottom:2px}
 .contact-note{margin-top:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;font-size:12px;color:#7A9AB8}
@@ -37,19 +35,18 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 <div id="board-container"></div>
 
 <script>
-// 多语言数据
 const langData = {
   es: {
     'back-home-text': '← Volver al Inicio',
     'page-title': '📢 Solicitudes de financiamiento',
     'empty': 'No hay solicitudes publicadas. ¡Sé el primero!',
-    'amount': '💰 Monto',
-    'term': '⏱ Plazo',
-    'company': '🏢 Empresa',
-    'purpose_title': '🎯 Propósito',
+    'amount': 'Monto',
+    'term': 'Plazo',
+    'company': 'Empresa',
+    'purpose_title': 'Propósito',
     'purpose_prefix': 'Para comprar productos chinos:',
-    'method': '💳 Método de pago',
-    'contact': '📞 Contacto',
+    'method': 'Método de pago',
+    'contact': 'Contacto',
     'contact_note': '📧 Para más detalles, contacta a la plataforma:',
     'email': 'info@latinchinese.com',
     'days': 'días'
@@ -58,13 +55,13 @@ const langData = {
     'back-home-text': '← 返回首页',
     'page-title': '📢 融资需求列表',
     'empty': '暂无融资需求。快来发布第一条吧！',
-    'amount': '💰 融资金额',
-    'term': '⏱ 融资期限',
-    'company': '🏢 公司名称',
-    'purpose_title': '🎯 融资目的',
+    'amount': '融资金额',
+    'term': '融资期限',
+    'company': '公司名称',
+    'purpose_title': '融资目的',
     'purpose_prefix': '用于购买中国产品：',
-    'method': '💳 支付方式',
-    'contact': '📞 联系方式',
+    'method': '支付方式',
+    'contact': '联系方式',
     'contact_note': '📧 有关融资细节，请直接发邮件与平台联系：',
     'email': 'info@latinchinese.com',
     'days': '天'
@@ -73,10 +70,8 @@ const langData = {
 
 let currentLang = 'es';
 
-// 公司名称缩写（取每个单词首字母，保留原顺序）
 function abbreviateCompany(company){
   if(!company) return '';
-  // 分割单词（按空格或连字符）
   let words = company.split(/\s+|-/);
   let abbreviation = '';
   for(let w of words){
@@ -113,9 +108,8 @@ function renderBoard(){
   }
   container.innerHTML = requests.map(req => {
     const financed = (req.total * req.ratio / 100).toFixed(0);
-    // 金额显示格式：$12500 (相当于 $25000 的 50%)
-    const amountDisplay = `${t['amount']}: $${financed} (equivalente a $${req.total} al ${req.ratio}%)`;
-    const termDisplay = `${t['term']}: ${req.term} ${t['days']}`;
+    const amountValue = (currentLang === 'zh') ? `$${financed} (相当于 $${req.total} 的 ${req.ratio}%)` : `$${financed} (equivalente a $${req.total} al ${req.ratio}%)`;
+    const termValue = `${req.term} ${t['days']}`;
     const maskedCompany = abbreviateCompany(req.company);
     const maskedWhatsapp = maskPhone(req.whatsapp);
     const maskedEmail = maskEmail(req.email);
@@ -126,16 +120,22 @@ function renderBoard(){
     
     return `
       <div class="financing-item">
-        <div class="financing-amount">${amountDisplay}</div>
-        <div class="financing-term">${termDisplay}</div>
-        
-        <div class="detail-row">
+        <div class="detail-grid">
+          <div class="detail-icon">💰</div>
+          <div class="detail-label">${t['amount']}:</div>
+          <div class="detail-value">${amountValue}</div>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-icon">⏱</div>
+          <div class="detail-label">${t['term']}:</div>
+          <div class="detail-value">${termValue}</div>
+        </div>
+        <div class="detail-grid">
           <div class="detail-icon">🏢</div>
           <div class="detail-label">${t['company']}:</div>
           <div class="detail-value">${maskedCompany}</div>
         </div>
-        
-        <div class="detail-row">
+        <div class="detail-grid">
           <div class="detail-icon">🎯</div>
           <div class="detail-label">${t['purpose_title']}:</div>
           <div class="detail-value">
@@ -143,19 +143,16 @@ function renderBoard(){
             <div class="purpose-text">${req.product}</div>
           </div>
         </div>
-        
-        <div class="detail-row">
+        <div class="detail-grid">
           <div class="detail-icon">💳</div>
           <div class="detail-label">${t['method']}:</div>
           <div class="detail-value">${methodDisplay}</div>
         </div>
-        
-        <div class="detail-row">
+        <div class="detail-grid">
           <div class="detail-icon">📞</div>
           <div class="detail-label">${t['contact']}:</div>
           <div class="detail-value"><span class="phone-highlight">${maskedWhatsapp}</span> | ${maskedEmail}</div>
         </div>
-        
         <div class="contact-note">
           ${t['contact_note']} <a href="mailto:${t['email']}">${t['email']}</a>
         </div>
