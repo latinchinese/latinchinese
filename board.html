@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>融资需求公示板 · 透明化物流平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width:430px;margin:0 auto;padding-bottom:30px}
+.topbar{position:sticky;top:0;background:rgba(7,17,31,0.95);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.logo{display:flex;align-items:baseline;gap:6px;cursor:pointer}
+.logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px}.logo-es{font-weight:600;font-size:9px;color:#00C2A8}
+.lang-toggle{display:flex;background:#122844;border-radius:20px;padding:3px;cursor:pointer}
+.lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;background:rgba(245,166,35,0.2);color:#F5A623;white-space:nowrap}
+.lang-opt.on{background:#00C2A8;color:#07111F}
+.back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
+.pg-title{font-weight:800;font-size:24px;margin:12px 18px}
+.financing-item{background:#0D1E33;border-radius:16px;padding:16px;margin:12px 18px;border-left:4px solid #F5A623}
+.financing-amount{font-size:20px;font-weight:700;color:#F5A623}
+.financing-term{font-size:12px;color:#7A9AB8;margin:4px 0}
+.pill-sm{display:inline-block;background:rgba(0,194,168,0.13);color:#00C2A8;padding:2px 10px;border-radius:20px;font-size:11px}
+.contact-note{font-size:12px;color:#7A9AB8;margin-top:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px}
+.contact-note a{color:#00C2A8;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="logo" onclick="window.location.href='index.html'"><span class="logo-mini">🌐</span><span class="logo-cn">透明化物流平台</span><span class="logo-es">Tablón de financiamiento</span></div><div class="lang-toggle" onclick="toggleLang()"><div class="lang-opt on" id="lo-es">ES</div><div class="lang-opt" id="lo-zh">中文</div></div></div>
+<div class="back-home" onclick="window.location.href='index.html'"><span id="back-home-text">← Volver al Inicio</span></div>
+<div class="pg-title" id="page-title">📢 Solicitudes de financiamiento</div>
+<div id="board-container"></div>
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+const langData = {
+  es: { 
+    'back-home-text':'← Volver al Inicio',
+    'page-title':'📢 Solicitudes de financiamiento',
+    'empty':'No hay solicitudes publicadas. ¡Sé el primero!',
+    'contact-message':'📧 Para más detalles, contacta a la plataforma:',
+    'email':'info@latinchinese.com'
+  },
+  zh: { 
+    'back-home-text':'← 返回首页',
+    'page-title':'📢 融资需求列表',
+    'empty':'暂无融资需求。快来发布第一条吧！',
+    'contact-message':'📧 有关融资细节，请直接发邮件与平台联系：',
+    'email':'info@latinchinese.com'
+  }
+};
+let currentLang = 'es';
+
+function maskString(str, visibleStart=2, visibleEnd=1){
+  if(!str) return ''; if(str.length<=visibleStart+visibleEnd) return str[0]+'***'; return str.slice(0,visibleStart)+'***'+str.slice(-visibleEnd);
+}
+function maskPhone(phone){
+  if(!phone) return ''; let cleaned=phone.replace(/\D/g,''); if(cleaned.length<=6) return phone.slice(0,2)+'***'+phone.slice(-2); return phone.slice(0,3)+'***'+phone.slice(-3);
+}
+function maskEmail(email){
+  if(!email) return ''; let parts=email.split('@'); if(parts.length<2) return email; let local=parts[0]; if(local.length<=2) return local+'***@'+parts[1]; return local.slice(0,2)+'***@'+parts[1];
+}
+function renderBoard(){
+  const container=document.getElementById('board-container');
+  if(!container) return;
+  const requests=JSON.parse(localStorage.getItem('financing_requests')||'[]');
+  if(requests.length===0){
+    container.innerHTML=`<div class="financing-item" style="text-align:center">${langData[currentLang]['empty']}</div>`;
+    return;
+  }
+  const t = langData[currentLang];
+  container.innerHTML=requests.map(req=>{
+    const financed=(req.total*req.ratio/100).toFixed(0);
+    const maskedCompany=maskString(req.company,3,2);
+    const maskedWhatsapp=maskPhone(req.whatsapp);
+    const maskedEmail=maskEmail(req.email);
+    const product=req.product.length>40?req.product.slice(0,40)+'…':req.product;
+    return `
+      <div class="financing-item">
+        <div class="financing-amount">💰 ${req.total} USD</div>
+        <div class="financing-term">📊 ${req.ratio}% (${financed} USD) | ⏱ ${req.term} días</div>
+        <div><span class="pill-sm">🏢 ${maskedCompany}</span></div>
+        <div>📦 ${product}</div>
+        <div>📞 ${maskedWhatsapp} | ✉️ ${maskedEmail}</div>
+        <div class="contact-note">${t['contact-message']} <a href="mailto:${t['email']}">${t['email']}</a></div>
+      </div>
+    `;
+  }).join('');
+}
+function applyLang(){const t=langData[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerText=val;}renderBoard();}
+function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
+window.addEventListener('load',()=>{applyLang();});
+</script>
+</body>
+</html>
