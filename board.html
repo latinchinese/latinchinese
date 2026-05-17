@@ -16,14 +16,18 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 .back-home{display:inline-block;margin:16px 0 8px 18px;padding:8px 16px;background:#122844;border-radius:30px;font-size:13px;color:#00C2A8;cursor:pointer;border:1px solid rgba(255,255,255,0.1);width:auto}
 .pg-title{font-weight:800;font-size:24px;margin:12px 18px}
 .financing-item{background:#0D1E33;border-radius:16px;padding:16px;margin:12px 18px;border-left:4px solid #F5A623}
-.financing-amount{font-size:20px;font-weight:700;color:#F5A623}
-.financing-term{font-size:12px;color:#7A9AB8;margin:4px 0}
-.row{display:flex;flex-wrap:wrap;margin:6px 0}
-.label{width:110px;font-weight:600;color:#7A9AB8;font-size:13px}
-.value{flex:1;color:#E2EDF8;font-size:13px}
-.contact-note{margin-top:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px;font-size:12px;color:#7A9AB8}
+.financing-amount{font-size:20px;font-weight:700;color:#F5A623;margin-bottom:4px}
+.financing-term{font-size:12px;color:#7A9AB8;margin-bottom:12px}
+.detail-row{display:flex;margin-bottom:8px;align-items:flex-start}
+.detail-icon{width:32px;font-size:18px;color:#00C2A8}
+.detail-label{width:100px;font-weight:600;color:#7A9AB8;font-size:13px}
+.detail-value{flex:1;color:#E2EDF8;font-size:13px;line-height:1.4}
+.purpose-text{color:#E2EDF8;font-size:13px;margin-top:2px}
+.purpose-line{color:#F5A623;font-size:12px;margin-bottom:2px}
+.contact-note{margin-top:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;font-size:12px;color:#7A9AB8}
 .contact-note a{color:#00C2A8;text-decoration:none}
 .empty{text-align:center;padding:40px;color:#7A9AB8}
+.phone-highlight{color:#F5A623;font-weight:700}
 </style>
 </head>
 <body>
@@ -33,11 +37,52 @@ body{background:#07111F;color:#E2EDF8;font-family:system-ui,sans-serif;max-width
 <div id="board-container"></div>
 
 <script>
-// 静态双语内容（无需语言切换，直接显示中西文）
+// 多语言数据
+const langData = {
+  es: {
+    'back-home-text': '← Volver al Inicio',
+    'page-title': '📢 Solicitudes de financiamiento',
+    'empty': 'No hay solicitudes publicadas. ¡Sé el primero!',
+    'amount': '💰 Monto',
+    'term': '⏱ Plazo',
+    'company': '🏢 Empresa',
+    'purpose_title': '🎯 Propósito',
+    'purpose_prefix': 'Para comprar productos chinos:',
+    'method': '💳 Método de pago',
+    'contact': '📞 Contacto',
+    'contact_note': '📧 Para más detalles, contacta a la plataforma:',
+    'email': 'info@latinchinese.com',
+    'days': 'días'
+  },
+  zh: {
+    'back-home-text': '← 返回首页',
+    'page-title': '📢 融资需求列表',
+    'empty': '暂无融资需求。快来发布第一条吧！',
+    'amount': '💰 融资金额',
+    'term': '⏱ 融资期限',
+    'company': '🏢 公司名称',
+    'purpose_title': '🎯 融资目的',
+    'purpose_prefix': '用于购买中国产品：',
+    'method': '💳 支付方式',
+    'contact': '📞 联系方式',
+    'contact_note': '📧 有关融资细节，请直接发邮件与平台联系：',
+    'email': 'info@latinchinese.com',
+    'days': '天'
+  }
+};
+
+let currentLang = 'es';
+
+// 脱敏函数：保留公司类型后缀（如 SAC, EIRL）
 function maskCompany(company){
   if(!company) return '';
-  if(company.length <= 4) return company[0]+'***';
-  return company.slice(0, company.length-2) + '**';
+  // 匹配常见的公司类型后缀
+  const suffixMatch = company.match(/(\s+(SAC|EIRL|S\.A\.|C\.A\.|Ltda\.|SRL|S\.R\.L\.|Cía\.|Limitada|Asociación|Corporación|Group|Co\.|Ltd\.?))$/i);
+  let suffix = suffixMatch ? suffixMatch[1] : '';
+  let base = suffix ? company.slice(0, -suffix.length) : company;
+  if(base.length <= 3) return base + '***' + suffix;
+  let masked = base.slice(0, base.length - 2) + '**';
+  return masked + suffix;
 }
 function maskPhone(phone){
   if(!phone) return '';
@@ -58,8 +103,9 @@ function renderBoard(){
   const container=document.getElementById('board-container');
   if(!container) return;
   const requests=JSON.parse(localStorage.getItem('financing_requests')||'[]');
+  const t = langData[currentLang];
   if(requests.length===0){
-    container.innerHTML=`<div class="empty">暂无融资需求。快来发布第一条吧！<br>No hay solicitudes publicadas. ¡Sé el primero!</div>`;
+    container.innerHTML=`<div class="empty">${t['empty']}</div>`;
     return;
   }
   container.innerHTML=requests.map(req=>{
@@ -67,47 +113,68 @@ function renderBoard(){
     const maskedCompany=maskCompany(req.company);
     const maskedWhatsapp=maskPhone(req.whatsapp);
     const maskedEmail=maskEmail(req.email);
-    const countryName = req.country || 'Perú';
-    // 融资方式翻译
+    // 融资方式显示转换
     let methodDisplay = req.method;
-    if(req.method === 'Carta de crédito diferida') methodDisplay = '远期信用证 / Carta de crédito diferida';
-    else if(req.method === 'Pago directo a proveedor') methodDisplay = '直接支付给供应商 / Pago directo a proveedor';
-    else methodDisplay = req.method;
+    if(req.method === 'Carta de crédito diferida') methodDisplay = (currentLang === 'es') ? 'Carta de crédito diferida' : '远期信用证';
+    else if(req.method === 'Pago directo a proveedor') methodDisplay = (currentLang === 'es') ? 'Pago directo a proveedor' : '直接支付给供应商';
+    
     return `
       <div class="financing-item">
-        <div class="financing-amount">💰 ${req.total} USD  <span style="font-size:12px; color:#7A9AB8;">(${req.ratio}% financiamiento = ${financed} USD)</span></div>
-        <div class="financing-term">⏱ ${req.term} días / 天</div>
+        <div class="financing-amount">${t['amount']}: ${req.total} USD (${req.ratio}% = ${financed} USD)</div>
+        <div class="financing-term">${t['term']}: ${req.term} ${t['days']}</div>
         
-        <div class="row"><div class="label">🌍 País / 国家:</div><div class="value">${countryName}</div></div>
-        <div class="row"><div class="label">🏢 Empresa / 公司:</div><div class="value">${maskedCompany}</div></div>
-        <div class="row"><div class="label">📦 Producto / 产品:</div><div class="value">${req.product}</div></div>
-        <div class="row"><div class="label">💳 Método / 支付方式:</div><div class="value">${methodDisplay}</div></div>
-        <div class="row"><div class="label">📞 Contacto / 联系方式:</div><div class="value">${maskedWhatsapp} | ${maskedEmail}</div></div>
+        <div class="detail-row">
+          <div class="detail-icon">🏢</div>
+          <div class="detail-label">${t['company']}:</div>
+          <div class="detail-value">${maskedCompany}</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-icon">🎯</div>
+          <div class="detail-label">${t['purpose_title']}:</div>
+          <div class="detail-value">
+            <div class="purpose-line">${t['purpose_prefix']}</div>
+            <div class="purpose-text">${req.product}</div>
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-icon">💳</div>
+          <div class="detail-label">${t['method']}:</div>
+          <div class="detail-value">${methodDisplay}</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-icon">📞</div>
+          <div class="detail-label">${t['contact']}:</div>
+          <div class="detail-value"><span class="phone-highlight">${maskedWhatsapp}</span> | ${maskedEmail}</div>
+        </div>
         
         <div class="contact-note">
-          📧 有关融资细节，请直接发邮件与平台联系：<a href="mailto:info@latinchinese.com">info@latinchinese.com</a><br>
-          📧 Para más detalles, contacta a la plataforma: <a href="mailto:info@latinchinese.com">info@latinchinese.com</a>
+          ${t['contact_note']} <a href="mailto:${t['email']}">${t['email']}</a>
         </div>
       </div>
     `;
   }).join('');
 }
 
-function toggleLang(){
-  // 此页面不需要语言切换，因为已经是双语显示，但为了保留顶部按钮的视觉效果，仍做简单处理
-  const esBtn=document.getElementById('lo-es');
-  const zhBtn=document.getElementById('lo-zh');
-  const isEs=esBtn.classList.contains('on');
-  if(isEs){
-    esBtn.classList.remove('on');
-    zhBtn.classList.add('on');
-  } else {
-    esBtn.classList.add('on');
-    zhBtn.classList.remove('on');
+function applyLang(){
+  const t = langData[currentLang];
+  for(let [id, val] of Object.entries(t)){
+    let el = document.getElementById(id);
+    if(el) el.innerText = val;
   }
-  // 页面内容已经是双语，所以不需要重新渲染
+  renderBoard();
+  document.getElementById('lo-es').classList.toggle('on', currentLang === 'es');
+  document.getElementById('lo-zh').classList.toggle('on', currentLang === 'zh');
 }
-window.addEventListener('load',()=>{renderBoard();});
+function toggleLang(){
+  currentLang = currentLang === 'es' ? 'zh' : 'es';
+  applyLang();
+}
+window.addEventListener('load',()=>{
+  applyLang();
+});
 </script>
 </body>
 </html>
