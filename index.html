@@ -7,43 +7,38 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{background:#07111F;color:#E2EDF8;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;max-width:430px;margin:0 auto;overflow:hidden}
+body{background:#07111F;color:#E2EDF8;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;overflow:hidden}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 90% 45% at 50% -5%,rgba(0,194,168,0.07)0%,transparent 65%),radial-gradient(ellipse 55% 40% at 95% 85%,rgba(139,111,232,0.05)0%,transparent 55%)}
-:root{--bg:#07111F;--surf:#0D1E33;--surf2:#122844;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.11);--teal:#00C2A8;--teal-d:rgba(0,194,168,0.13);--gold:#F5A623;--gold-d:rgba(245,166,35,0.13);--red:#FF4D6A;--red-d:rgba(255,77,106,0.13);--green:#22C97A;--green-d:rgba(34,201,122,0.11);--purple:#8B6FE8;--muted:#4E6A88;--text:#E2EDF8;--text2:#7A9AB8;--nav:72px;--top:58px}
-.topbar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--top);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,17,31,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:200}
+:root{--bg:#07111F;--surf:#0D1E33;--surf2:#122844;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.11);--teal:#00C2A8;--teal-d:rgba(0,194,168,0.13);--gold:#F5A623;--gold-d:rgba(245,166,35,0.13);--red:#FF4D6A;--red-d:rgba(255,77,106,0.13);--green:#22C97A;--green-d:rgba(34,201,122,0.11);--purple:#8B6FE8;--orange:#FF9F4A;--cyan:#2DD4BF;--muted:#4E6A88;--text:#E2EDF8;--text2:#7A9AB8;--nav:72px;--top:58px}
+.topbar{position:fixed;top:0;left:0;width:100%;height:var(--top);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,17,31,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:200}
 .logo{display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}.logo-mini{font-size:20px}.logo-cn{font-weight:800;font-size:15px;letter-spacing:.5px}.logo-es{font-weight:600;font-size:9px;color:var(--teal)}
 .lang-toggle{display:flex;background:var(--surf2);border:1px solid var(--border2);border-radius:20px;padding:3px;cursor:pointer}
 .lang-opt{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;transition:all 0.2s;background:rgba(245,166,35,0.2);color:var(--gold);white-space:nowrap}
 .lang-opt.on{background:var(--teal);color:#07111F}
 .notif-btn{width:34px;height:34px;border-radius:50%;background:var(--surf2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative}.notif-dot{position:absolute;top:7px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
-.scroll{position:fixed;top:var(--top);left:50%;transform:translateX(-50%);width:100%;max-width:430px;bottom:var(--nav);overflow-y:auto;overflow-x:hidden;z-index:1}
+.scroll{position:fixed;top:var(--top);left:0;width:100%;bottom:var(--nav);overflow-y:auto;overflow-x:hidden;z-index:1}
 .scroll::-webkit-scrollbar{display:none}
 .page{display:block;padding:22px 18px 20px;min-height:100%}
 .pg-title{font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:4px;background:linear-gradient(135deg,#E2EDF8 0%,#00C2A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .pg-sub{font-weight:600;font-size:14px;color:var(--text2);margin-bottom:20px;letter-spacing:-0.2px}
-.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--nav);background:rgba(7,17,31,0.97);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0)}.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:6px 4px;background:transparent;border:none}.bni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}.bni-label{font-size:10px;font-weight:600;color:var(--muted)}.bni.on .bni-icon{background:var(--teal-d)}.bni.on .bni-label{color:var(--teal)}
-.card{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;cursor:pointer}
-.card:hover{border-color:rgba(0,194,168,0.3)}
-.card-content{display:flex;align-items:center;gap:12px}  /* 修复 emoji 与文字垂直对齐 */
+.bnav{position:fixed;bottom:0;left:0;width:100%;height:var(--nav);background:rgba(7,17,31,0.97);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0)}.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:6px 4px;background:transparent;border:none}.bni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}.bni-label{font-size:10px;font-weight:600;color:var(--muted)}.bni.on .bni-icon{background:var(--teal-d)}.bni.on .bni-label{color:var(--teal)}
+/* 统一卡片样式 */
+.card{background:var(--surf);border-radius:16px;padding:18px;margin-bottom:12px;cursor:pointer}
+.card:hover{filter:brightness(1.05)}
+.card-content{display:flex;align-items:center;gap:12px}
+/* 加亮加粗的第二行描述文字 */
+.card-desc{font-size:11px;font-weight:700;color:var(--teal);letter-spacing:0.3px;text-shadow:0 0 2px rgba(0,194,168,0.3)}
 .category-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
 .cat-card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:all 0.1s}
 .cat-card:active{transform:scale(0.98)}
 .cat-emoji{font-size:28px;margin-bottom:6px}
 .cat-name{font-weight:700;font-size:14px;margin-bottom:2px}
 .cat-name-es{font-size:11px;color:var(--text2)}
-.platform-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
-.platform-card{background:var(--surf2);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:14px;padding:12px 6px;text-align:center;cursor:pointer;transition:all 0.1s}
-.platform-card:active{transform:scale(0.96)}
-.platform-name{font-size:13px;font-weight:800;margin-bottom:4px}
-.platform-desc{font-size:9px;color:var(--text2)}
 .service-card{background:rgba(0,194,168,0.08);border-radius:16px;padding:14px 16px;margin:16px 0;border-left:4px solid var(--gold)}
 .service-card p{font-size:12px;line-height:1.45;color:var(--text2);margin:0}
 .service-card strong{color:var(--teal)}
 .service-card .icon{font-size:20px;margin-right:6px;color:var(--gold)}
-.back-home-btn{display:inline-block;margin-bottom:16px;padding:8px 16px;background:var(--surf2);border-radius:30px;font-size:13px;color:var(--teal);cursor:pointer;border:1px solid var(--border2);width:auto}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#07111F;font-weight:700;font-size:13px;padding:10px 20px;border-radius:20px;z-index:999;display:none;white-space:nowrap}
-.fg{margin-bottom:14px}.fl{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.5px}.fl span{font-size:11px;font-weight:400;color:var(--muted)}
-.fi,.fs,.fta{width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:11px 14px;outline:none}.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal)}.fta{min-height:80px;resize:none}.fs{cursor:pointer}.btn{background:var(--teal);border:none;border-radius:12px;padding:13px;font-weight:700;color:#07111F;width:100%;cursor:pointer;margin-top:10px}.btn:hover{background:#00d4b8}.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2)}.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 </style>
 </head>
 <body>
@@ -54,58 +49,55 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
     <div class="pg-sub" id="t-home-sub">Bienvenido, comerciante</div>
     
     <!-- 卡片1：物流锁价 -->
-    <div class="card" style="background:var(--teal-d); border-color:var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
+    <div class="card" style="background:var(--teal-d); border: 1px solid var(--teal);" onclick="window.location.href='costos/c_operativo.html'">
       <div class="card-content">
         <div style="font-size:28px;">📦</div>
         <div>
           <div style="font-weight:800; font-size:16px;" id="t-cost-card">Bloqueo de fletes</div>
-          <div style="font-size:11px; color:var(--text2);" id="t-cost-desc">Compara y asegura tarifas</div>
+          <div class="card-desc" id="t-cost-desc">Compara y asegura tarifas</div>
         </div>
       </div>
     </div>
     
     <!-- 卡片2：融资需求 -->
-    <div class="card" style="background:var(--gold-d); border-color:var(--gold);" onclick="window.location.href='financiamiento.html'">
+    <div class="card" style="background:var(--gold-d); border: 1px solid var(--gold);" onclick="window.location.href='financiamiento.html'">
       <div class="card-content">
         <div style="font-size:28px;">💰</div>
         <div>
           <div style="font-weight:800; font-size:16px;" id="t-fin-card">Financiamiento</div>
-          <div style="font-size:11px; color:var(--text2);" id="t-fin-desc">Para compradores</div>
+          <div class="card-desc" id="t-fin-desc">Para compradores</div>
         </div>
       </div>
     </div>
     
     <!-- 卡片3：找货源 - Made-in-China.com -->
-    <div class="card" style="background:rgba(139,111,232,0.13); border-color:var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
+    <div class="card" style="background:rgba(139,111,232,0.13); border: 1px solid var(--purple);" onclick="window.open('https://es.made-in-china.com/','_blank')">
       <div class="card-content">
         <div style="font-size:28px;">🏭</div>
         <div>
           <div style="font-weight:800; font-size:16px;" id="t-mic-card">Encontrar productos</div>
-          <div style="font-size:10px; color:var(--text2);" id="t-mic-desc">Made-in-China.com</div>
+          <div class="card-desc" id="t-mic-desc">Made-in-China.com</div>
         </div>
       </div>
     </div>
     
     <!-- 卡片4：找货源 - Alibaba.com -->
-    <div class="card" style="background:var(--red-d); border-color:var(--red);" onclick="window.open('https://spanish.alibaba.com/','_blank')">
+    <div class="card" style="background:var(--red-d); border: 1px solid var(--red);" onclick="window.open('https://spanish.alibaba.com/','_blank')">
       <div class="card-content">
         <div style="font-size:28px;">🌐</div>
         <div>
           <div style="font-weight:800; font-size:16px;" id="t-ali-card">Encontrar productos</div>
-          <div style="font-size:10px; color:var(--text2);" id="t-ali-desc">Alibaba.com</div>
+          <div class="card-desc" id="t-ali-desc">Alibaba.com</div>
         </div>
       </div>
     </div>
 
+    <!-- 三个独立B2B平台卡片：全封闭边框，与上面卡片风格一致 -->
+    <div id="b2b-cards-container"></div>
+
     <!-- 服务卡片 -->
     <div class="service-card">
       <p><span class="icon">🛡️</span> <span id="service-text">Cargando...</span></p>
-    </div>
-
-    <!-- 更多B2B平台 -->
-    <div style="margin-top: 8px;">
-      <div style="font-weight:700; font-size:14px; margin-bottom:8px;" id="t-more-platforms">Más plataformas B2B / 更多B2B平台</div>
-      <div class="platform-grid" id="platform-grid"></div>
     </div>
 
     <!-- 产品分类 -->
@@ -138,10 +130,13 @@ const T = {
     't-mic-card':'Encontrar productos','t-mic-desc':'Made-in-China.com',
     't-ali-card':'Encontrar productos','t-ali-desc':'Alibaba.com',
     't-categories-title':'Categorías de productos',
-    't-more-platforms':'Más plataformas B2B',
     'service-text':'Los enlaces externos te llevan a sitios de compra independientes. Puedes buscar productos y solicitar cotizaciones y datos de embalaje (volumen/peso) directamente a los proveedores. Nuestros servicios: cotización de fletes, verificación de proveedores, evaluación de precios, asesoría de métodos de pago, y selección de rutas logísticas para evitar sobrecostos en el puerto de destino. 👉 Envíanos la información del proveedor y te ayudamos a verificarlo.',
     't-help':'💡 Haz clic en cualquier categoría para buscar en Alibaba (versión en español)',
-    't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar'
+    't-nav-home':'Inicio','t-nav-login':'Entrada','t-nav-orders':'Cotizar','t-nav-verify':'Verificar',
+    // B2B cards
+    'b2b-dhgate-name':'DHgate','b2b-dhgate-desc':'B2B Platform',
+    'b2b-gs-name':'Global Sources','b2b-gs-desc':'B2B Platform',
+    'b2b-yiwu-name':'Yiwugo','b2b-yiwu-desc':'B2B Platform'
   },
   zh: {
     'lo-es':'ES','lo-zh':'中','t-home-title':'采购导航','t-home-sub':'欢迎回来，商客',
@@ -150,10 +145,12 @@ const T = {
     't-mic-card':'找货源','t-mic-desc':'中国制造网',
     't-ali-card':'找货源','t-ali-desc':'阿里巴巴国际站',
     't-categories-title':'产品分类',
-    't-more-platforms':'更多B2B平台',
     'service-text':'外部链接将带您前往独立的购物平台。您可以直接向供应商搜索产品并索要报价及包装信息（体积/重量）。我们的服务：运费报价、供应商核实、价格评估、付款方式建议、以及物流路线选择，帮助您避免目的港的不合理收费。👉 将供应商信息发给我们，我们将协助您核实。',
     't-help':'💡 点击任意分类，跳转到阿里巴巴西语站搜索产品',
-    't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实'
+    't-nav-home':'首页','t-nav-login':'入口','t-nav-orders':'询价','t-nav-verify':'核实',
+    'b2b-dhgate-name':'敦煌网','b2b-dhgate-desc':'B2B平台',
+    'b2b-gs-name':'环球资源','b2b-gs-desc':'B2B平台',
+    'b2b-yiwu-name':'义乌购','b2b-yiwu-desc':'B2B平台'
   }
 };
 const categories = [
@@ -178,19 +175,62 @@ const categories = [
   { emoji:"🧱",name_es:"Materiales de construcción",name_zh:"建筑材料",keyword:"construcción" },
   { emoji:"🌾",name_es:"Insumos agrícolas",name_zh:"农用物资",keyword:"agrícola" }
 ];
-const morePlatforms = [
-  { name_es:"DHgate",name_zh:"敦煌网",url:"https://es.dhgate.com/" },
-  { name_es:"Global Sources",name_zh:"环球资源",url:"https://www.globalsources.com" },
-  { name_es:"Yiwugo",name_zh:"义乌购",url:"https://g.yiwugo.com/" }
+
+// B2B平台数据：每个平台独立的边框颜色、背景色、图标
+const b2bPlatforms = [
+  { key:'dhgate', url:'https://es.dhgate.com/', borderColor:'#8B6FE8', bgColor:'rgba(139,111,232,0.13)', icon:'🛒' },
+  { key:'gs', url:'https://www.globalsources.com', borderColor:'#FF9F4A', bgColor:'rgba(255,159,74,0.13)', icon:'🌍' },
+  { key:'yiwu', url:'https://g.yiwugo.com/', borderColor:'#2DD4BF', bgColor:'rgba(45,212,191,0.13)', icon:'📦' }
 ];
+
 let currentLang = 'es';
+
+function renderB2BCards() {
+  const container = document.getElementById('b2b-cards-container');
+  if (!container) return;
+  container.innerHTML = b2bPlatforms.map(p => {
+    const nameKey = `b2b-${p.key}-name`;
+    const descKey = `b2b-${p.key}-desc`;
+    return `
+      <div class="card" style="background: ${p.bgColor}; border: 1px solid ${p.borderColor};" onclick="window.open('${p.url}','_blank')">
+        <div class="card-content">
+          <div style="font-size:28px;">${p.icon}</div>
+          <div>
+            <div style="font-weight:800; font-size:16px;" id="${nameKey}">${T[currentLang][nameKey] || p.key}</div>
+            <div class="card-desc" id="${descKey}">${T[currentLang][descKey] || 'B2B Platform'}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderCategoryGrid(){const g=document.getElementById('category-grid');if(!g)return;g.innerHTML=categories.map(c=>`<div class="cat-card" onclick="searchOnAliExpress('${c.keyword}')"><div class="cat-emoji">${c.emoji}</div><div class="cat-name">${currentLang==='es'?c.name_es:c.name_zh}</div><div class="cat-name-es">${currentLang==='es'?'':c.name_es}</div></div>`).join('');}
-function renderPlatformGrid(){const g=document.getElementById('platform-grid');if(!g)return;g.innerHTML=morePlatforms.map(p=>`<div class="platform-card" onclick="window.open('${p.url}','_blank')"><div class="platform-name">${currentLang==='es'?p.name_es:p.name_zh}</div><div class="platform-desc">B2B Platform</div></div>`).join('');}
+
 function searchOnAliExpress(k){const url=`https://www.alibaba.com/trade/search?SearchText=${encodeURIComponent(k)}&lang=es`;showToast(currentLang==='es'?'Abriendo Alibaba...':'正在打开阿里巴巴...');window.open(url,'_blank');}
 function showToast(m){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2000);}
-function applyLang(){const t=T[currentLang];for(let[id,val]of Object.entries(t)){let el=document.getElementById(id);if(el)el.innerHTML=val;}const sv=document.getElementById('service-text');if(sv)sv.innerHTML=t['service-text'];renderCategoryGrid();renderPlatformGrid();document.getElementById('lo-es').classList.toggle('on',currentLang==='es');document.getElementById('lo-zh').classList.toggle('on',currentLang==='zh');}
+
+function applyLang(){
+  const t=T[currentLang];
+  for(let [id,val] of Object.entries(t)){
+    let el=document.getElementById(id);
+    if(el) el.innerHTML=val;
+  }
+  const sv=document.getElementById('service-text');
+  if(sv) sv.innerHTML=t['service-text'];
+  // 重新渲染B2B卡片以更新语言
+  renderB2BCards();
+  renderCategoryGrid();
+  document.getElementById('lo-es').classList.toggle('on', currentLang==='es');
+  document.getElementById('lo-zh').classList.toggle('on', currentLang==='zh');
+}
+
 function toggleLang(){currentLang=currentLang==='es'?'zh':'es';applyLang();}
-window.addEventListener('load',()=>{applyLang();renderCategoryGrid();renderPlatformGrid();});
+
+window.addEventListener('load',()=>{
+  applyLang();
+  renderCategoryGrid();
+});
 </script>
 </body>
 </html>
